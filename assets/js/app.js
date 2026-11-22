@@ -3,7 +3,7 @@
 const $=s=>document.querySelector(s);
 const route=document.body.dataset.route||"home";
 const ROOT_PREFIX=document.body.dataset.rootPrefix||"./";
-const engines=[{"id":"clone-hero","name":"Clone Hero","short":"CH","games":"Clone Hero"},{"id":"gh3","name":"Guitar Hero III","short":"GH3","games":"Guitar Hero III"},{"id":"gh1-2","name":"Guitar Hero I & II","short":"GH1 + II","games":"Guitar Hero 1 and 2"},{"id":"ghwt-wor","name":"Guitar Hero: World Tour / WoR","short":"WT / WoR","games":"World Tour and Warriors of Rock"},{"id":"yarg","name":"YARG","short":"YARG","games":"YARG"}];
+const engines=[{"id":"clone-hero","name":"Clone Hero","short":"CH","type":"Community engine","year":"2017","youtube":"https://www.youtube.com/@CloneHeroGame","website":"https://clonehero.net/","description":"Community five-fret rhythm game and custom-chart platform.","icon":"assets/img/games/clone-hero/icon.png","logo":"assets/img/games/clone-hero/logo.png"},{"id":"gh1","name":"Guitar Hero","short":"GH1","type":"Guitar Hero","year":"2005","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The original five-fret Guitar Hero.","icon":"assets/img/games/gh1/icon.png","logo":"assets/img/games/gh1/logo.png"},{"id":"gh2","name":"Guitar Hero II","short":"GH2","type":"Guitar Hero","year":"2006","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The second mainline Guitar Hero release.","icon":"assets/img/games/gh2/icon.png","logo":"assets/img/games/gh2/logo.png"},{"id":"gh80s","name":"Guitar Hero Encore: Rocks the 80s","short":"80s","type":"Guitar Hero","year":"2007","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The 80s-focused standalone Guitar Hero release.","icon":"assets/img/games/gh80s/icon.png","logo":"assets/img/games/gh80s/logo.png"},{"id":"gh3","name":"Guitar Hero III: Legends of Rock","short":"GH3","type":"Guitar Hero","year":"2007","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"Guitar Hero III, with its own separate chart and record list.","icon":"assets/img/games/gh3/icon.png","logo":"assets/img/games/gh3/logo.png"},{"id":"gh-aerosmith","name":"Guitar Hero: Aerosmith","short":"AERO","type":"Guitar Hero","year":"2008","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The standalone Aerosmith-focused Guitar Hero game.","icon":"assets/img/games/gh-aerosmith/icon.png","logo":"assets/img/games/gh-aerosmith/logo.png"},{"id":"gh-world-tour","name":"Guitar Hero World Tour","short":"WT","type":"Guitar Hero","year":"2008","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"World Tour has its own leaderboard, separate from Warriors of Rock.","icon":"assets/img/games/gh-world-tour/icon.png","logo":"assets/img/games/gh-world-tour/logo.png"},{"id":"gh-metallica","name":"Guitar Hero: Metallica","short":"MET","type":"Guitar Hero","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The standalone Metallica Guitar Hero game.","icon":"assets/img/games/gh-metallica/icon.png","logo":"assets/img/games/gh-metallica/logo.png"},{"id":"gh-smash-hits","name":"Guitar Hero: Smash Hits","short":"HITS","type":"Guitar Hero","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The reworked classic-song collection, tracked separately.","icon":"assets/img/games/gh-smash-hits/icon.png","logo":"assets/img/games/gh-smash-hits/logo.png"},{"id":"gh5","name":"Guitar Hero 5","short":"GH5","type":"Guitar Hero","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"Guitar Hero 5 gets its own records and hardest-song list.","icon":"assets/img/games/gh5/icon.png","logo":"assets/img/games/gh5/logo.png"},{"id":"gh-van-halen","name":"Guitar Hero: Van Halen","short":"VH","type":"Guitar Hero","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The standalone Van Halen Guitar Hero game.","icon":"assets/img/games/gh-van-halen/icon.png","logo":"assets/img/games/gh-van-halen/logo.png"},{"id":"band-hero","name":"Band Hero","short":"BH","type":"Guitar Hero family","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"Band Hero is tracked independently from Guitar Hero 5.","icon":"assets/img/games/band-hero/icon.png","logo":"assets/img/games/band-hero/logo.png"},{"id":"gh-warriors-of-rock","name":"Guitar Hero: Warriors of Rock","short":"WoR","type":"Guitar Hero","year":"2010","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"Warriors of Rock is separate from World Tour.","icon":"assets/img/games/gh-warriors-of-rock/icon.png","logo":"assets/img/games/gh-warriors-of-rock/logo.png"},{"id":"yarg","name":"YARG","short":"YARG","type":"Community engine","year":"","youtube":"https://www.youtube.com/@YARGGame","website":"https://yarg.in/","description":"Yet Another Rhythm Game, an open-source five-fret rhythm game.","icon":"assets/img/games/yarg/icon.png","logo":"assets/img/games/yarg/logo.png"}];
 const STORE_KEY="overstrum-submissions-v1";
 const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 const fmt=value=>Number.isFinite(Number(value))?Number(value).toFixed(1):"—";
@@ -148,7 +148,7 @@ const FALLBACK_CHARTS=[
     "id": "gh3-fc-1",
     "rank": 1,
     "engine": "gh3",
-    "engineName": "Guitar Hero III",
+    "engineName": "Guitar Hero III: Legends of Rock",
     "kind": "fc",
     "title": "Razor Skyline",
     "artist": "The Overpass",
@@ -171,7 +171,7 @@ const FALLBACK_CHARTS=[
     "id": "gh3-fc-2",
     "rank": 2,
     "engine": "gh3",
-    "engineName": "Guitar Hero III",
+    "engineName": "Guitar Hero III: Legends of Rock",
     "kind": "fc",
     "title": "Dead Air",
     "artist": "Paper Atlas",
@@ -194,7 +194,7 @@ const FALLBACK_CHARTS=[
     "id": "gh3-fc-3",
     "rank": 3,
     "engine": "gh3",
-    "engineName": "Guitar Hero III",
+    "engineName": "Guitar Hero III: Legends of Rock",
     "kind": "fc",
     "title": "Afterimage",
     "artist": "Vanta",
@@ -217,7 +217,7 @@ const FALLBACK_CHARTS=[
     "id": "gh3-pass-1",
     "rank": 1,
     "engine": "gh3",
-    "engineName": "Guitar Hero III",
+    "engineName": "Guitar Hero III: Legends of Rock",
     "kind": "pass",
     "title": "Razor Skyline",
     "artist": "The Overpass",
@@ -239,7 +239,7 @@ const FALLBACK_CHARTS=[
     "id": "gh3-pass-2",
     "rank": 2,
     "engine": "gh3",
-    "engineName": "Guitar Hero III",
+    "engineName": "Guitar Hero III: Legends of Rock",
     "kind": "pass",
     "title": "Dead Air",
     "artist": "Paper Atlas",
@@ -262,7 +262,7 @@ const FALLBACK_CHARTS=[
     "id": "gh3-pass-3",
     "rank": 3,
     "engine": "gh3",
-    "engineName": "Guitar Hero III",
+    "engineName": "Guitar Hero III: Legends of Rock",
     "kind": "pass",
     "title": "Afterimage",
     "artist": "Vanta",
@@ -284,8 +284,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "gh1-2-fc-1",
     "rank": 1,
-    "engine": "gh1-2",
-    "engineName": "Guitar Hero I & II",
+    "engine": "gh1",
+    "engineName": "Guitar Hero",
     "kind": "fc",
     "title": "Crimson Theory",
     "artist": "The Low Ends",
@@ -307,8 +307,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "gh1-2-fc-2",
     "rank": 2,
-    "engine": "gh1-2",
-    "engineName": "Guitar Hero I & II",
+    "engine": "gh2",
+    "engineName": "Guitar Hero II",
     "kind": "fc",
     "title": "Blackout Avenue",
     "artist": "Static Season",
@@ -329,8 +329,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "gh1-2-fc-3",
     "rank": 3,
-    "engine": "gh1-2",
-    "engineName": "Guitar Hero I & II",
+    "engine": "gh1",
+    "engineName": "Guitar Hero",
     "kind": "fc",
     "title": "Cold Mercury",
     "artist": "Northbound",
@@ -351,8 +351,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "gh1-2-pass-1",
     "rank": 1,
-    "engine": "gh1-2",
-    "engineName": "Guitar Hero I & II",
+    "engine": "gh2",
+    "engineName": "Guitar Hero II",
     "kind": "pass",
     "title": "Crimson Theory",
     "artist": "The Low Ends",
@@ -374,8 +374,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "gh1-2-pass-2",
     "rank": 2,
-    "engine": "gh1-2",
-    "engineName": "Guitar Hero I & II",
+    "engine": "gh1",
+    "engineName": "Guitar Hero",
     "kind": "pass",
     "title": "Blackout Avenue",
     "artist": "Static Season",
@@ -397,8 +397,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "gh1-2-pass-3",
     "rank": 3,
-    "engine": "gh1-2",
-    "engineName": "Guitar Hero I & II",
+    "engine": "gh2",
+    "engineName": "Guitar Hero II",
     "kind": "pass",
     "title": "Cold Mercury",
     "artist": "Northbound",
@@ -420,8 +420,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "ghwt-wor-fc-1",
     "rank": 1,
-    "engine": "ghwt-wor",
-    "engineName": "GH: World Tour + Warriors of Rock",
+    "engine": "gh-world-tour",
+    "engineName": "Guitar Hero World Tour",
     "kind": "fc",
     "title": "Midnight Engine",
     "artist": "The Overpass",
@@ -442,8 +442,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "ghwt-wor-fc-2",
     "rank": 2,
-    "engine": "ghwt-wor",
-    "engineName": "GH: World Tour + Warriors of Rock",
+    "engine": "gh-warriors-of-rock",
+    "engineName": "Guitar Hero: Warriors of Rock",
     "kind": "fc",
     "title": "Hollow Signal",
     "artist": "Vanta",
@@ -465,8 +465,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "ghwt-wor-fc-3",
     "rank": 3,
-    "engine": "ghwt-wor",
-    "engineName": "GH: World Tour + Warriors of Rock",
+    "engine": "gh-world-tour",
+    "engineName": "Guitar Hero World Tour",
     "kind": "fc",
     "title": "Run the Wire",
     "artist": "Paper Atlas",
@@ -488,8 +488,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "ghwt-wor-pass-1",
     "rank": 1,
-    "engine": "ghwt-wor",
-    "engineName": "GH: World Tour + Warriors of Rock",
+    "engine": "gh-warriors-of-rock",
+    "engineName": "Guitar Hero: Warriors of Rock",
     "kind": "pass",
     "title": "Midnight Engine",
     "artist": "The Overpass",
@@ -511,8 +511,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "ghwt-wor-pass-2",
     "rank": 2,
-    "engine": "ghwt-wor",
-    "engineName": "GH: World Tour + Warriors of Rock",
+    "engine": "gh-world-tour",
+    "engineName": "Guitar Hero World Tour",
     "kind": "pass",
     "title": "Hollow Signal",
     "artist": "Vanta",
@@ -533,8 +533,8 @@ const FALLBACK_CHARTS=[
   {
     "id": "ghwt-wor-pass-3",
     "rank": 3,
-    "engine": "ghwt-wor",
-    "engineName": "GH: World Tour + Warriors of Rock",
+    "engine": "gh-warriors-of-rock",
+    "engineName": "Guitar Hero: Warriors of Rock",
     "kind": "pass",
     "title": "Run the Wire",
     "artist": "Paper Atlas",
@@ -696,7 +696,7 @@ let allCharts=[];
 function readSubmissions(){try{const value=JSON.parse(localStorage.getItem(STORE_KEY)||"[]");return Array.isArray(value)?value:[]}catch{return[]}}
 function syncCharts(){allCharts=[...baseCharts,...submissions]}
 function setNav(){
- const navKey=route==="home"?"home":route==="submit"?"submit":route==="rules"?"rules":route==="community"?"community":"leaderboard";
+ const navKey=route==="home"?"home":route==="games"?"games":route==="submit"?"submit":route==="rules"?"rules":route==="community"?"community":"leaderboard";
  document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("active",a.dataset.nav===navKey));
  const toggle=$(".menu-toggle"),nav=$(".main-nav");
  if(toggle&&!toggle.dataset.bound){toggle.dataset.bound="true";toggle.addEventListener("click",()=>{const open=nav.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open))})}
@@ -709,8 +709,8 @@ function renderHome(){
  const fc=allCharts.filter(c=>c.kind==="fc").length,passes=allCharts.filter(c=>c.kind==="pass").length;
  const recent=[...allCharts].sort((a,b)=>String(b.verifiedAt||"").localeCompare(String(a.verifiedAt||""))).slice(0,3);
  $("#app").innerHTML='<section class="hero"><div><span class="eyebrow">A community archive for five-fret rhythm games</span><h1>Good runs deserve <span>a place.</span></h1><p class="hero-copy">Overstrum collects full combos and hardest passes across the games we play. Browse records, explore the players behind them, and submit a run for review.</p><div class="hero-actions"><a class="button primary" href="'+ROOT_PREFIX+'leaderboard/">Explore leaderboard <span aria-hidden="true">↗</span></a><a class="button ghost" href="'+ROOT_PREFIX+'submit/">Submit a record</a></div></div><aside class="hero-summary"><div class="summary-top"><span>List overview</span><span><i class="live-dot"></i>Community maintained</span></div><div class="summary-grid"><div class="summary-stat"><strong>'+allCharts.length+'</strong><span>Listed entries</span></div><div class="summary-stat"><strong>'+uniquePlayers.size+'</strong><span>Players</span></div><div class="summary-stat"><strong>'+fc+'</strong><span>Full combos</span></div><div class="summary-stat"><strong>'+passes+'</strong><span>Passes</span></div></div></aside></section>'+
- '<div class="section-heading"><div><h2>Choose a game</h2><p>Jump into the leaderboard with the engine already selected.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'leaderboard/">All records ↗</a></div>'+
- '<section class="engine-grid">'+engines.map(e=>'<a class="engine-card" href="'+queryUrl(e.id,"all")+'"><div class="engine-card-top"><span class="engine-icon">'+esc(e.short)+'</span><span class="engine-arrow">↗</span></div><strong>'+esc(e.name)+'</strong><small>'+allCharts.filter(c=>c.engine===e.id).length+' listed entries</small><div class="engine-badges"><span>Full combo</span><span>Pass</span></div></a>').join("")+'</section>'+
+ '<div class="section-heading"><div><h2>Choose a game</h2><p>Each release has its own leaderboard and hardest-song list.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'leaderboard/">All records ↗</a></div>'+
+ '<section class="engine-grid">'+engines.map(e=>'<a class="engine-card" href="'+ROOT_PREFIX+'games/?game='+encodeURIComponent(e.id)+'"><div class="engine-card-top"><span class="engine-icon"><img src="'+ROOT_PREFIX+e.icon+'" alt=""></span><span class="engine-arrow">↗</span></div><strong>'+esc(e.name)+'</strong><small>'+allCharts.filter(c=>c.engine===e.id).length+' listed entries</small><div class="engine-badges"><span>Full combo</span><span>Pass</span></div></a>').join("")+'</section>'+
  '<div class="section-heading"><div><h2>Recently added</h2><p>The latest entries in the archive.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'leaderboard/">View leaderboard ↗</a></div>'+
  '<section class="recent-grid">'+recent.map(c=>'<article class="recent-card"><div class="recent-card-top">'+statusBadge(c)+'<span class="badge">'+(c.kind==="fc"?"Full combo":"Pass")+'</span></div><strong>'+esc(c.title)+'</strong><p>'+esc(c.artist||"Artist not supplied")+' · '+esc(engineFor(c.engine).name)+'</p></article>').join("")+'</section>'+
  '<div class="section-heading"><div><h2>How the list works</h2><p>Clear standards, careful review, and useful records.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'rules/">Read verification rules ↗</a></div>'+
@@ -754,7 +754,7 @@ function renderLeaderboard(seedEngine,seedKind){
  const defaultKind=seedKind||params.get("kind")||"all";
  $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Browse the archive</span><h1>Leaderboard</h1><p>Explore chart records by game, achievement type, or player. Open any entry for its verification details.</p></div></div>'+
  '<div class="filters"><label class="search-field"><input id="record-search" type="search" placeholder="Search song, artist, charter or victor…" autocomplete="off" aria-label="Search records"></label>'+
- '<select class="select-field" id="engine-filter" aria-label="Filter by engine"><option value="all">All engines</option>'+engines.map(e=>'<option value="'+e.id+'">'+esc(e.name)+'</option>').join("")+'</select>'+
+ '<select class="select-field" id="engine-filter" aria-label="Filter by game"><option value="all">All games</option>'+engines.map(e=>'<option value="'+e.id+'">'+esc(e.name)+'</option>').join("")+'</select>'+
  '<select class="select-field" id="kind-filter" aria-label="Filter by achievement"><option value="all">All achievements</option><option value="fc">Full combos</option><option value="pass">Passes</option></select>'+
  '<select class="select-field" id="status-filter" aria-label="Filter by status"><option value="all">All statuses</option><option value="verified">Verified</option><option value="sample">Sample data</option><option value="pending">Pending review</option></select><span class="filter-count" id="filter-count"></span></div>'+
  '<div class="view-tabs" role="tablist" aria-label="Leaderboard view"><button class="active" type="button" data-view="records" role="tab" aria-selected="true">Chart records</button><button type="button" data-view="players" role="tab" aria-selected="false">Player rankings</button></div>'+
@@ -785,6 +785,58 @@ function renderLeaderboard(seedEngine,seedKind){
   document.querySelectorAll("[data-view]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
   $("#records-view").hidden=view!=="records";$("#players-view").hidden=view!=="players";
  }));
+ paint();setNav();
+}
+function renderGames(){
+ const params=new URLSearchParams(location.search);
+ let selectedId=params.get("game")||"clone-hero";
+ if(!engines.some(e=>e.id===selectedId))selectedId="clone-hero";
+ let selectedKind=["fc","pass"].includes(params.get("kind"))?params.get("kind"):"all";
+ const selectedGame=()=>engineFor(selectedId);
+ const updateAddress=()=>{
+  const p=new URLSearchParams();p.set("game",selectedId);
+  if(selectedKind!=="all")p.set("kind",selectedKind);
+  history.replaceState({}, "",location.pathname+"?"+p.toString());
+ };
+ const tabs=engines.map(g=>'<button class="game-tab'+(g.id===selectedId?' active':'')+'" type="button" role="tab" aria-selected="'+(g.id===selectedId?'true':'false')+'" data-game-tab="'+esc(g.id)+'"><img src="'+ROOT_PREFIX+g.icon+'" alt=""><span>'+esc(g.short)+'</span></button>').join("");
+ $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Separate leaderboard for every release</span><h1>Games</h1><p>Pick a game to see its own hardest charts, full combos, passes, and official links. Nothing is bundled together.</p></div></div>'+
+ '<div class="game-tabs" role="tablist" aria-label="Choose a game">'+tabs+'</div>'+
+ '<section class="game-feature"><div class="game-art"><img id="game-icon-large" class="game-page-icon" src="'+ROOT_PREFIX+selectedGame().icon+'" alt=""><img id="game-logo-large" class="game-page-logo" src="'+ROOT_PREFIX+selectedGame().logo+'" alt="'+esc(selectedGame().name)+' logo"></div><div class="game-info"><span class="eyebrow" id="game-type">'+esc(selectedGame().type)+(selectedGame().year?' · '+esc(selectedGame().year):'')+'</span><h2 id="game-heading">'+esc(selectedGame().name)+'</h2><p id="game-description">'+esc(selectedGame().description)+'</p><div class="game-links"><a id="game-youtube" class="button primary" href="'+esc(selectedGame().youtube||'#')+'" target="_blank" rel="noopener noreferrer">Official YouTube ↗</a>'+(selectedGame().website?'<a id="game-website" class="button ghost" href="'+esc(selectedGame().website)+'" target="_blank" rel="noopener noreferrer">Official site ↗</a>':'')+'</div></div></section>'+
+ '<div class="section-heading"><div><h2>Hardest songs & records</h2><p id="game-record-summary">Records for this game only.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'submit/">Submit a run ↗</a></div>'+
+ '<div class="game-record-controls"><div class="view-tabs" role="tablist" aria-label="Achievement type"><button type="button" class="'+(selectedKind==="all"?'active':'')+'" data-game-kind="all" role="tab" aria-selected="'+(selectedKind==="all"?'true':'false')+'">All records</button><button type="button" class="'+(selectedKind==="fc"?'active':'')+'" data-game-kind="fc" role="tab" aria-selected="'+(selectedKind==="fc"?'true':'false')+'">Full combos</button><button type="button" class="'+(selectedKind==="pass"?'active':'')+'" data-game-kind="pass" role="tab" aria-selected="'+(selectedKind==="pass"?'true':'false')+'">Passes</button></div><label class="search-field game-search"><input id="game-record-search" type="search" placeholder="Search songs, players or charters…" autocomplete="off" aria-label="Search this game records"></label></div>'+
+ '<div class="table-wrap"><table class="records-table"><thead><tr><th>#</th><th>Song / artist / charter</th><th>Game</th><th>Type</th><th>Victors</th><th>Peak NPS</th><th>Status</th></tr></thead><tbody id="game-record-body"></tbody></table></div>'+
+ '<div class="notice">Each game has its own record list. The bundled entries are sample data for layout testing, not actual verified achievements.</div>';
+ const paint=()=>{
+  const q=$("#game-record-search").value.trim().toLowerCase();
+  const rows=allCharts.filter(c=>c.engine===selectedId&&(selectedKind==="all"||c.kind===selectedKind)&&[c.title,c.artist,c.charter,c.firstVerifier,...(c.victors||[])].join(" ").toLowerCase().includes(q))
+   .sort((a,b)=>Number(a.rank||9999)-Number(b.rank||9999)||Number(b.peakNps||0)-Number(a.peakNps||0));
+  $("#game-record-body").innerHTML=recordRows(rows);
+  $("#game-record-summary").textContent=rows.length+" entries for "+selectedGame().name+" · ordered by chart rank";
+ };
+ const setGame=id=>{
+  if(!engines.some(g=>g.id===id))return;
+  selectedId=id;
+  document.querySelectorAll("[data-game-tab]").forEach(button=>{
+   const active=button.dataset.gameTab===id;button.classList.toggle("active",active);button.setAttribute("aria-selected",String(active));
+  });
+  const game=selectedGame();
+  $("#game-icon-large").src=ROOT_PREFIX+game.icon;
+  $("#game-logo-large").src=ROOT_PREFIX+game.logo;
+  $("#game-logo-large").alt=game.name+" logo";
+  $("#game-heading").textContent=game.name;
+  $("#game-type").textContent=game.type+(game.year?" · "+game.year:"");
+  $("#game-description").textContent=game.description;
+  $("#game-youtube").href=game.youtube||"#";
+  const site=$("#game-website");if(site&&game.website)site.href=game.website;if(site)site.hidden=!game.website;
+  updateAddress();paint();
+ };
+ document.querySelectorAll("[data-game-tab]").forEach(button=>button.addEventListener("click",()=>setGame(button.dataset.gameTab)));
+ document.querySelectorAll("[data-game-kind]").forEach(button=>button.addEventListener("click",()=>{
+  selectedKind=button.dataset.gameKind;
+  document.querySelectorAll("[data-game-kind]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
+  updateAddress();paint();
+ }));
+ $("#game-record-search").addEventListener("input",paint);
  paint();setNav();
 }
 function renderSubmit(){
@@ -840,11 +892,12 @@ function renderCurrentRoute(){
  syncCharts();
  try{
   if(route==="home")renderHome();
+  else if(route==="games")renderGames();
   else if(route==="submit")renderSubmit();
   else if(route==="rules")renderRules();
   else if(route==="community")renderCommunity();
   else if(route==="leaderboard")renderLeaderboard();
-  else if(route.includes("/")){const [engine,kind]=route.split("/");renderLeaderboard(engine,kind)}
+  else if(route.includes("/")){const [legacyEngine,kind]=route.split("/");const engine=legacyEngine==="gh1-2"?"gh1":legacyEngine==="ghwt-wor"?"gh-world-tour":legacyEngine;renderLeaderboard(engine,kind)}
   else renderHome();
  }catch(error){
   console.error("Overstrum page render failed:",error);

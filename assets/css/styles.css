@@ -156,3 +156,28 @@ input:focus,select:focus,textarea:focus{border-color:rgba(52,211,153,.55)!import
 .brand{flex-direction:row;align-items:center;min-width:166px;line-height:1}
 .brand-logo{display:block;width:176px;height:auto;max-height:38px;object-fit:contain}
 @media(max-width:620px){.brand-logo{width:148px;max-height:34px}}
+
+
+/* Individual game tabs and replaceable artwork */
+.engine-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.engine-icon{overflow:hidden;padding:3px}
+.engine-icon img{display:block;width:100%;height:100%;object-fit:contain}
+.game-tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 12px;margin:0 0 18px;border-bottom:1px solid var(--line);scrollbar-width:thin}
+.game-tab{flex:0 0 auto;min-width:72px;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 11px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.game-tab img{display:block;width:24px;height:24px;object-fit:contain;border-radius:5px}
+.game-tab:hover{background:var(--surface-2);color:var(--text)}
+.game-tab.active{background:var(--surface-2);border-color:var(--line-strong);color:var(--text)}
+.game-feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,1fr);gap:24px;align-items:center;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(120deg,#1a1d23,#17191e);margin:0 0 25px}
+.game-art{display:flex;align-items:center;gap:16px;min-width:0}
+.game-page-icon{width:78px;height:78px;object-fit:contain;flex:0 0 auto}
+.game-page-logo{display:block;width:min(100%,440px);height:auto;max-height:132px;object-fit:contain}
+.game-info{min-width:0}
+.game-info h2{font:750 24px/1.2 var(--display);letter-spacing:-.7px;margin:5px 0 8px}
+.game-info p{font-size:12px;color:var(--muted);margin:0 0 14px;max-width:560px}
+.game-links{display:flex;gap:8px;flex-wrap:wrap}
+.game-links .button{min-height:34px;padding:8px 12px;font-size:11px}
+.game-record-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 13px}
+.game-record-controls .view-tabs{margin:0}
+.game-search{max-width:310px}
+@media(max-width:900px){.engine-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.game-feature{grid-template-columns:1fr}}
+@media(max-width:620px){.engine-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.game-feature{padding:15px;gap:15px}.game-art{gap:10px}.game-page-icon{width:54px;height:54px}.game-page-logo{max-height:100px}.game-info h2{font-size:21px}.game-record-controls{align-items:stretch;flex-direction:column}.game-search{max-width:none}.game-tab{min-width:66px;padding:8px 9px}.game-tab img{width:21px;height:21px}}

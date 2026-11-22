@@ -21,3 +21,12 @@ Edit `data/charts.json` to curate the shared list. The included records are demo
 ## Logo assets
 
 The original `assets/logo-black.png` and `assets/logo-white.png` files are preserved; the dark header uses `assets/logo-white.png`, which contains the original wordmark and five-colour fret bar. The repository currently contains only the explicitly named `*-placeholder.svg` files in `assets/img/engines/`, not authentic game-engine logo artwork. Those files are preserved unchanged rather than replaced with invented logos.
+
+## Individual game tabs
+
+The **Games** page gives each supported title its own tab and hardest-song/record list: Clone Hero, Guitar Hero, Guitar Hero II, Rocks the 80s, Guitar Hero III, Aerosmith, World Tour, Metallica, Smash Hits, Guitar Hero 5, Van Halen, Band Hero, Warriors of Rock, and YARG. World Tour and Warriors of Rock are separate, as are GH1 and GH2.
+
+Each game has two replaceable PNG slots in `assets/img/games/<game-id>/`: `icon.png` (small square tab/card image) and `logo.png` (large game logo). Replace the placeholder file at the same path and filename. See `assets/img/games/README.md` for the complete game ID list.
+
+The Guitar Hero titles link to the official Guitar Hero YouTube channel; Clone Hero and YARG link to their respective official channels.
+
