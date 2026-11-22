@@ -1,0 +1,65 @@
+[
+  {
+    "name": "bytebreak",
+    "points": 170,
+    "achievements": 16,
+    "pioneers": 3,
+    "rank": 1
+  },
+  {
+    "name": "Riven",
+    "points": 169,
+    "achievements": 14,
+    "pioneers": 4,
+    "rank": 2
+  },
+  {
+    "name": "Echowave",
+    "points": 129,
+    "achievements": 13,
+    "pioneers": 3,
+    "rank": 3
+  },
+  {
+    "name": "Duskline",
+    "points": 84,
+    "achievements": 7,
+    "pioneers": 4,
+    "rank": 4
+  },
+  {
+    "name": "Fracture",
+    "points": 84,
+    "achievements": 7,
+    "pioneers": 4,
+    "rank": 5
+  },
+  {
+    "name": "Signal",
+    "points": 81,
+    "achievements": 7,
+    "pioneers": 3,
+    "rank": 6
+  },
+  {
+    "name": "Aster",
+    "points": 76,
+    "achievements": 7,
+    "pioneers": 3,
+    "rank": 7
+  },
+  {
+    "name": "hexdrive",
+    "points": 75,
+    "achievements": 6,
+    "pioneers": 3,
+    "rank": 8
+  },
+  {
+    "name": "Cinder",
+    "points": 37,
+    "achievements": 3,
+    "pioneers": 3,
+    "rank": 9
+  }
+]
