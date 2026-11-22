@@ -187,3 +187,9 @@ input:focus,select:focus,textarea:focus{border-color:rgba(52,211,153,.55)!import
 .achievement-tabs button{min-width:58px;text-align:center;font-size:12px;padding:8px 16px}
 .game-record-controls .achievement-tabs{margin:0}
 @media(max-width:620px){.achievement-tabs{min-width:120px}.achievement-tabs button{flex:1;padding:8px 13px}}
+
+/* Game selection lives directly on the leaderboard as icon tabs. */
+.leaderboard-game-tabs{max-width:100%;margin:0 0 16px;padding:3px 0 10px;border:0;border-bottom:1px solid var(--line);border-radius:0}
+.leaderboard-game-tabs .game-tab{min-width:68px;padding:7px 9px}
+.leaderboard-game-tabs .game-tab img{width:25px;height:25px}
+@media(max-width:620px){.leaderboard-game-tabs{gap:4px}.leaderboard-game-tabs .game-tab{min-width:59px;padding:6px 7px}.leaderboard-game-tabs .game-tab img{width:22px;height:22px}}

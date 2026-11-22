@@ -697,7 +697,7 @@ function readSubmissions(){try{const value=JSON.parse(localStorage.getItem(STORE
 function syncCharts(){allCharts=[...baseCharts,...submissions]}
 function setNav(){
  const navKey=route==="home"?"home":route==="games"?"games":route==="submit"?"submit":route==="rules"?"rules":route==="community"?"community":"leaderboard";
- document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("active",a.dataset.nav===navKey));
+ document.querySelectorAll("[data-nav]").forEach(a=>{a.classList.toggle("active",a.dataset.nav===navKey);if(a.dataset.nav==="games")a.textContent="The List"});
  const toggle=$(".menu-toggle"),nav=$(".main-nav");
  if(toggle&&!toggle.dataset.bound){toggle.dataset.bound="true";toggle.addEventListener("click",()=>{const open=nav.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open))})}
 }
@@ -754,23 +754,22 @@ function renderLeaderboard(seedEngine,seedKind){
  const defaultKind=(seedKind||params.get("kind"))==="fc"?"fc":"pass";
  $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Browse the archive</span><h1>Leaderboard</h1><p>Explore separate Full Combo and Pass boards for every game. Open any entry for its verification details.</p></div></div>'+
  '<div class="achievement-tabs view-tabs" role="tablist" aria-label="Achievement category"><button type="button" class="'+(defaultKind==="fc"?"active":"")+'" data-leaderboard-kind="fc" role="tab" aria-selected="'+(defaultKind==="fc"?"true":"false")+'">FC</button><button type="button" class="'+(defaultKind==="pass"?"active":"")+'" data-leaderboard-kind="pass" role="tab" aria-selected="'+(defaultKind==="pass"?"true":"false")+'">Pass</button></div>'+
+ '<div class="game-tabs leaderboard-game-tabs" role="tablist" aria-label="Choose a game"><button class="game-tab'+(defaultEngine==="all"?" active":"")+'" type="button" data-leaderboard-game="all" role="tab" aria-selected="'+(defaultEngine==="all"?"true":"false")+'"><span>All</span></button>'+engines.map(g=>'<button class="game-tab'+(g.id===defaultEngine?' active':'')+'" type="button" data-leaderboard-game="'+esc(g.id)+'" role="tab" aria-selected="'+(g.id===defaultEngine?'true':'false')+'"><img src="'+ROOT_PREFIX+g.icon+'" alt=""><span>'+esc(g.short)+'</span></button>').join("")+'</div>'+
  '<div class="filters"><label class="search-field"><input id="record-search" type="search" placeholder="Search song, artist, charter or victor…" autocomplete="off" aria-label="Search records"></label>'+
- '<select class="select-field" id="engine-filter" aria-label="Filter by game"><option value="all">All games</option>'+engines.map(e=>'<option value="'+e.id+'">'+esc(e.name)+'</option>').join("")+'</select>'+
- 
  '<select class="select-field" id="status-filter" aria-label="Filter by status"><option value="all">All statuses</option><option value="verified">Verified</option><option value="sample">Sample data</option><option value="pending">Pending review</option></select><span class="filter-count" id="filter-count"></span></div>'+
  '<div class="view-tabs" role="tablist" aria-label="Leaderboard view"><button class="active" type="button" data-view="records" role="tab" aria-selected="true">Chart records</button><button type="button" data-view="players" role="tab" aria-selected="false">Player rankings</button></div>'+
  '<section id="records-view"><div class="table-wrap"><table class="records-table"><thead><tr><th>#</th><th>Song / artist / charter</th><th>Engine</th><th>Type</th><th>Victors</th><th>Peak NPS</th><th>Status</th></tr></thead><tbody id="record-body"></tbody></table></div></section>'+
  '<section id="players-view" hidden><div class="table-wrap"><table class="players-table"><thead><tr><th>#</th><th>Player</th><th>Records</th><th>Pioneer verifications</th><th style="text-align:right">Points</th></tr></thead><tbody id="player-body"></tbody></table></div><p class="field-hint" style="margin-top:10px">Pioneer recognition adds 3 points to a reviewed record. Pending submissions do not earn points until approved.</p></section>'+
  '<div class="notice">Sample records are included to demonstrate the interface and are not verified achievements. Submissions from this browser appear as pending review and are visible only in this browser.</div>';
- const engineEl=$("#engine-filter"),statusEl=$("#status-filter"),searchEl=$("#record-search");
+ const statusEl=$("#status-filter"),searchEl=$("#record-search");
  let selectedKind=defaultKind;
- engineEl.value=engines.some(e=>e.id===defaultEngine)?defaultEngine:"all";
+ let selectedEngine=engines.some(e=>e.id===defaultEngine)?defaultEngine:"all";
  
- function updateUrl(){const p=new URLSearchParams();if(engineEl.value!=="all")p.set("engine",engineEl.value);p.set("kind",selectedKind);const q=p.toString();history.replaceState({}, "",location.pathname+(q?"?"+q:""))}
+ function updateUrl(){const p=new URLSearchParams();if(selectedEngine!=="all")p.set("engine",selectedEngine);p.set("kind",selectedKind);const q=p.toString();history.replaceState({}, "",location.pathname+(q?"?"+q:""))}
  function paint(){
   const q=searchEl.value.trim().toLowerCase();
   const filtered=allCharts.filter(c=>{
-   const engineOk=engineEl.value==="all"||c.engine===engineEl.value;
+   const engineOk=selectedEngine==="all"||c.engine===selectedEngine;
    const kindOk=c.kind===selectedKind;
    const statusOk=statusEl.value==="all"||statusFor(c)===statusEl.value;
    const haystack=[c.title,c.artist,c.charter,c.firstVerifier,...(c.victors||[]),c.player].join(" ").toLowerCase();
@@ -780,7 +779,12 @@ function renderLeaderboard(seedEngine,seedKind){
   $("#player-body").innerHTML=renderPlayerTable(filtered);
   $("#filter-count").textContent=filtered.length+" entries";
  }
- [engineEl,statusEl].forEach(el=>el.addEventListener("change",()=>{updateUrl();paint()}));
+ statusEl.addEventListener("change",()=>{updateUrl();paint()});
+ document.querySelectorAll("[data-leaderboard-game]").forEach(button=>button.addEventListener("click",()=>{
+  selectedEngine=button.dataset.leaderboardGame;
+  document.querySelectorAll("[data-leaderboard-game]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
+  updateUrl();paint();
+ }));
  document.querySelectorAll("[data-leaderboard-kind]").forEach(button=>button.addEventListener("click",()=>{
   selectedKind=button.dataset.leaderboardKind;
   document.querySelectorAll("[data-leaderboard-kind]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
@@ -806,7 +810,7 @@ function renderGames(){
   history.replaceState({}, "",location.pathname+"?"+p.toString());
  };
  const tabs=engines.map(g=>'<button class="game-tab'+(g.id===selectedId?' active':'')+'" type="button" role="tab" aria-selected="'+(g.id===selectedId?'true':'false')+'" data-game-tab="'+esc(g.id)+'"><img src="'+ROOT_PREFIX+g.icon+'" alt=""><span>'+esc(g.short)+'</span></button>').join("");
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Separate leaderboard for every release</span><h1>Games</h1><p>Pick a game to see its own hardest charts, full combos, passes, and official links. Nothing is bundled together.</p></div></div>'+
+ $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Separate leaderboard for every release</span><h1>The List</h1><p>Pick a game to see its own hardest charts, full combos, passes, and official links. Nothing is bundled together.</p></div></div>'+
  '<div class="game-tabs" role="tablist" aria-label="Choose a game">'+tabs+'</div>'+
  '<section class="game-feature"><div class="game-art"><img id="game-icon-large" class="game-page-icon" src="'+ROOT_PREFIX+selectedGame().icon+'" alt=""><img id="game-logo-large" class="game-page-logo" src="'+ROOT_PREFIX+selectedGame().logo+'" alt="'+esc(selectedGame().name)+' logo"></div><div class="game-info"><span class="eyebrow" id="game-type">'+esc(selectedGame().type)+(selectedGame().year?' · '+esc(selectedGame().year):'')+'</span><h2 id="game-heading">'+esc(selectedGame().name)+'</h2><p id="game-description">'+esc(selectedGame().description)+'</p><div class="game-links"><a id="game-youtube" class="button primary" href="'+esc(selectedGame().youtube||'#')+'" target="_blank" rel="noopener noreferrer">Official YouTube ↗</a>'+(selectedGame().website?'<a id="game-website" class="button ghost" href="'+esc(selectedGame().website)+'" target="_blank" rel="noopener noreferrer">Official site ↗</a>':'')+'</div></div></section>'+
  '<div class="section-heading"><div><h2>Hardest songs & records</h2><p id="game-record-summary">Records for this game only.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'submit/">Submit a run ↗</a></div>'+
