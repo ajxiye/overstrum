@@ -181,3 +181,9 @@ input:focus,select:focus,textarea:focus{border-color:rgba(52,211,153,.55)!import
 .game-search{max-width:310px}
 @media(max-width:900px){.engine-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.game-feature{grid-template-columns:1fr}}
 @media(max-width:620px){.engine-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.game-feature{padding:15px;gap:15px}.game-art{gap:10px}.game-page-icon{width:54px;height:54px}.game-page-logo{max-height:100px}.game-info h2{font-size:21px}.game-record-controls{align-items:stretch;flex-direction:column}.game-search{max-width:none}.game-tab{min-width:66px;padding:8px 9px}.game-tab img{width:21px;height:21px}}
+
+/* Separate FC and Pass lists, with Pass selected by default */
+.achievement-tabs{display:flex;gap:4px;width:max-content;min-width:132px;margin:0 0 14px;padding:3px}
+.achievement-tabs button{min-width:58px;text-align:center;font-size:12px;padding:8px 16px}
+.game-record-controls .achievement-tabs{margin:0}
+@media(max-width:620px){.achievement-tabs{min-width:120px}.achievement-tabs button{flex:1;padding:8px 13px}}
