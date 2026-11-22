@@ -2,12 +2,695 @@
 "use strict";
 const $=s=>document.querySelector(s);
 const route=document.body.dataset.route||"home";
+const ROOT_PREFIX=document.body.dataset.rootPrefix||"./";
 const engines=[{"id":"clone-hero","name":"Clone Hero","short":"CH","games":"Clone Hero"},{"id":"gh3","name":"Guitar Hero III","short":"GH3","games":"Guitar Hero III"},{"id":"gh1-2","name":"Guitar Hero I & II","short":"GH1 + II","games":"Guitar Hero 1 and 2"},{"id":"ghwt-wor","name":"Guitar Hero: World Tour / WoR","short":"WT / WoR","games":"World Tour and Warriors of Rock"},{"id":"yarg","name":"YARG","short":"YARG","games":"YARG"}];
 const STORE_KEY="overstrum-submissions-v1";
 const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 const fmt=value=>Number.isFinite(Number(value))?Number(value).toFixed(1):"—";
 const engineFor=id=>engines.find(e=>e.id===id)||{id,name:"Unknown engine",short:"—"};
-let baseCharts=[];
+const FALLBACK_CHARTS=[
+  {
+    "id": "clone-hero-fc-1",
+    "rank": 1,
+    "engine": "clone-hero",
+    "engineName": "Clone Hero",
+    "kind": "fc",
+    "title": "Signal Fires",
+    "artist": "Static Season",
+    "charter": "Ari Vale",
+    "points": 15,
+    "firstVerifier": "Duskline",
+    "victors": [
+      "Duskline",
+      "Riven"
+    ],
+    "hash": "d4b2907e5c3a18f6d4b2907e5c3a18f6",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/1",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "clone-hero-fc-2",
+    "rank": 2,
+    "engine": "clone-hero",
+    "engineName": "Clone Hero",
+    "kind": "fc",
+    "title": "Glass Circuit",
+    "artist": "Northbound",
+    "charter": "Mira Sol",
+    "points": 12,
+    "firstVerifier": "Fracture",
+    "victors": [
+      "Fracture",
+      "bytebreak",
+      "Signal"
+    ],
+    "hash": "a18f6d4b2907e5c3a18f6d4b2907e5c3",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/2",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "clone-hero-fc-3",
+    "rank": 3,
+    "engine": "clone-hero",
+    "engineName": "Clone Hero",
+    "kind": "fc",
+    "title": "Violet Static",
+    "artist": "The Relay",
+    "charter": "Kellan",
+    "points": 10,
+    "firstVerifier": "Riven",
+    "victors": [
+      "Riven",
+      "Echowave",
+      "Aster"
+    ],
+    "hash": "7e5c3a18f6d4b2907e5c3a18f6d4b290",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/3",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "clone-hero-pass-1",
+    "rank": 1,
+    "engine": "clone-hero",
+    "engineName": "Clone Hero",
+    "kind": "pass",
+    "title": "Signal Fires",
+    "artist": "Static Season",
+    "charter": "Ari Vale",
+    "points": 10,
+    "firstVerifier": "Aster",
+    "victors": [
+      "Aster",
+      "Riven",
+      "bytebreak"
+    ],
+    "hash": "4b2907e5c3a18f6d4b2907e5c3a18f6d",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/4",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "clone-hero-pass-2",
+    "rank": 2,
+    "engine": "clone-hero",
+    "engineName": "Clone Hero",
+    "kind": "pass",
+    "title": "Glass Circuit",
+    "artist": "Northbound",
+    "charter": "Mira Sol",
+    "points": 8,
+    "firstVerifier": "Cinder",
+    "victors": [
+      "Cinder",
+      "bytebreak"
+    ],
+    "hash": "18f6d4b2907e5c3a18f6d4b2907e5c3a",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/5",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "clone-hero-pass-3",
+    "rank": 3,
+    "engine": "clone-hero",
+    "engineName": "Clone Hero",
+    "kind": "pass",
+    "title": "Violet Static",
+    "artist": "The Relay",
+    "charter": "Kellan",
+    "points": 6,
+    "firstVerifier": "Echowave",
+    "victors": [
+      "Echowave",
+      "Duskline"
+    ],
+    "hash": "e5c3a18f6d4b2907e5c3a18f6d4b2907",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/6",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "gh3-fc-1",
+    "rank": 1,
+    "engine": "gh3",
+    "engineName": "Guitar Hero III",
+    "kind": "fc",
+    "title": "Razor Skyline",
+    "artist": "The Overpass",
+    "charter": "Niko",
+    "points": 15,
+    "firstVerifier": "hexdrive",
+    "victors": [
+      "hexdrive",
+      "Riven",
+      "Echowave"
+    ],
+    "hash": "6d4b2907e5c3a18f6d4b2907e5c3a18f",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/7",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "gh3-fc-2",
+    "rank": 2,
+    "engine": "gh3",
+    "engineName": "Guitar Hero III",
+    "kind": "fc",
+    "title": "Dead Air",
+    "artist": "Paper Atlas",
+    "charter": "Mira Sol",
+    "points": 12,
+    "firstVerifier": "Signal",
+    "victors": [
+      "Signal",
+      "bytebreak",
+      "Fracture"
+    ],
+    "hash": "3a18f6d4b2907e5c3a18f6d4b2907e5c",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/8",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "gh3-fc-3",
+    "rank": 3,
+    "engine": "gh3",
+    "engineName": "Guitar Hero III",
+    "kind": "fc",
+    "title": "Afterimage",
+    "artist": "Vanta",
+    "charter": "Ari Vale",
+    "points": 10,
+    "firstVerifier": "bytebreak",
+    "victors": [
+      "bytebreak",
+      "Echowave",
+      "hexdrive"
+    ],
+    "hash": "07e5c3a18f6d4b2907e5c3a18f6d4b29",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/9",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "gh3-pass-1",
+    "rank": 1,
+    "engine": "gh3",
+    "engineName": "Guitar Hero III",
+    "kind": "pass",
+    "title": "Razor Skyline",
+    "artist": "The Overpass",
+    "charter": "Niko",
+    "points": 10,
+    "firstVerifier": "Duskline",
+    "victors": [
+      "Duskline",
+      "Riven"
+    ],
+    "hash": "d4b2907e5c3a18f6d4b2907e5c3a18f6",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/10",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "gh3-pass-2",
+    "rank": 2,
+    "engine": "gh3",
+    "engineName": "Guitar Hero III",
+    "kind": "pass",
+    "title": "Dead Air",
+    "artist": "Paper Atlas",
+    "charter": "Mira Sol",
+    "points": 8,
+    "firstVerifier": "Fracture",
+    "victors": [
+      "Fracture",
+      "bytebreak",
+      "Signal"
+    ],
+    "hash": "a18f6d4b2907e5c3a18f6d4b2907e5c3",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/11",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "gh3-pass-3",
+    "rank": 3,
+    "engine": "gh3",
+    "engineName": "Guitar Hero III",
+    "kind": "pass",
+    "title": "Afterimage",
+    "artist": "Vanta",
+    "charter": "Ari Vale",
+    "points": 6,
+    "firstVerifier": "Riven",
+    "victors": [
+      "Riven",
+      "Echowave",
+      "Aster"
+    ],
+    "hash": "7e5c3a18f6d4b2907e5c3a18f6d4b290",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/12",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "gh1-2-fc-1",
+    "rank": 1,
+    "engine": "gh1-2",
+    "engineName": "Guitar Hero I & II",
+    "kind": "fc",
+    "title": "Crimson Theory",
+    "artist": "The Low Ends",
+    "charter": "Kellan",
+    "points": 15,
+    "firstVerifier": "Aster",
+    "victors": [
+      "Aster",
+      "Riven",
+      "bytebreak"
+    ],
+    "hash": "f6d4b2907e5c3a18f6d4b2907e5c3a18",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/13",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "gh1-2-fc-2",
+    "rank": 2,
+    "engine": "gh1-2",
+    "engineName": "Guitar Hero I & II",
+    "kind": "fc",
+    "title": "Blackout Avenue",
+    "artist": "Static Season",
+    "charter": "Niko",
+    "points": 12,
+    "firstVerifier": "Cinder",
+    "victors": [
+      "Cinder",
+      "bytebreak"
+    ],
+    "hash": "c3a18f6d4b2907e5c3a18f6d4b2907e5",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/14",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "gh1-2-fc-3",
+    "rank": 3,
+    "engine": "gh1-2",
+    "engineName": "Guitar Hero I & II",
+    "kind": "fc",
+    "title": "Cold Mercury",
+    "artist": "Northbound",
+    "charter": "Ari Vale",
+    "points": 10,
+    "firstVerifier": "Echowave",
+    "victors": [
+      "Echowave",
+      "Duskline"
+    ],
+    "hash": "907e5c3a18f6d4b2907e5c3a18f6d4b2",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/15",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "gh1-2-pass-1",
+    "rank": 1,
+    "engine": "gh1-2",
+    "engineName": "Guitar Hero I & II",
+    "kind": "pass",
+    "title": "Crimson Theory",
+    "artist": "The Low Ends",
+    "charter": "Kellan",
+    "points": 10,
+    "firstVerifier": "hexdrive",
+    "victors": [
+      "hexdrive",
+      "Riven",
+      "Echowave"
+    ],
+    "hash": "6d4b2907e5c3a18f6d4b2907e5c3a18f",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/16",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "gh1-2-pass-2",
+    "rank": 2,
+    "engine": "gh1-2",
+    "engineName": "Guitar Hero I & II",
+    "kind": "pass",
+    "title": "Blackout Avenue",
+    "artist": "Static Season",
+    "charter": "Niko",
+    "points": 8,
+    "firstVerifier": "Signal",
+    "victors": [
+      "Signal",
+      "bytebreak",
+      "Fracture"
+    ],
+    "hash": "3a18f6d4b2907e5c3a18f6d4b2907e5c",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/17",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "gh1-2-pass-3",
+    "rank": 3,
+    "engine": "gh1-2",
+    "engineName": "Guitar Hero I & II",
+    "kind": "pass",
+    "title": "Cold Mercury",
+    "artist": "Northbound",
+    "charter": "Ari Vale",
+    "points": 6,
+    "firstVerifier": "bytebreak",
+    "victors": [
+      "bytebreak",
+      "Echowave",
+      "hexdrive"
+    ],
+    "hash": "07e5c3a18f6d4b2907e5c3a18f6d4b29",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/18",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "ghwt-wor-fc-1",
+    "rank": 1,
+    "engine": "ghwt-wor",
+    "engineName": "GH: World Tour + Warriors of Rock",
+    "kind": "fc",
+    "title": "Midnight Engine",
+    "artist": "The Overpass",
+    "charter": "Mira Sol",
+    "points": 15,
+    "firstVerifier": "Duskline",
+    "victors": [
+      "Duskline",
+      "Riven"
+    ],
+    "hash": "8f6d4b2907e5c3a18f6d4b2907e5c3a1",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/19",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "ghwt-wor-fc-2",
+    "rank": 2,
+    "engine": "ghwt-wor",
+    "engineName": "GH: World Tour + Warriors of Rock",
+    "kind": "fc",
+    "title": "Hollow Signal",
+    "artist": "Vanta",
+    "charter": "Kellan",
+    "points": 12,
+    "firstVerifier": "Fracture",
+    "victors": [
+      "Fracture",
+      "bytebreak",
+      "Signal"
+    ],
+    "hash": "5c3a18f6d4b2907e5c3a18f6d4b2907e",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/20",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "ghwt-wor-fc-3",
+    "rank": 3,
+    "engine": "ghwt-wor",
+    "engineName": "GH: World Tour + Warriors of Rock",
+    "kind": "fc",
+    "title": "Run the Wire",
+    "artist": "Paper Atlas",
+    "charter": "Niko",
+    "points": 10,
+    "firstVerifier": "Riven",
+    "victors": [
+      "Riven",
+      "Echowave",
+      "Aster"
+    ],
+    "hash": "2907e5c3a18f6d4b2907e5c3a18f6d4b",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/21",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "ghwt-wor-pass-1",
+    "rank": 1,
+    "engine": "ghwt-wor",
+    "engineName": "GH: World Tour + Warriors of Rock",
+    "kind": "pass",
+    "title": "Midnight Engine",
+    "artist": "The Overpass",
+    "charter": "Mira Sol",
+    "points": 10,
+    "firstVerifier": "Aster",
+    "victors": [
+      "Aster",
+      "Riven",
+      "bytebreak"
+    ],
+    "hash": "f6d4b2907e5c3a18f6d4b2907e5c3a18",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/22",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "ghwt-wor-pass-2",
+    "rank": 2,
+    "engine": "ghwt-wor",
+    "engineName": "GH: World Tour + Warriors of Rock",
+    "kind": "pass",
+    "title": "Hollow Signal",
+    "artist": "Vanta",
+    "charter": "Kellan",
+    "points": 8,
+    "firstVerifier": "Cinder",
+    "victors": [
+      "Cinder",
+      "bytebreak"
+    ],
+    "hash": "c3a18f6d4b2907e5c3a18f6d4b2907e5",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/23",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "ghwt-wor-pass-3",
+    "rank": 3,
+    "engine": "ghwt-wor",
+    "engineName": "GH: World Tour + Warriors of Rock",
+    "kind": "pass",
+    "title": "Run the Wire",
+    "artist": "Paper Atlas",
+    "charter": "Niko",
+    "points": 6,
+    "firstVerifier": "Echowave",
+    "victors": [
+      "Echowave",
+      "Duskline"
+    ],
+    "hash": "907e5c3a18f6d4b2907e5c3a18f6d4b2",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/24",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "yarg-fc-1",
+    "rank": 1,
+    "engine": "yarg",
+    "engineName": "YARG",
+    "kind": "fc",
+    "title": "Satellite Teeth",
+    "artist": "Static Season",
+    "charter": "Ari Vale",
+    "points": 15,
+    "firstVerifier": "hexdrive",
+    "victors": [
+      "hexdrive",
+      "Riven",
+      "Echowave"
+    ],
+    "hash": "18f6d4b2907e5c3a18f6d4b2907e5c3a",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/25",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "yarg-fc-2",
+    "rank": 2,
+    "engine": "yarg",
+    "engineName": "YARG",
+    "kind": "fc",
+    "title": "Digital Graves",
+    "artist": "The Relay",
+    "charter": "Kellan",
+    "points": 12,
+    "firstVerifier": "Signal",
+    "victors": [
+      "Signal",
+      "bytebreak",
+      "Fracture"
+    ],
+    "hash": "e5c3a18f6d4b2907e5c3a18f6d4b2907",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/26",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "yarg-fc-3",
+    "rank": 3,
+    "engine": "yarg",
+    "engineName": "YARG",
+    "kind": "fc",
+    "title": "Floodlights",
+    "artist": "Northbound",
+    "charter": "Mira Sol",
+    "points": 10,
+    "firstVerifier": "bytebreak",
+    "victors": [
+      "bytebreak",
+      "Echowave",
+      "hexdrive"
+    ],
+    "hash": "b2907e5c3a18f6d4b2907e5c3a18f6d4",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/27",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  },
+  {
+    "id": "yarg-pass-1",
+    "rank": 1,
+    "engine": "yarg",
+    "engineName": "YARG",
+    "kind": "pass",
+    "title": "Satellite Teeth",
+    "artist": "Static Season",
+    "charter": "Ari Vale",
+    "points": 10,
+    "firstVerifier": "Duskline",
+    "victors": [
+      "Duskline",
+      "Riven"
+    ],
+    "hash": "8f6d4b2907e5c3a18f6d4b2907e5c3a1",
+    "peakNps": 21.7,
+    "averageNps": 12.8,
+    "video": "https://example.com/overstrum-demo-proof/28",
+    "verifiedAt": "2026-11-22",
+    "demo": true
+  },
+  {
+    "id": "yarg-pass-2",
+    "rank": 2,
+    "engine": "yarg",
+    "engineName": "YARG",
+    "kind": "pass",
+    "title": "Digital Graves",
+    "artist": "The Relay",
+    "charter": "Kellan",
+    "points": 8,
+    "firstVerifier": "Fracture",
+    "victors": [
+      "Fracture",
+      "bytebreak",
+      "Signal"
+    ],
+    "hash": "5c3a18f6d4b2907e5c3a18f6d4b2907e",
+    "peakNps": 18.4,
+    "averageNps": 11.2,
+    "video": "https://example.com/overstrum-demo-proof/29",
+    "verifiedAt": "2026-11-21",
+    "demo": true
+  },
+  {
+    "id": "yarg-pass-3",
+    "rank": 3,
+    "engine": "yarg",
+    "engineName": "YARG",
+    "kind": "pass",
+    "title": "Floodlights",
+    "artist": "Northbound",
+    "charter": "Mira Sol",
+    "points": 6,
+    "firstVerifier": "Riven",
+    "victors": [
+      "Riven",
+      "Echowave",
+      "Aster"
+    ],
+    "hash": "2907e5c3a18f6d4b2907e5c3a18f6d4b",
+    "peakNps": 24.2,
+    "averageNps": 9.6,
+    "video": "https://example.com/overstrum-demo-proof/30",
+    "verifiedAt": "2026-11-20",
+    "demo": true
+  }
+];
+let baseCharts=FALLBACK_CHARTS.slice();
 let submissions=readSubmissions();
 let allCharts=[];
 function readSubmissions(){try{const value=JSON.parse(localStorage.getItem(STORE_KEY)||"[]");return Array.isArray(value)?value:[]}catch{return[]}}
@@ -16,21 +699,21 @@ function setNav(){
  const navKey=route==="home"?"home":route==="submit"?"submit":route==="rules"?"rules":route==="community"?"community":"leaderboard";
  document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("active",a.dataset.nav===navKey));
  const toggle=$(".menu-toggle"),nav=$(".main-nav");
- toggle?.addEventListener("click",()=>{const open=nav.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open))});
+ if(toggle&&!toggle.dataset.bound){toggle.dataset.bound="true";toggle.addEventListener("click",()=>{const open=nav.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open))})}
 }
 function statusFor(c){return c.status==="pending"?"pending":c.demo?"sample":"verified"}
 function statusBadge(c){const s=statusFor(c),label=s==="pending"?"Pending review":s==="sample"?"Sample data":"Verified";return '<span class="badge '+s+'">'+label+'</span>'}
-function queryUrl(engine,kind){const p=new URLSearchParams();if(engine&&engine!=="all")p.set("engine",engine);if(kind&&kind!=="all")p.set("kind",kind);return "leaderboard/"+(p.toString()?"?"+p.toString():"")}
+function queryUrl(engine,kind){const p=new URLSearchParams();if(engine&&engine!=="all")p.set("engine",engine);if(kind&&kind!=="all")p.set("kind",kind);return ROOT_PREFIX+"leaderboard/"+(p.toString()?"?"+p.toString():"")}
 function renderHome(){
  const uniquePlayers=new Set(allCharts.flatMap(c=>c.victors||[]).concat(submissions.map(c=>c.player).filter(Boolean)));
  const fc=allCharts.filter(c=>c.kind==="fc").length,passes=allCharts.filter(c=>c.kind==="pass").length;
  const recent=[...allCharts].sort((a,b)=>String(b.verifiedAt||"").localeCompare(String(a.verifiedAt||""))).slice(0,3);
- $("#app").innerHTML='<section class="hero"><div><span class="eyebrow">A community archive for five-fret rhythm games</span><h1>Good runs deserve <span>a place.</span></h1><p class="hero-copy">Overstrum collects full combos and hardest passes across the games we play. Browse records, explore the players behind them, and submit a run for review.</p><div class="hero-actions"><a class="button primary" href="leaderboard/">Explore leaderboard <span aria-hidden="true">↗</span></a><a class="button ghost" href="submit/">Submit a record</a></div></div><aside class="hero-summary"><div class="summary-top"><span>List overview</span><span><i class="live-dot"></i>Community maintained</span></div><div class="summary-grid"><div class="summary-stat"><strong>'+allCharts.length+'</strong><span>Listed entries</span></div><div class="summary-stat"><strong>'+uniquePlayers.size+'</strong><span>Players</span></div><div class="summary-stat"><strong>'+fc+'</strong><span>Full combos</span></div><div class="summary-stat"><strong>'+passes+'</strong><span>Passes</span></div></div></aside></section>'+
- '<div class="section-heading"><div><h2>Choose a game</h2><p>Jump into the leaderboard with the engine already selected.</p></div><a class="inline-link" href="leaderboard/">All records ↗</a></div>'+
+ $("#app").innerHTML='<section class="hero"><div><span class="eyebrow">A community archive for five-fret rhythm games</span><h1>Good runs deserve <span>a place.</span></h1><p class="hero-copy">Overstrum collects full combos and hardest passes across the games we play. Browse records, explore the players behind them, and submit a run for review.</p><div class="hero-actions"><a class="button primary" href="'+ROOT_PREFIX+'leaderboard/">Explore leaderboard <span aria-hidden="true">↗</span></a><a class="button ghost" href="'+ROOT_PREFIX+'submit/">Submit a record</a></div></div><aside class="hero-summary"><div class="summary-top"><span>List overview</span><span><i class="live-dot"></i>Community maintained</span></div><div class="summary-grid"><div class="summary-stat"><strong>'+allCharts.length+'</strong><span>Listed entries</span></div><div class="summary-stat"><strong>'+uniquePlayers.size+'</strong><span>Players</span></div><div class="summary-stat"><strong>'+fc+'</strong><span>Full combos</span></div><div class="summary-stat"><strong>'+passes+'</strong><span>Passes</span></div></div></aside></section>'+
+ '<div class="section-heading"><div><h2>Choose a game</h2><p>Jump into the leaderboard with the engine already selected.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'leaderboard/">All records ↗</a></div>'+
  '<section class="engine-grid">'+engines.map(e=>'<a class="engine-card" href="'+queryUrl(e.id,"all")+'"><div class="engine-card-top"><span class="engine-icon">'+esc(e.short)+'</span><span class="engine-arrow">↗</span></div><strong>'+esc(e.name)+'</strong><small>'+allCharts.filter(c=>c.engine===e.id).length+' listed entries</small><div class="engine-badges"><span>Full combo</span><span>Pass</span></div></a>').join("")+'</section>'+
- '<div class="section-heading"><div><h2>Recently added</h2><p>The latest entries in the archive.</p></div><a class="inline-link" href="leaderboard/">View leaderboard ↗</a></div>'+
+ '<div class="section-heading"><div><h2>Recently added</h2><p>The latest entries in the archive.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'leaderboard/">View leaderboard ↗</a></div>'+
  '<section class="recent-grid">'+recent.map(c=>'<article class="recent-card"><div class="recent-card-top">'+statusBadge(c)+'<span class="badge">'+(c.kind==="fc"?"Full combo":"Pass")+'</span></div><strong>'+esc(c.title)+'</strong><p>'+esc(c.artist||"Artist not supplied")+' · '+esc(engineFor(c.engine).name)+'</p></article>').join("")+'</section>'+
- '<div class="section-heading"><div><h2>How the list works</h2><p>Clear standards, careful review, and useful records.</p></div><a class="inline-link" href="rules/">Read verification rules ↗</a></div>'+
+ '<div class="section-heading"><div><h2>How the list works</h2><p>Clear standards, careful review, and useful records.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'rules/">Read verification rules ↗</a></div>'+
  '<section class="content-grid"><article class="content-card"><h3>Evidence first</h3><p>Runs should be supported by continuous gameplay footage, appropriate handcam or input visibility, and original gameplay audio.</p></article><article class="content-card"><h3>Exact chart identity</h3><p>Chart hashes help distinguish different versions of a chart. A record is not considered reviewed until its chart details are checked.</p></article></section>'+
  '<div class="notice">The records currently bundled with this site are sample data for layout testing, not verified achievements. New submissions are saved locally and remain pending review.</div>';
  setNav();
@@ -116,7 +799,7 @@ function renderSubmit(){
  '<div class="form-field full"><label for="proof-url">Video proof URL</label><input id="proof-url" name="video" type="url" required placeholder="https://youtu.be/…"><span class="field-hint">Use a public video link that reviewers can open.</span></div>'+
  '<div class="form-field full"><label for="submission-notes">Notes <span class="field-hint">(optional)</span></label><textarea id="submission-notes" name="notes" maxlength="500" placeholder="Anything reviewers should know about this run?"></textarea></div>'+
  '</div><div class="form-footer"><button class="button primary" type="submit">Add submission</button><span id="form-message" class="form-message" aria-live="polite">This does not publish a verified record or send data to a server.</span></div></form>'+
- '<div class="notice"><strong>How this works:</strong> GitHub Pages is a static host, so this form stores submissions in your browser's local storage. They will not appear on another visitor's device. For a shared public submission queue, Overstrum will need a backend or a connected form service.</div>';
+ '<div class="notice"><strong>How this works:</strong> GitHub Pages is a static host, so this form stores submissions in your browser&#39;s local storage. They will not appear on another visitor&#39;s device. For a shared public submission queue, Overstrum will need a backend or a connected form service.</div>';
  $("#submission-form").addEventListener("submit",event=>{
   event.preventDefault();
   const form=event.currentTarget,data=new FormData(form);
@@ -146,16 +829,16 @@ function renderRules(){
  $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">A consistent standard for every game</span><h1>Verification rules</h1><p>Overstrum records should be clear, attributable, and tied to the exact chart that was played.</p></div></div>'+
  '<section class="rules-list">'+
  '<article class="rule-item"><span class="rule-number">01</span><div><h3>Continuous gameplay footage</h3><p>Provide a recording that shows the run from a clear start through the result screen. Avoid cuts, splices, speed changes, or edits that interrupt the attempt.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">02</span><div><h3>Handcam or input visibility</h3><p>Show the player's hands or input method clearly when the game or chart rules require it. The evidence should make the performance attributable to the submitting player.</p></div></article>'+
+ '<article class="rule-item"><span class="rule-number">02</span><div><h3>Handcam or input visibility</h3><p>Show the player&#39;s hands or input method clearly when the game or chart rules require it. The evidence should make the performance attributable to the submitting player.</p></div></article>'+
  '<article class="rule-item"><span class="rule-number">03</span><div><h3>Original gameplay audio</h3><p>Keep the gameplay audio unedited and synchronised with the video. Do not replace the game audio or use processing that could conceal timing or gameplay events.</p></div></article>'+
  '<article class="rule-item"><span class="rule-number">04</span><div><h3>Chart MD5 hash</h3><p>Provide the MD5 hash of the exact chart file used. The expected value is 32 hexadecimal characters. Reviewers can use it to distinguish chart revisions and duplicates.</p></div></article>'+
  '<article class="rule-item"><span class="rule-number">05</span><div><h3>Review and pioneer credit</h3><p>A submission remains pending until reviewed. First-verifier recognition is assigned after acceptance, and points are calculated from approved records rather than unreviewed submissions.</p></div></article>'+
- '</section><div class="notice">The current site is a static prototype. The included chart entries are examples for testing the layout, not claims of verified achievements. Do not treat a sample or locally submitted row as an approved record.</div><div class="hero-actions"><a class="button primary" href="submit/">Submit a record</a><a class="button ghost" href="community/">View community list</a></div>';
+ '</section><div class="notice">The current site is a static prototype. The included chart entries are examples for testing the layout, not claims of verified achievements. Do not treat a sample or locally submitted row as an approved record.</div><div class="hero-actions"><a class="button primary" href="'+ROOT_PREFIX+'submit/">Submit a record</a><a class="button ghost" href="'+ROOT_PREFIX+'community/">View community list</a></div>';
  setNav();
 }
-function init(){
- fetch("data/charts.json").then(response=>{if(!response.ok)throw new Error("Unable to load the chart database");return response.json()}).then(data=>{
-  baseCharts=Array.isArray(data)?data:[];syncCharts();
+function renderCurrentRoute(){
+ syncCharts();
+ try{
   if(route==="home")renderHome();
   else if(route==="submit")renderSubmit();
   else if(route==="rules")renderRules();
@@ -163,13 +846,35 @@ function init(){
   else if(route==="leaderboard")renderLeaderboard();
   else if(route.includes("/")){const [engine,kind]=route.split("/");renderLeaderboard(engine,kind)}
   else renderHome();
- }).catch(error=>{$("#app").innerHTML='<div class="empty-state">Could not load the Overstrum data. '+esc(error.message)+'</div>';});
+ }catch(error){
+  console.error("Overstrum page render failed:",error);
+  $("#app").innerHTML='<div class="empty-state" role="alert">Overstrum could not render this page. Reload the page to try again.</div>';
+ }
+}
+function init(){
+ // Render bundled records first. The site never waits for a network request to leave its loading state.
+ baseCharts=FALLBACK_CHARTS.slice();
+ syncCharts();
+ renderCurrentRoute();
+
  document.addEventListener("click",event=>{
   const trigger=event.target.closest("[data-open]");
   if(trigger){const panel=document.getElementById("details-"+trigger.dataset.open);if(!panel)return;const open=panel.hidden;panel.hidden=!open;trigger.setAttribute("aria-expanded",String(open));return;}
   const copy=event.target.closest("[data-copy]");
   if(copy){const value=copy.dataset.copy;const done=()=>{const old=copy.textContent;copy.textContent="Copied";setTimeout(()=>copy.textContent=old,1100)};if(navigator.clipboard?.writeText)navigator.clipboard.writeText(value).then(done).catch(()=>fallback());else fallback();function fallback(){const input=document.createElement("textarea");input.value=value;document.body.appendChild(input);input.select();try{document.execCommand("copy");done()}finally{input.remove()}}}
  });
+
+ // This same-origin JSON request only refreshes the bundled data. Failure or timeout leaves
+ // the fallback charts and community data already rendered above intact.
+ if(typeof fetch==="function"&&typeof AbortController!=="undefined"){
+  const controller=new AbortController();
+  const timeoutId=setTimeout(()=>controller.abort(),3500);
+  fetch(ROOT_PREFIX+"data/charts.json",{signal:controller.signal,cache:"no-store"})
+   .then(response=>{if(!response.ok)throw new Error("Chart JSON unavailable");return response.json()})
+   .then(data=>{if(!Array.isArray(data))throw new Error("Chart JSON must contain an array");baseCharts=data;renderCurrentRoute()})
+   .catch(error=>{console.info("Using bundled Overstrum sample data:",error.message)})
+   .finally(()=>clearTimeout(timeoutId));
+ }
 }
 init();
 })();
