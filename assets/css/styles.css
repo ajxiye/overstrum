@@ -265,7 +265,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid rgba(255,107,74,.7);ou
 .list-primary-cta:hover{background:#FF8064}
 .list-secondary-cta{width:100%;min-height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 3px;border:0;background:transparent;color:var(--muted);font-size:13px;font-weight:650;cursor:pointer}
 .list-secondary-cta:hover{color:var(--text)}
-.inspector-extra{margin-top:13px;padding-top:13px;border-top:1px solid rgba(255,255,255,.06)}
+.inspector-extra{margin-top:13px;padding-top:13px;border:0}
 .inspector-extra>div{display:flex;justify-content:space-between;gap:10px;margin:8px 0}
 .inspector-extra>div>span,.inspector-extra>div>strong{color:var(--muted);font-size:12px}
 .inspector-extra>div>strong{color:var(--text)}
