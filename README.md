@@ -1,32 +1,69 @@
-# overstrum.
+<div align="center">
+  <a href="https://github.io">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/logo-white.png">
+      <source media="(prefers-color-scheme: light)" srcset="assets/logo-black.png">
+      <img alt="Overstrum" src="assets/logo-white.png" width="320">
+    </picture>
+  </a>
 
-A static five-fret rhythm-game record archive for Clone Hero, Guitar Hero and YARG.
+  <p><strong>Five-fret records, kept honest.</strong></p>
 
-## Preview locally
+  <p>
+    <a href="https://github.io">Visit Overstrum</a> ·
+    <a href="https://github.ioleaderboard/">Leaderboard</a> ·
+    <a href="https://github.iosubmit/">Submit a Record</a> ·
+    <a href="https://github.iorules/">Rules</a>
+  </p>
+</div>
 
-Run `python -m http.server 8000` from the repository root and open `http://localhost:8000/`.
+---
 
-## GitHub Pages
+## About Overstrum
 
-In **Settings → Pages**, select **Deploy from a branch**, branch `main`, folder `/(root)`. Each engine/category route has a real folder `index.html`. Every page uses directory-relative links and assets, so the site works from the `/overstrum/` project subpath without a root-absolute `<base>` URL.
+**Overstrum** is a community record archive and demonlist for 5-fret rhythm games. It tracks the hardest legitimate Full Combos (FCs), passes, charters, first victors, and top players across **Clone Hero**, **YARG**, and the classic **Guitar Hero** series.
 
-## Submissions
+Because every rhythm game engine plays differently—from Clone Hero's loose tap mechanics to Guitar Hero 1 and 2's strict hit windows—Overstrum separates every engine into its own ranking list and player leaderboard instead of lumping them together.
 
-The submission form saves pending entries in the current browser's local storage. This is intentionally local-only: GitHub Pages does not provide a shared database or server endpoint. For public submissions across visitors, connect a backend or form service. Pending submissions are never counted as verified points.
+---
 
-## Data
+## Supported Games
 
-Edit `data/charts.json` to curate the shared list. The included records are demonstration entries, not actual verified achievements. The app also bundles these sample records in `assets/js/app.js`, so the interface renders immediately even when the optional JSON refresh cannot load. The player rankings and community profiles are calculated from victor credits.
+* **Clone Hero** — Custom charts, speedups, and community setlists
+* **YARG** — Yet Another Rhythm Game (5-fret)
+* **Guitar Hero III** — *Guitar Hero III: Legends of Rock* and *Guitar Hero: Aerosmith*
+* **Guitar Hero 1 & 2** — *Guitar Hero*, *Guitar Hero II*, and *Guitar Hero Encore: Rocks the 80s*
+* **GHWT – Warriors of Rock** — *World Tour*, *Metallica*, *Smash Hits*, *Guitar Hero 5*, *Van Halen*, *Band Hero*, and *Warriors of Rock*
 
-## Logo assets
+---
 
-The original `assets/logo-black.png` and `assets/logo-white.png` files are preserved; the dark header uses `assets/logo-white.png`, which contains the original wordmark and five-colour fret bar. The repository currently contains only the explicitly named `*-placeholder.svg` files in `assets/img/engines/`, not authentic game-engine logo artwork. Those files are preserved unchanged rather than replaced with invented logos.
+## How the Rankings Work
 
-## Individual game tabs
+Every engine has its own difficulty ladder divided into clear tiers:
 
-The **Games** page gives each supported title its own tab and hardest-song/record list: Clone Hero, Guitar Hero, Guitar Hero II, Rocks the 80s, Guitar Hero III, Aerosmith, World Tour, Metallica, Smash Hits, Guitar Hero 5, Van Halen, Band Hero, Warriors of Rock, and YARG. World Tour and Warriors of Rock are separate, as are GH1 and GH2.
+* **Main List (`#1 – #75`):** The hardest verified charts in the game, ranked in exact order of difficulty. Beating these awards the highest leaderboard points.
+* **Extended List (`#76 – #150`):** Tough charts ranked below the Main List that still award points so rising players can climb the leaderboard.
+* **Legacy List (`#151+`):** Older or pushed-off charts archived with their charter and victor history.
+* **Open Bounties:** The hardest known charts that still haven't been FC'd legitimately.
 
-Each game has two replaceable PNG slots in `assets/img/games/<game-id>/`: `icon.png` (small square tab/card image) and `logo.png` (large game logo). Replace the placeholder file at the same path and filename. See `assets/img/games/README.md` for the complete game ID list.
+### Points & First Victors
+* **FCs Earn Points:** Both FCs and Passes are recorded on chart pages, but only verified **FCs** give you leaderboard points.
+* **First Victor Bonus:** Being the first person to ever FC a ranked chart earns a **+10% point bonus** on top of that chart's score.
+* **Speedups:** Sped-up charts are ranked separately when increased by at least **5% increments** (such as `115%`, `125%`, `150%`, or `200%`).
 
-The Guitar Hero titles link to the official Guitar Hero YouTube channel; Clone Hero and YARG link to their respective official channels.
+---
 
+## Verification & Rules
+
+Overstrum only lists legitimate, human-played records:
+* Every submission must include a **public or unlisted video** (YouTube or Twitch).
+* Videos must have **audible strum/fret clicks** or an **on-screen input viewer** so runs can be verified.
+* Bots, macros, modified hit windows, and spliced runs are permanently banned.
+
+---
+
+## Submitting a Record
+
+1. Go to the **[Submit Page](https://github.iosubmit/)**.
+2. Choose your game, chart, record type (`FC` or `Pass`), and paste your video link.
+3. Copy your generated submission and send it via **[GitHub Issues](https://github.com)** to have it reviewed and added to the live leaderboard.
