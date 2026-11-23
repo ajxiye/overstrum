@@ -1,682 +1,742 @@
 [
   {
-    "id": "clone-hero-fc-1",
-    "rank": 1,
+    "id": "ch-soulless-6",
     "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "fc",
-    "title": "Signal Fires",
-    "artist": "Static Season",
-    "charter": "Ari Vale",
-    "points": 15,
-    "firstVerifier": "Duskline",
-    "victors": [
-      "Duskline",
-      "Riven"
+    "game_id": "clone-hero",
+    "rank": 1,
+    "title": "Soulless 6",
+    "artist": "ExileLord",
+    "charter": "ExileLord",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred",
+      "Endurance"
     ],
-    "hash": "d4b2907e5c3a18f6d4b2907e5c3a18f6",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/1",
-    "verifiedAt": "2026-11-22",
-    "demo": true
+    "first_victor": {
+      "player": "CarnyJared",
+      "date": "2021-04-19",
+      "video_url": "https://www.youtube.com/watch?v=CRneGN5LYqo"
+    },
+    "victors": [
+      {
+        "player": "CarnyJared",
+        "type": "FC",
+        "date": "2021-04-19",
+        "video_url": "https://www.youtube.com/watch?v=CRneGN5LYqo"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.youtube.com/watch?v=CRneGN5LYqo"
   },
   {
-    "id": "clone-hero-fc-2",
-    "rank": 2,
+    "id": "ch-soulless-5",
     "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "fc",
-    "title": "Glass Circuit",
-    "artist": "Northbound",
-    "charter": "Mira Sol",
-    "points": 12,
-    "firstVerifier": "Fracture",
-    "victors": [
-      "Fracture",
-      "bytebreak",
-      "Signal"
+    "game_id": "clone-hero",
+    "rank": 2,
+    "title": "Soulless 5",
+    "artist": "ExileLord",
+    "charter": "ExileLord",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred",
+      "Endurance"
     ],
-    "hash": "a18f6d4b2907e5c3a18f6d4b2907e5c3",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/2",
-    "verifiedAt": "2026-11-21",
-    "demo": true
+    "first_victor": {
+      "player": "Frif",
+      "date": "2019-10-17",
+      "video_url": "https://www.youtube.com/watch?v=Y2QIQtb9nlY"
+    },
+    "victors": [
+      {
+        "player": "Frif",
+        "type": "FC",
+        "date": "2019-10-17",
+        "video_url": "https://www.youtube.com/watch?v=Y2QIQtb9nlY"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.youtube.com/watch?v=Y2QIQtb9nlY"
   },
   {
-    "id": "clone-hero-fc-3",
-    "rank": 3,
+    "id": "ch-apathetic-inversions",
     "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "fc",
-    "title": "Violet Static",
-    "artist": "The Relay",
-    "charter": "Kellan",
-    "points": 10,
-    "firstVerifier": "Riven",
-    "victors": [
-      "Riven",
-      "Echowave",
-      "Aster"
+    "game_id": "clone-hero",
+    "rank": 151,
+    "title": "Apathetic Inversions",
+    "artist": "Sidney600",
+    "charter": "Sidney600",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Strict Engine"
     ],
-    "hash": "7e5c3a18f6d4b2907e5c3a18f6d4b290",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/3",
-    "verifiedAt": "2026-11-20",
-    "demo": true
+    "first_victor": {
+      "player": "TobeGH3",
+      "date": "2012-10",
+      "video_url": "https://www.fullcombo.net/songs/24/"
+    },
+    "victors": [
+      {
+        "player": "TobeGH3",
+        "type": "FC",
+        "date": "2012-10",
+        "video_url": "https://www.fullcombo.net/songs/24/"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.fullcombo.net/songs/24/"
   },
   {
-    "id": "clone-hero-pass-1",
-    "rank": 1,
+    "id": "ch-caverns-of-lolwut",
     "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "pass",
-    "title": "Signal Fires",
-    "artist": "Static Season",
-    "charter": "Ari Vale",
-    "points": 10,
-    "firstVerifier": "Aster",
-    "victors": [
-      "Aster",
-      "Riven",
-      "bytebreak"
+    "game_id": "clone-hero",
+    "rank": 152,
+    "title": "Caverns of Lolwut",
+    "artist": "Plumato",
+    "charter": "Plumato",
+    "speed": 100,
+    "tags": [
+      "Speed / Shred",
+      "Strumming / Stamina"
     ],
-    "hash": "4b2907e5c3a18f6d4b2907e5c3a18f6d",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/4",
-    "verifiedAt": "2026-11-22",
-    "demo": true
+    "first_victor": {
+      "player": "DeadShadowGH",
+      "date": "2018-10",
+      "video_url": "https://www.fullcombo.net/songs/54/"
+    },
+    "victors": [
+      {
+        "player": "DeadShadowGH",
+        "type": "FC",
+        "date": "2018-10",
+        "video_url": "https://www.fullcombo.net/songs/54/"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.fullcombo.net/songs/54/"
   },
   {
-    "id": "clone-hero-pass-2",
-    "rank": 2,
+    "id": "ch-zoidberg-cowboy",
     "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "pass",
-    "title": "Glass Circuit",
-    "artist": "Northbound",
-    "charter": "Mira Sol",
-    "points": 8,
-    "firstVerifier": "Cinder",
-    "victors": [
-      "Cinder",
-      "bytebreak"
+    "game_id": "clone-hero",
+    "rank": null,
+    "title": "Zoidberg the Cowboy",
+    "artist": "Schmutz",
+    "charter": "Schmutz",
+    "speed": 100,
+    "tags": [
+      "Strumming / Stamina",
+      "Endurance"
     ],
-    "hash": "18f6d4b2907e5c3a18f6d4b2907e5c3a",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/5",
-    "verifiedAt": "2026-11-21",
-    "demo": true
+    "first_victor": null,
+    "victors": [],
+    "bounty": true,
+    "source_url": "https://www.fullcombo.net/songs/460/"
   },
   {
-    "id": "clone-hero-pass-3",
-    "rank": 3,
+    "id": "ch-spacerace",
     "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "pass",
-    "title": "Violet Static",
-    "artist": "The Relay",
-    "charter": "Kellan",
-    "points": 6,
-    "firstVerifier": "Echowave",
-    "victors": [
-      "Echowave",
-      "Duskline"
+    "game_id": "clone-hero",
+    "rank": null,
+    "title": "Spacerace",
+    "artist": "archwk",
+    "charter": "archwk",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Endurance"
     ],
-    "hash": "e5c3a18f6d4b2907e5c3a18f6d4b2907",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/6",
-    "verifiedAt": "2026-11-20",
-    "demo": true
+    "first_victor": null,
+    "victors": [],
+    "bounty": true,
+    "source_url": "https://www.fullcombo.net/songs/950/"
   },
   {
-    "id": "gh3-fc-1",
-    "rank": 1,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "fc",
-    "title": "Razor Skyline",
-    "artist": "The Overpass",
-    "charter": "Niko",
-    "points": 15,
-    "firstVerifier": "hexdrive",
-    "victors": [
-      "hexdrive",
-      "Riven",
-      "Echowave"
+    "id": "ch-supernovae-uber-solo",
+    "engine": "clone-hero",
+    "game_id": "clone-hero",
+    "rank": null,
+    "title": "Supernovae Uber Solo",
+    "artist": "archwk",
+    "charter": "archwk",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Endurance"
     ],
-    "hash": "6d4b2907e5c3a18f6d4b2907e5c3a18f",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/7",
-    "verifiedAt": "2026-11-22",
-    "demo": true
+    "first_victor": null,
+    "victors": [],
+    "bounty": true,
+    "source_url": "https://www.fullcombo.net/artists/archwk/"
   },
   {
-    "id": "gh3-fc-2",
-    "rank": 2,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "fc",
-    "title": "Dead Air",
-    "artist": "Paper Atlas",
-    "charter": "Mira Sol",
-    "points": 12,
-    "firstVerifier": "Signal",
-    "victors": [
-      "Signal",
-      "bytebreak",
-      "Fracture"
+    "id": "ch-supernovae-solo-buffed",
+    "engine": "clone-hero",
+    "game_id": "clone-hero",
+    "rank": null,
+    "title": "Supernovae Solo Buffed",
+    "artist": "archwk",
+    "charter": "archwk",
+    "speed": 100,
+    "tags": [
+      "Speed / Shred",
+      "Tech / Tapping"
     ],
-    "hash": "3a18f6d4b2907e5c3a18f6d4b2907e5c",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/8",
-    "verifiedAt": "2026-11-21",
-    "demo": true
+    "first_victor": null,
+    "victors": [],
+    "bounty": true,
+    "source_url": "https://www.fullcombo.net/artists/archwk/"
   },
   {
-    "id": "gh3-fc-3",
-    "rank": 3,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "fc",
-    "title": "Afterimage",
-    "artist": "Vanta",
-    "charter": "Ari Vale",
-    "points": 10,
-    "firstVerifier": "bytebreak",
-    "victors": [
-      "bytebreak",
-      "Echowave",
-      "hexdrive"
+    "id": "ch-glacial-storm-5",
+    "engine": "clone-hero",
+    "game_id": "clone-hero",
+    "rank": null,
+    "title": "Glacial Storm 5",
+    "artist": "Spunky",
+    "charter": "Spunky",
+    "speed": 100,
+    "tags": [
+      "Speed / Shred",
+      "Strumming / Stamina"
     ],
-    "hash": "07e5c3a18f6d4b2907e5c3a18f6d4b29",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/9",
-    "verifiedAt": "2026-11-20",
-    "demo": true
+    "first_victor": null,
+    "victors": [],
+    "bounty": true,
+    "source_url": "https://www.fullcombo.net/artists/spunky/"
   },
   {
-    "id": "gh3-pass-1",
-    "rank": 1,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "pass",
-    "title": "Razor Skyline",
-    "artist": "The Overpass",
-    "charter": "Niko",
-    "points": 10,
-    "firstVerifier": "Duskline",
-    "victors": [
-      "Duskline",
-      "Riven"
+    "id": "ch-chasing-comets",
+    "engine": "clone-hero",
+    "game_id": "clone-hero",
+    "rank": null,
+    "title": "Chasing Comets",
+    "artist": "archwk",
+    "charter": "archwk",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Endurance"
     ],
-    "hash": "d4b2907e5c3a18f6d4b2907e5c3a18f6",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/10",
-    "verifiedAt": "2026-11-22",
-    "demo": true
+    "first_victor": null,
+    "victors": [],
+    "bounty": true,
+    "source_url": "https://www.fullcombo.net/artists/archwk/"
   },
   {
-    "id": "gh3-pass-2",
-    "rank": 2,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "pass",
-    "title": "Dead Air",
-    "artist": "Paper Atlas",
-    "charter": "Mira Sol",
-    "points": 8,
-    "firstVerifier": "Fracture",
-    "victors": [
-      "Fracture",
-      "bytebreak",
-      "Signal"
+    "id": "ch-archwks-hell",
+    "engine": "clone-hero",
+    "game_id": "clone-hero",
+    "rank": null,
+    "title": "ArchWks Hell",
+    "artist": "archwk",
+    "charter": "archwk",
+    "speed": 100,
+    "tags": [
+      "Endurance",
+      "Strict Engine"
     ],
-    "hash": "a18f6d4b2907e5c3a18f6d4b2907e5c3",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/11",
-    "verifiedAt": "2026-11-21",
-    "demo": true
+    "first_victor": null,
+    "victors": [],
+    "bounty": true,
+    "source_url": "https://www.fullcombo.net/artists/archwk/"
   },
   {
-    "id": "gh3-pass-3",
-    "rank": 3,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "pass",
-    "title": "Afterimage",
-    "artist": "Vanta",
-    "charter": "Ari Vale",
-    "points": 6,
-    "firstVerifier": "Riven",
-    "victors": [
-      "Riven",
-      "Echowave",
-      "Aster"
+    "id": "ch-supernovae",
+    "engine": "clone-hero",
+    "game_id": "clone-hero",
+    "rank": null,
+    "title": "Supernovae",
+    "artist": "archwk",
+    "charter": "archwk",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred"
     ],
-    "hash": "7e5c3a18f6d4b2907e5c3a18f6d4b290",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/12",
-    "verifiedAt": "2026-11-20",
-    "demo": true
+    "first_victor": null,
+    "victors": [],
+    "bounty": true,
+    "source_url": "https://www.fullcombo.net/artists/archwk/"
   },
   {
-    "id": "gh1-2-fc-1",
-    "rank": 1,
-    "engine": "gh1",
-    "engineName": "Guitar Hero",
-    "kind": "fc",
-    "title": "Crimson Theory",
-    "artist": "The Low Ends",
-    "charter": "Kellan",
-    "points": 15,
-    "firstVerifier": "Aster",
-    "victors": [
-      "Aster",
-      "Riven",
-      "bytebreak"
-    ],
-    "hash": "f6d4b2907e5c3a18f6d4b2907e5c3a18",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/13",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-fc-2",
-    "rank": 2,
-    "engine": "gh2",
-    "engineName": "Guitar Hero II",
-    "kind": "fc",
-    "title": "Blackout Avenue",
-    "artist": "Static Season",
-    "charter": "Niko",
-    "points": 12,
-    "firstVerifier": "Cinder",
-    "victors": [
-      "Cinder",
-      "bytebreak"
-    ],
-    "hash": "c3a18f6d4b2907e5c3a18f6d4b2907e5",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/14",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-fc-3",
-    "rank": 3,
-    "engine": "gh1",
-    "engineName": "Guitar Hero",
-    "kind": "fc",
-    "title": "Cold Mercury",
-    "artist": "Northbound",
-    "charter": "Ari Vale",
-    "points": 10,
-    "firstVerifier": "Echowave",
-    "victors": [
-      "Echowave",
-      "Duskline"
-    ],
-    "hash": "907e5c3a18f6d4b2907e5c3a18f6d4b2",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/15",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-pass-1",
-    "rank": 1,
-    "engine": "gh2",
-    "engineName": "Guitar Hero II",
-    "kind": "pass",
-    "title": "Crimson Theory",
-    "artist": "The Low Ends",
-    "charter": "Kellan",
-    "points": 10,
-    "firstVerifier": "hexdrive",
-    "victors": [
-      "hexdrive",
-      "Riven",
-      "Echowave"
-    ],
-    "hash": "6d4b2907e5c3a18f6d4b2907e5c3a18f",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/16",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-pass-2",
-    "rank": 2,
-    "engine": "gh1",
-    "engineName": "Guitar Hero",
-    "kind": "pass",
-    "title": "Blackout Avenue",
-    "artist": "Static Season",
-    "charter": "Niko",
-    "points": 8,
-    "firstVerifier": "Signal",
-    "victors": [
-      "Signal",
-      "bytebreak",
-      "Fracture"
-    ],
-    "hash": "3a18f6d4b2907e5c3a18f6d4b2907e5c",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/17",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-pass-3",
-    "rank": 3,
-    "engine": "gh2",
-    "engineName": "Guitar Hero II",
-    "kind": "pass",
-    "title": "Cold Mercury",
-    "artist": "Northbound",
-    "charter": "Ari Vale",
-    "points": 6,
-    "firstVerifier": "bytebreak",
-    "victors": [
-      "bytebreak",
-      "Echowave",
-      "hexdrive"
-    ],
-    "hash": "07e5c3a18f6d4b2907e5c3a18f6d4b29",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/18",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-fc-1",
-    "rank": 1,
-    "engine": "gh-world-tour",
-    "engineName": "Guitar Hero World Tour",
-    "kind": "fc",
-    "title": "Midnight Engine",
-    "artist": "The Overpass",
-    "charter": "Mira Sol",
-    "points": 15,
-    "firstVerifier": "Duskline",
-    "victors": [
-      "Duskline",
-      "Riven"
-    ],
-    "hash": "8f6d4b2907e5c3a18f6d4b2907e5c3a1",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/19",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-fc-2",
-    "rank": 2,
-    "engine": "gh-warriors-of-rock",
-    "engineName": "Guitar Hero: Warriors of Rock",
-    "kind": "fc",
-    "title": "Hollow Signal",
-    "artist": "Vanta",
-    "charter": "Kellan",
-    "points": 12,
-    "firstVerifier": "Fracture",
-    "victors": [
-      "Fracture",
-      "bytebreak",
-      "Signal"
-    ],
-    "hash": "5c3a18f6d4b2907e5c3a18f6d4b2907e",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/20",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-fc-3",
-    "rank": 3,
-    "engine": "gh-world-tour",
-    "engineName": "Guitar Hero World Tour",
-    "kind": "fc",
-    "title": "Run the Wire",
-    "artist": "Paper Atlas",
-    "charter": "Niko",
-    "points": 10,
-    "firstVerifier": "Riven",
-    "victors": [
-      "Riven",
-      "Echowave",
-      "Aster"
-    ],
-    "hash": "2907e5c3a18f6d4b2907e5c3a18f6d4b",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/21",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-pass-1",
-    "rank": 1,
-    "engine": "gh-warriors-of-rock",
-    "engineName": "Guitar Hero: Warriors of Rock",
-    "kind": "pass",
-    "title": "Midnight Engine",
-    "artist": "The Overpass",
-    "charter": "Mira Sol",
-    "points": 10,
-    "firstVerifier": "Aster",
-    "victors": [
-      "Aster",
-      "Riven",
-      "bytebreak"
-    ],
-    "hash": "f6d4b2907e5c3a18f6d4b2907e5c3a18",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/22",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-pass-2",
-    "rank": 2,
-    "engine": "gh-world-tour",
-    "engineName": "Guitar Hero World Tour",
-    "kind": "pass",
-    "title": "Hollow Signal",
-    "artist": "Vanta",
-    "charter": "Kellan",
-    "points": 8,
-    "firstVerifier": "Cinder",
-    "victors": [
-      "Cinder",
-      "bytebreak"
-    ],
-    "hash": "c3a18f6d4b2907e5c3a18f6d4b2907e5",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/23",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-pass-3",
-    "rank": 3,
-    "engine": "gh-warriors-of-rock",
-    "engineName": "Guitar Hero: Warriors of Rock",
-    "kind": "pass",
-    "title": "Run the Wire",
-    "artist": "Paper Atlas",
-    "charter": "Niko",
-    "points": 6,
-    "firstVerifier": "Echowave",
-    "victors": [
-      "Echowave",
-      "Duskline"
-    ],
-    "hash": "907e5c3a18f6d4b2907e5c3a18f6d4b2",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/24",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "yarg-fc-1",
-    "rank": 1,
+    "id": "yarg-vehemence",
     "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "fc",
-    "title": "Satellite Teeth",
-    "artist": "Static Season",
-    "charter": "Ari Vale",
-    "points": 15,
-    "firstVerifier": "hexdrive",
-    "victors": [
-      "hexdrive",
-      "Riven",
-      "Echowave"
-    ],
-    "hash": "18f6d4b2907e5c3a18f6d4b2907e5c3a",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/25",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "yarg-fc-2",
-    "rank": 2,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "fc",
-    "title": "Digital Graves",
-    "artist": "The Relay",
-    "charter": "Kellan",
-    "points": 12,
-    "firstVerifier": "Signal",
-    "victors": [
-      "Signal",
-      "bytebreak",
-      "Fracture"
-    ],
-    "hash": "e5c3a18f6d4b2907e5c3a18f6d4b2907",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/26",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "yarg-fc-3",
-    "rank": 3,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "fc",
-    "title": "Floodlights",
-    "artist": "Northbound",
-    "charter": "Mira Sol",
-    "points": 10,
-    "firstVerifier": "bytebreak",
-    "victors": [
-      "bytebreak",
-      "Echowave",
-      "hexdrive"
-    ],
-    "hash": "b2907e5c3a18f6d4b2907e5c3a18f6d4",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/27",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "yarg-pass-1",
+    "game_id": "yarg",
     "rank": 1,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "pass",
-    "title": "Satellite Teeth",
-    "artist": "Static Season",
-    "charter": "Ari Vale",
-    "points": 10,
-    "firstVerifier": "Duskline",
-    "victors": [
-      "Duskline",
-      "Riven"
+    "title": "Vehemence",
+    "artist": "Reo",
+    "charter": "YARG Charting Team",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Strict Engine"
     ],
-    "hash": "8f6d4b2907e5c3a18f6d4b2907e5c3a1",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/28",
-    "verifiedAt": "2026-11-22",
-    "demo": true
+    "first_victor": null,
+    "victors": [
+      {
+        "player": "JarheadHME",
+        "type": "FC",
+        "date": "2026-05-08",
+        "video_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
   },
   {
-    "id": "yarg-pass-2",
+    "id": "yarg-tick-tock",
+    "engine": "yarg",
+    "game_id": "yarg",
     "rank": 2,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "pass",
-    "title": "Digital Graves",
-    "artist": "The Relay",
-    "charter": "Kellan",
-    "points": 8,
-    "firstVerifier": "Fracture",
-    "victors": [
-      "Fracture",
-      "bytebreak",
-      "Signal"
+    "title": "Tick Tock",
+    "artist": "obkatiekat",
+    "charter": "YARG Charting Team",
+    "speed": 100,
+    "tags": [
+      "Speed / Shred",
+      "Strict Engine"
     ],
-    "hash": "5c3a18f6d4b2907e5c3a18f6d4b2907e",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/29",
-    "verifiedAt": "2026-11-21",
-    "demo": true
+    "first_victor": null,
+    "victors": [
+      {
+        "player": "JarheadHME",
+        "type": "FC",
+        "date": "2026-05-08",
+        "video_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
   },
   {
-    "id": "yarg-pass-3",
-    "rank": 3,
+    "id": "yarg-stress",
     "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "pass",
-    "title": "Floodlights",
-    "artist": "Northbound",
-    "charter": "Mira Sol",
-    "points": 6,
-    "firstVerifier": "Riven",
-    "victors": [
-      "Riven",
-      "Echowave",
-      "Aster"
+    "game_id": "yarg",
+    "rank": 3,
+    "title": "Stress",
+    "artist": "Jim's Big Ego",
+    "charter": "YARG Charting Team",
+    "speed": 100,
+    "tags": [
+      "Strumming / Stamina",
+      "Endurance"
     ],
-    "hash": "2907e5c3a18f6d4b2907e5c3a18f6d4b",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/30",
-    "verifiedAt": "2026-11-20",
-    "demo": true
+    "first_victor": null,
+    "victors": [
+      {
+        "player": "JarheadHME",
+        "type": "FC",
+        "date": "2026-05-08",
+        "video_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
+  },
+  {
+    "id": "gh12-jordan",
+    "engine": "gh1-2",
+    "game_id": "gh2",
+    "rank": 1,
+    "title": "Jordan",
+    "artist": "Buckethead",
+    "charter": "Harmonix",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred",
+      "Strict Engine"
+    ],
+    "first_victor": {
+      "player": "HellAshes",
+      "date": "2008-01-09",
+      "video_url": "https://guitarhero.fandom.com/wiki/Jordan"
+    },
+    "victors": [
+      {
+        "player": "HellAshes",
+        "type": "FC",
+        "date": "2008-01-09",
+        "video_url": "https://guitarhero.fandom.com/wiki/Jordan"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Jordan"
+  },
+  {
+    "id": "gh12-bark-at-the-moon",
+    "engine": "gh1-2",
+    "game_id": "gh1",
+    "rank": 2,
+    "title": "Bark at the Moon",
+    "artist": "Ozzy Osbourne",
+    "charter": "Harmonix",
+    "speed": 100,
+    "tags": [
+      "Strumming / Stamina",
+      "Speed / Shred"
+    ],
+    "first_victor": {
+      "player": "strikebowler585",
+      "date": "2008-04-23",
+      "video_url": "https://guitarhero.fandom.com/wiki/Bark_at_the_Moon"
+    },
+    "victors": [
+      {
+        "player": "strikebowler585",
+        "type": "FC",
+        "date": "2008-04-23",
+        "video_url": "https://guitarhero.fandom.com/wiki/Bark_at_the_Moon"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Bark_at_the_Moon"
+  },
+  {
+    "id": "gh12-hangar-18",
+    "engine": "gh1-2",
+    "game_id": "gh2",
+    "rank": 76,
+    "title": "Hangar 18",
+    "artist": "Megadeth",
+    "charter": "Harmonix",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Hangar_18"
+  },
+  {
+    "id": "gh12-misirlou",
+    "engine": "gh1-2",
+    "game_id": "gh2",
+    "rank": 77,
+    "title": "Misirlou",
+    "artist": "Dick Dale",
+    "charter": "Harmonix",
+    "speed": 100,
+    "tags": [
+      "Strumming / Stamina",
+      "Endurance"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Misirlou"
+  },
+  {
+    "id": "gh12-free-bird",
+    "engine": "gh1-2",
+    "game_id": "gh2",
+    "rank": 151,
+    "title": "Free Bird",
+    "artist": "Lynyrd Skynyrd",
+    "charter": "Harmonix",
+    "speed": 100,
+    "tags": [
+      "Endurance",
+      "Tech / Tapping"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Free_Bird"
+  },
+  {
+    "id": "gh3-through-fire-flames",
+    "engine": "gh3",
+    "game_id": "gh3",
+    "rank": 1,
+    "title": "Through the Fire and Flames",
+    "artist": "DragonForce",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Speed / Shred",
+      "Endurance",
+      "Tech / Tapping"
+    ],
+    "first_victor": {
+      "player": "Chris Chike",
+      "date": "2008-06-03",
+      "video_url": "https://www.iamchris4life.com/"
+    },
+    "victors": [
+      {
+        "player": "Chris Chike",
+        "type": "FC",
+        "date": "2008-06-03",
+        "video_url": "https://www.iamchris4life.com/"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Through_the_Fire_and_Flames"
+  },
+  {
+    "id": "gh3-devil-went-down",
+    "engine": "gh3",
+    "game_id": "gh3",
+    "rank": 2,
+    "title": "The Devil Went Down to Georgia",
+    "artist": "The Charlie Daniels Band",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Strumming / Stamina",
+      "Endurance"
+    ],
+    "first_victor": {
+      "player": "GuitarHeroPhenom",
+      "date": "2008-12-16",
+      "video_url": "https://www.youtube.com/watch?v=ixvNiuJk4To"
+    },
+    "victors": [
+      {
+        "player": "GuitarHeroPhenom",
+        "type": "FC",
+        "date": "2008-12-16",
+        "video_url": "https://www.youtube.com/watch?v=ixvNiuJk4To"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.xboxachievements.com/forum/topic/95556-the-devil-went-down-to-georgia-fc/"
+  },
+  {
+    "id": "gh3-one",
+    "engine": "gh3",
+    "game_id": "gh3",
+    "rank": 76,
+    "title": "One",
+    "artist": "Metallica",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Strumming / Stamina"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/One"
+  },
+  {
+    "id": "gh3-raining-blood",
+    "engine": "gh3",
+    "game_id": "gh3",
+    "rank": 77,
+    "title": "Raining Blood",
+    "artist": "Slayer",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Strumming / Stamina",
+      "Speed / Shred"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Raining_Blood"
+  },
+  {
+    "id": "gh3-cliffs-of-dover",
+    "engine": "gh3",
+    "game_id": "gh3",
+    "rank": 151,
+    "title": "Cliffs of Dover",
+    "artist": "Eric Johnson",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Cliffs_of_Dover"
+  },
+  {
+    "id": "gh3-aerosmith-train-kept",
+    "engine": "gh3",
+    "game_id": "gh-aerosmith",
+    "rank": 152,
+    "title": "Train Kept A-Rollin'",
+    "artist": "Aerosmith",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Strumming / Stamina",
+      "Endurance"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Train_Kept_A-Rollin%27"
+  },
+  {
+    "id": "ghw-dyers-eve",
+    "engine": "ghwt-wor",
+    "game_id": "gh-metallica",
+    "rank": 1,
+    "title": "Dyer's Eve",
+    "artist": "Metallica",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Speed / Shred",
+      "Strumming / Stamina",
+      "Endurance"
+    ],
+    "first_victor": {
+      "player": "JLC",
+      "date": "2009-09-14",
+      "video_url": "https://www.youtube.com/watch?v=TaybrSJcAso"
+    },
+    "victors": [
+      {
+        "player": "JLC",
+        "type": "FC",
+        "date": "2009-09-14",
+        "video_url": "https://www.youtube.com/watch?v=TaybrSJcAso"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.youtube.com/watch?v=TaybrSJcAso"
+  },
+  {
+    "id": "ghw-fury-of-the-storm",
+    "engine": "ghwt-wor",
+    "game_id": "gh-warriors-of-rock",
+    "rank": 2,
+    "title": "Fury of the Storm",
+    "artist": "DragonForce",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred",
+      "Endurance"
+    ],
+    "first_victor": null,
+    "victors": [
+      {
+        "player": "A Wise Moose",
+        "type": "FC",
+        "date": "2018-08-14",
+        "video_url": "https://www.youtube.com/watch?v=7UVjx9OhwMg"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.youtube.com/watch?v=7UVjx9OhwMg"
+  },
+  {
+    "id": "ghw-black-widow",
+    "engine": "ghwt-wor",
+    "game_id": "gh-warriors-of-rock",
+    "rank": 3,
+    "title": "Black Widow of La Porte",
+    "artist": "John 5 ft. Jim Root",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred"
+    ],
+    "first_victor": null,
+    "victors": [
+      {
+        "player": "GuitarHeroPhenom",
+        "type": "FC",
+        "date": "2012-11-17",
+        "video_url": "https://www.youtube.com/watch?v=MXmD7AzCNKU"
+      },
+      {
+        "player": "A Wise Moose",
+        "type": "FC",
+        "date": "2019-04-19",
+        "video_url": "https://www.youtube.com/watch?v=keW_yskjRFU"
+      }
+    ],
+    "bounty": false,
+    "source_url": "https://www.youtube.com/watch?v=MXmD7AzCNKU"
+  },
+  {
+    "id": "ghw-satch-boogie",
+    "engine": "ghwt-wor",
+    "game_id": "gh-world-tour",
+    "rank": 76,
+    "title": "Satch Boogie",
+    "artist": "Joe Satriani",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Tech / Tapping",
+      "Speed / Shred"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Satch_Boogie"
+  },
+  {
+    "id": "ghw-sudden-death",
+    "engine": "ghwt-wor",
+    "game_id": "gh-warriors-of-rock",
+    "rank": 77,
+    "title": "Sudden Death",
+    "artist": "Megadeth",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Speed / Shred",
+      "Strumming / Stamina"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/Sudden_Death"
+  },
+  {
+    "id": "ghw-21st-century",
+    "engine": "ghwt-wor",
+    "game_id": "gh5",
+    "rank": 151,
+    "title": "21st Century Schizoid Man",
+    "artist": "King Crimson",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Strumming / Stamina",
+      "Endurance"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/21st_Century_Schizoid_Man"
+  },
+  {
+    "id": "ghw-this-day-we-fight",
+    "engine": "ghwt-wor",
+    "game_id": "gh-warriors-of-rock",
+    "rank": 152,
+    "title": "This Day We Fight!",
+    "artist": "Megadeth",
+    "charter": "Neversoft",
+    "speed": 100,
+    "tags": [
+      "Speed / Shred",
+      "Strumming / Stamina"
+    ],
+    "first_victor": null,
+    "victors": [],
+    "bounty": false,
+    "source_url": "https://guitarhero.fandom.com/wiki/This_Day_We_Fight!"
   }
 ]

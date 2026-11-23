@@ -1,961 +1,520 @@
-(()=>{
+(function(){
 "use strict";
-const $=s=>document.querySelector(s);
-const route=document.body.dataset.route||"home";
-const ROOT_PREFIX=document.body.dataset.rootPrefix||"./";
-const engines=[{"id":"clone-hero","name":"Clone Hero","short":"CH","type":"Community engine","year":"2017","youtube":"https://www.youtube.com/@CloneHeroGame","website":"https://clonehero.net/","description":"Community five-fret rhythm game and custom-chart platform.","icon":"assets/img/games/clone-hero/icon.png","logo":"assets/img/games/clone-hero/logo.png"},{"id":"gh1","name":"Guitar Hero","short":"GH1","type":"Guitar Hero","year":"2005","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The original five-fret Guitar Hero.","icon":"assets/img/games/gh1/icon.png","logo":"assets/img/games/gh1/logo.png"},{"id":"gh2","name":"Guitar Hero II","short":"GH2","type":"Guitar Hero","year":"2006","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The second mainline Guitar Hero release.","icon":"assets/img/games/gh2/icon.png","logo":"assets/img/games/gh2/logo.png"},{"id":"gh80s","name":"Guitar Hero Encore: Rocks the 80s","short":"80s","type":"Guitar Hero","year":"2007","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The 80s-focused standalone Guitar Hero release.","icon":"assets/img/games/gh80s/icon.png","logo":"assets/img/games/gh80s/logo.png"},{"id":"gh3","name":"Guitar Hero III: Legends of Rock","short":"GH3","type":"Guitar Hero","year":"2007","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"Guitar Hero III, with its own separate chart and record list.","icon":"assets/img/games/gh3/icon.png","logo":"assets/img/games/gh3/logo.png"},{"id":"gh-aerosmith","name":"Guitar Hero: Aerosmith","short":"AERO","type":"Guitar Hero","year":"2008","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The standalone Aerosmith-focused Guitar Hero game.","icon":"assets/img/games/gh-aerosmith/icon.png","logo":"assets/img/games/gh-aerosmith/logo.png"},{"id":"gh-world-tour","name":"Guitar Hero World Tour","short":"WT","type":"Guitar Hero","year":"2008","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"World Tour has its own leaderboard, separate from Warriors of Rock.","icon":"assets/img/games/gh-world-tour/icon.png","logo":"assets/img/games/gh-world-tour/logo.png"},{"id":"gh-metallica","name":"Guitar Hero: Metallica","short":"MET","type":"Guitar Hero","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The standalone Metallica Guitar Hero game.","icon":"assets/img/games/gh-metallica/icon.png","logo":"assets/img/games/gh-metallica/logo.png"},{"id":"gh-smash-hits","name":"Guitar Hero: Smash Hits","short":"HITS","type":"Guitar Hero","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The reworked classic-song collection, tracked separately.","icon":"assets/img/games/gh-smash-hits/icon.png","logo":"assets/img/games/gh-smash-hits/logo.png"},{"id":"gh5","name":"Guitar Hero 5","short":"GH5","type":"Guitar Hero","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"Guitar Hero 5 gets its own records and hardest-song list.","icon":"assets/img/games/gh5/icon.png","logo":"assets/img/games/gh5/logo.png"},{"id":"gh-van-halen","name":"Guitar Hero: Van Halen","short":"VH","type":"Guitar Hero","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"The standalone Van Halen Guitar Hero game.","icon":"assets/img/games/gh-van-halen/icon.png","logo":"assets/img/games/gh-van-halen/logo.png"},{"id":"band-hero","name":"Band Hero","short":"BH","type":"Guitar Hero family","year":"2009","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"Band Hero is tracked independently from Guitar Hero 5.","icon":"assets/img/games/band-hero/icon.png","logo":"assets/img/games/band-hero/logo.png"},{"id":"gh-warriors-of-rock","name":"Guitar Hero: Warriors of Rock","short":"WoR","type":"Guitar Hero","year":"2010","youtube":"https://www.youtube.com/guitarhero","website":"https://www.guitarhero.com/","description":"Warriors of Rock is separate from World Tour.","icon":"assets/img/games/gh-warriors-of-rock/icon.png","logo":"assets/img/games/gh-warriors-of-rock/logo.png"},{"id":"yarg","name":"YARG","short":"YARG","type":"Community engine","year":"","youtube":"https://www.youtube.com/@YARGGame","website":"https://yarg.in/","description":"Yet Another Rhythm Game, an open-source five-fret rhythm game.","icon":"assets/img/games/yarg/icon.png","logo":"assets/img/games/yarg/logo.png"}];
-const STORE_KEY="overstrum-submissions-v1";
-const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-const fmt=value=>Number.isFinite(Number(value))?Number(value).toFixed(1):"—";
-const engineFor=id=>engines.find(e=>e.id===id)||{id,name:"Unknown engine",short:"—"};
-const FALLBACK_CHARTS=[
-  {
-    "id": "clone-hero-fc-1",
-    "rank": 1,
-    "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "fc",
-    "title": "Signal Fires",
-    "artist": "Static Season",
-    "charter": "Ari Vale",
-    "points": 15,
-    "firstVerifier": "Duskline",
-    "victors": [
-      "Duskline",
-      "Riven"
-    ],
-    "hash": "d4b2907e5c3a18f6d4b2907e5c3a18f6",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/1",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "clone-hero-fc-2",
-    "rank": 2,
-    "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "fc",
-    "title": "Glass Circuit",
-    "artist": "Northbound",
-    "charter": "Mira Sol",
-    "points": 12,
-    "firstVerifier": "Fracture",
-    "victors": [
-      "Fracture",
-      "bytebreak",
-      "Signal"
-    ],
-    "hash": "a18f6d4b2907e5c3a18f6d4b2907e5c3",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/2",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "clone-hero-fc-3",
-    "rank": 3,
-    "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "fc",
-    "title": "Violet Static",
-    "artist": "The Relay",
-    "charter": "Kellan",
-    "points": 10,
-    "firstVerifier": "Riven",
-    "victors": [
-      "Riven",
-      "Echowave",
-      "Aster"
-    ],
-    "hash": "7e5c3a18f6d4b2907e5c3a18f6d4b290",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/3",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "clone-hero-pass-1",
-    "rank": 1,
-    "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "pass",
-    "title": "Signal Fires",
-    "artist": "Static Season",
-    "charter": "Ari Vale",
-    "points": 10,
-    "firstVerifier": "Aster",
-    "victors": [
-      "Aster",
-      "Riven",
-      "bytebreak"
-    ],
-    "hash": "4b2907e5c3a18f6d4b2907e5c3a18f6d",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/4",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "clone-hero-pass-2",
-    "rank": 2,
-    "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "pass",
-    "title": "Glass Circuit",
-    "artist": "Northbound",
-    "charter": "Mira Sol",
-    "points": 8,
-    "firstVerifier": "Cinder",
-    "victors": [
-      "Cinder",
-      "bytebreak"
-    ],
-    "hash": "18f6d4b2907e5c3a18f6d4b2907e5c3a",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/5",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "clone-hero-pass-3",
-    "rank": 3,
-    "engine": "clone-hero",
-    "engineName": "Clone Hero",
-    "kind": "pass",
-    "title": "Violet Static",
-    "artist": "The Relay",
-    "charter": "Kellan",
-    "points": 6,
-    "firstVerifier": "Echowave",
-    "victors": [
-      "Echowave",
-      "Duskline"
-    ],
-    "hash": "e5c3a18f6d4b2907e5c3a18f6d4b2907",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/6",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "gh3-fc-1",
-    "rank": 1,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "fc",
-    "title": "Razor Skyline",
-    "artist": "The Overpass",
-    "charter": "Niko",
-    "points": 15,
-    "firstVerifier": "hexdrive",
-    "victors": [
-      "hexdrive",
-      "Riven",
-      "Echowave"
-    ],
-    "hash": "6d4b2907e5c3a18f6d4b2907e5c3a18f",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/7",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "gh3-fc-2",
-    "rank": 2,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "fc",
-    "title": "Dead Air",
-    "artist": "Paper Atlas",
-    "charter": "Mira Sol",
-    "points": 12,
-    "firstVerifier": "Signal",
-    "victors": [
-      "Signal",
-      "bytebreak",
-      "Fracture"
-    ],
-    "hash": "3a18f6d4b2907e5c3a18f6d4b2907e5c",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/8",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "gh3-fc-3",
-    "rank": 3,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "fc",
-    "title": "Afterimage",
-    "artist": "Vanta",
-    "charter": "Ari Vale",
-    "points": 10,
-    "firstVerifier": "bytebreak",
-    "victors": [
-      "bytebreak",
-      "Echowave",
-      "hexdrive"
-    ],
-    "hash": "07e5c3a18f6d4b2907e5c3a18f6d4b29",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/9",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "gh3-pass-1",
-    "rank": 1,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "pass",
-    "title": "Razor Skyline",
-    "artist": "The Overpass",
-    "charter": "Niko",
-    "points": 10,
-    "firstVerifier": "Duskline",
-    "victors": [
-      "Duskline",
-      "Riven"
-    ],
-    "hash": "d4b2907e5c3a18f6d4b2907e5c3a18f6",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/10",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "gh3-pass-2",
-    "rank": 2,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "pass",
-    "title": "Dead Air",
-    "artist": "Paper Atlas",
-    "charter": "Mira Sol",
-    "points": 8,
-    "firstVerifier": "Fracture",
-    "victors": [
-      "Fracture",
-      "bytebreak",
-      "Signal"
-    ],
-    "hash": "a18f6d4b2907e5c3a18f6d4b2907e5c3",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/11",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "gh3-pass-3",
-    "rank": 3,
-    "engine": "gh3",
-    "engineName": "Guitar Hero III: Legends of Rock",
-    "kind": "pass",
-    "title": "Afterimage",
-    "artist": "Vanta",
-    "charter": "Ari Vale",
-    "points": 6,
-    "firstVerifier": "Riven",
-    "victors": [
-      "Riven",
-      "Echowave",
-      "Aster"
-    ],
-    "hash": "7e5c3a18f6d4b2907e5c3a18f6d4b290",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/12",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-fc-1",
-    "rank": 1,
-    "engine": "gh1",
-    "engineName": "Guitar Hero",
-    "kind": "fc",
-    "title": "Crimson Theory",
-    "artist": "The Low Ends",
-    "charter": "Kellan",
-    "points": 15,
-    "firstVerifier": "Aster",
-    "victors": [
-      "Aster",
-      "Riven",
-      "bytebreak"
-    ],
-    "hash": "f6d4b2907e5c3a18f6d4b2907e5c3a18",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/13",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-fc-2",
-    "rank": 2,
-    "engine": "gh2",
-    "engineName": "Guitar Hero II",
-    "kind": "fc",
-    "title": "Blackout Avenue",
-    "artist": "Static Season",
-    "charter": "Niko",
-    "points": 12,
-    "firstVerifier": "Cinder",
-    "victors": [
-      "Cinder",
-      "bytebreak"
-    ],
-    "hash": "c3a18f6d4b2907e5c3a18f6d4b2907e5",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/14",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-fc-3",
-    "rank": 3,
-    "engine": "gh1",
-    "engineName": "Guitar Hero",
-    "kind": "fc",
-    "title": "Cold Mercury",
-    "artist": "Northbound",
-    "charter": "Ari Vale",
-    "points": 10,
-    "firstVerifier": "Echowave",
-    "victors": [
-      "Echowave",
-      "Duskline"
-    ],
-    "hash": "907e5c3a18f6d4b2907e5c3a18f6d4b2",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/15",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-pass-1",
-    "rank": 1,
-    "engine": "gh2",
-    "engineName": "Guitar Hero II",
-    "kind": "pass",
-    "title": "Crimson Theory",
-    "artist": "The Low Ends",
-    "charter": "Kellan",
-    "points": 10,
-    "firstVerifier": "hexdrive",
-    "victors": [
-      "hexdrive",
-      "Riven",
-      "Echowave"
-    ],
-    "hash": "6d4b2907e5c3a18f6d4b2907e5c3a18f",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/16",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-pass-2",
-    "rank": 2,
-    "engine": "gh1",
-    "engineName": "Guitar Hero",
-    "kind": "pass",
-    "title": "Blackout Avenue",
-    "artist": "Static Season",
-    "charter": "Niko",
-    "points": 8,
-    "firstVerifier": "Signal",
-    "victors": [
-      "Signal",
-      "bytebreak",
-      "Fracture"
-    ],
-    "hash": "3a18f6d4b2907e5c3a18f6d4b2907e5c",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/17",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "gh1-2-pass-3",
-    "rank": 3,
-    "engine": "gh2",
-    "engineName": "Guitar Hero II",
-    "kind": "pass",
-    "title": "Cold Mercury",
-    "artist": "Northbound",
-    "charter": "Ari Vale",
-    "points": 6,
-    "firstVerifier": "bytebreak",
-    "victors": [
-      "bytebreak",
-      "Echowave",
-      "hexdrive"
-    ],
-    "hash": "07e5c3a18f6d4b2907e5c3a18f6d4b29",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/18",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-fc-1",
-    "rank": 1,
-    "engine": "gh-world-tour",
-    "engineName": "Guitar Hero World Tour",
-    "kind": "fc",
-    "title": "Midnight Engine",
-    "artist": "The Overpass",
-    "charter": "Mira Sol",
-    "points": 15,
-    "firstVerifier": "Duskline",
-    "victors": [
-      "Duskline",
-      "Riven"
-    ],
-    "hash": "8f6d4b2907e5c3a18f6d4b2907e5c3a1",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/19",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-fc-2",
-    "rank": 2,
-    "engine": "gh-warriors-of-rock",
-    "engineName": "Guitar Hero: Warriors of Rock",
-    "kind": "fc",
-    "title": "Hollow Signal",
-    "artist": "Vanta",
-    "charter": "Kellan",
-    "points": 12,
-    "firstVerifier": "Fracture",
-    "victors": [
-      "Fracture",
-      "bytebreak",
-      "Signal"
-    ],
-    "hash": "5c3a18f6d4b2907e5c3a18f6d4b2907e",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/20",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-fc-3",
-    "rank": 3,
-    "engine": "gh-world-tour",
-    "engineName": "Guitar Hero World Tour",
-    "kind": "fc",
-    "title": "Run the Wire",
-    "artist": "Paper Atlas",
-    "charter": "Niko",
-    "points": 10,
-    "firstVerifier": "Riven",
-    "victors": [
-      "Riven",
-      "Echowave",
-      "Aster"
-    ],
-    "hash": "2907e5c3a18f6d4b2907e5c3a18f6d4b",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/21",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-pass-1",
-    "rank": 1,
-    "engine": "gh-warriors-of-rock",
-    "engineName": "Guitar Hero: Warriors of Rock",
-    "kind": "pass",
-    "title": "Midnight Engine",
-    "artist": "The Overpass",
-    "charter": "Mira Sol",
-    "points": 10,
-    "firstVerifier": "Aster",
-    "victors": [
-      "Aster",
-      "Riven",
-      "bytebreak"
-    ],
-    "hash": "f6d4b2907e5c3a18f6d4b2907e5c3a18",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/22",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-pass-2",
-    "rank": 2,
-    "engine": "gh-world-tour",
-    "engineName": "Guitar Hero World Tour",
-    "kind": "pass",
-    "title": "Hollow Signal",
-    "artist": "Vanta",
-    "charter": "Kellan",
-    "points": 8,
-    "firstVerifier": "Cinder",
-    "victors": [
-      "Cinder",
-      "bytebreak"
-    ],
-    "hash": "c3a18f6d4b2907e5c3a18f6d4b2907e5",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/23",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "ghwt-wor-pass-3",
-    "rank": 3,
-    "engine": "gh-warriors-of-rock",
-    "engineName": "Guitar Hero: Warriors of Rock",
-    "kind": "pass",
-    "title": "Run the Wire",
-    "artist": "Paper Atlas",
-    "charter": "Niko",
-    "points": 6,
-    "firstVerifier": "Echowave",
-    "victors": [
-      "Echowave",
-      "Duskline"
-    ],
-    "hash": "907e5c3a18f6d4b2907e5c3a18f6d4b2",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/24",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "yarg-fc-1",
-    "rank": 1,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "fc",
-    "title": "Satellite Teeth",
-    "artist": "Static Season",
-    "charter": "Ari Vale",
-    "points": 15,
-    "firstVerifier": "hexdrive",
-    "victors": [
-      "hexdrive",
-      "Riven",
-      "Echowave"
-    ],
-    "hash": "18f6d4b2907e5c3a18f6d4b2907e5c3a",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/25",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "yarg-fc-2",
-    "rank": 2,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "fc",
-    "title": "Digital Graves",
-    "artist": "The Relay",
-    "charter": "Kellan",
-    "points": 12,
-    "firstVerifier": "Signal",
-    "victors": [
-      "Signal",
-      "bytebreak",
-      "Fracture"
-    ],
-    "hash": "e5c3a18f6d4b2907e5c3a18f6d4b2907",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/26",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "yarg-fc-3",
-    "rank": 3,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "fc",
-    "title": "Floodlights",
-    "artist": "Northbound",
-    "charter": "Mira Sol",
-    "points": 10,
-    "firstVerifier": "bytebreak",
-    "victors": [
-      "bytebreak",
-      "Echowave",
-      "hexdrive"
-    ],
-    "hash": "b2907e5c3a18f6d4b2907e5c3a18f6d4",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/27",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  },
-  {
-    "id": "yarg-pass-1",
-    "rank": 1,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "pass",
-    "title": "Satellite Teeth",
-    "artist": "Static Season",
-    "charter": "Ari Vale",
-    "points": 10,
-    "firstVerifier": "Duskline",
-    "victors": [
-      "Duskline",
-      "Riven"
-    ],
-    "hash": "8f6d4b2907e5c3a18f6d4b2907e5c3a1",
-    "peakNps": 21.7,
-    "averageNps": 12.8,
-    "video": "https://example.com/overstrum-demo-proof/28",
-    "verifiedAt": "2026-11-22",
-    "demo": true
-  },
-  {
-    "id": "yarg-pass-2",
-    "rank": 2,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "pass",
-    "title": "Digital Graves",
-    "artist": "The Relay",
-    "charter": "Kellan",
-    "points": 8,
-    "firstVerifier": "Fracture",
-    "victors": [
-      "Fracture",
-      "bytebreak",
-      "Signal"
-    ],
-    "hash": "5c3a18f6d4b2907e5c3a18f6d4b2907e",
-    "peakNps": 18.4,
-    "averageNps": 11.2,
-    "video": "https://example.com/overstrum-demo-proof/29",
-    "verifiedAt": "2026-11-21",
-    "demo": true
-  },
-  {
-    "id": "yarg-pass-3",
-    "rank": 3,
-    "engine": "yarg",
-    "engineName": "YARG",
-    "kind": "pass",
-    "title": "Floodlights",
-    "artist": "Northbound",
-    "charter": "Mira Sol",
-    "points": 6,
-    "firstVerifier": "Riven",
-    "victors": [
-      "Riven",
-      "Echowave",
-      "Aster"
-    ],
-    "hash": "2907e5c3a18f6d4b2907e5c3a18f6d4b",
-    "peakNps": 24.2,
-    "averageNps": 9.6,
-    "video": "https://example.com/overstrum-demo-proof/30",
-    "verifiedAt": "2026-11-20",
-    "demo": true
-  }
+const ROOT=document.body.dataset.prefix||"./";
+const PAGE=document.body.dataset.page||"overview";
+const ENGINE_ID=document.body.dataset.engine||"clone-hero";
+const DEFAULT_BOARD=document.body.dataset.board||"FC";
+const STORE_KEY="overstrum-pending-submissions-v2";
+const $=function(selector,root){return (root||document).querySelector(selector)};
+const $$=function(selector,root){return Array.from((root||document).querySelectorAll(selector))};
+const ENGINES=[
+{id:"clone-hero",name:"Clone Hero",short:"CH",icon:"clone-hero-placeholder.svg",description:"Community charts and custom five-fret records.",games:[["clone-hero","Clone Hero"]]},
+{id:"yarg",name:"YARG",short:"YARG",icon:"yarg-placeholder.svg",description:"Yet Another Rhythm Game.",games:[["yarg","YARG"]]},
+{id:"gh3",name:"Guitar Hero III",short:"GH3",icon:"gh3-placeholder.svg",description:"Guitar Hero III and Guitar Hero: Aerosmith.",games:[["gh3","Guitar Hero III"],["gh-aerosmith","Aerosmith"]]},
+{id:"gh1-2",name:"Guitar Hero 1 & 2",short:"GH1/2",icon:"gh1-2-placeholder.svg",description:"Guitar Hero, Guitar Hero II and Rocks the 80s.",games:[["gh1","Guitar Hero"],["gh2","Guitar Hero II"],["gh80s","Rocks the 80s"]]},
+{id:"ghwt-wor",name:"GHWT – Warriors of Rock",short:"WT–WoR",icon:"ghwt-wor-placeholder.svg",description:"World Tour through Warriors of Rock, including the standalone releases.",games:[["gh-world-tour","World Tour"],["gh-metallica","Metallica"],["gh-smash-hits","Smash Hits"],["gh5","Guitar Hero 5"],["gh-van-halen","Van Halen"],["band-hero","Band Hero"],["gh-warriors-of-rock","Warriors of Rock"]]}
 ];
-let baseCharts=FALLBACK_CHARTS.slice();
-let submissions=readSubmissions();
-let allCharts=[];
-function readSubmissions(){try{const value=JSON.parse(localStorage.getItem(STORE_KEY)||"[]");return Array.isArray(value)?value:[]}catch{return[]}}
-function syncCharts(){allCharts=[...baseCharts,...submissions]}
-function setNav(){
- const navKey=route==="home"?"home":route==="games"?"games":route==="submit"?"submit":route==="rules"?"rules":route==="community"?"community":"leaderboard";
- document.querySelectorAll("[data-nav]").forEach(a=>{
-  a.classList.toggle("active",a.dataset.nav===navKey);
-  if(a.dataset.nav==="games")a.textContent="The List";
- });
- const toggle=$(".menu-toggle"),nav=$(".main-nav");
- if(toggle&&!toggle.dataset.bound){
-  toggle.dataset.bound="true";
-  toggle.addEventListener("click",()=>{
-   const open=nav.classList.toggle("open");
-   toggle.setAttribute("aria-expanded",String(open));
-  });
+const GAMES={
+"clone-hero":{name:"Clone Hero",short:"CH"},
+"yarg":{name:"YARG",short:"YARG"},
+"gh1":{name:"Guitar Hero",short:"GH1"},
+"gh2":{name:"Guitar Hero II",short:"GH2"},
+"gh80s":{name:"Rocks the 80s",short:"80s"},
+"gh3":{name:"Guitar Hero III",short:"GH3"},
+"gh-aerosmith":{name:"Guitar Hero: Aerosmith",short:"AERO"},
+"gh-world-tour":{name:"Guitar Hero World Tour",short:"WT"},
+"gh-metallica":{name:"Guitar Hero: Metallica",short:"MET"},
+"gh-smash-hits":{name:"Guitar Hero: Smash Hits",short:"HITS"},
+"gh5":{name:"Guitar Hero 5",short:"GH5"},
+"gh-van-halen":{name:"Guitar Hero: Van Halen",short:"VH"},
+"band-hero":{name:"Band Hero",short:"BH"},
+"gh-warriors-of-rock":{name:"Guitar Hero: Warriors of Rock",short:"WoR"}
+};
+const BUNDLED_CHARTS=[{"id":"ch-soulless-6","engine":"clone-hero","game_id":"clone-hero","rank":1,"title":"Soulless 6","artist":"ExileLord","charter":"ExileLord","speed":100,"tags":["Tech / Tapping","Speed / Shred","Endurance"],"first_victor":{"player":"CarnyJared","date":"2021-04-19","video_url":"https://www.youtube.com/watch?v=CRneGN5LYqo"},"victors":[{"player":"CarnyJared","type":"FC","date":"2021-04-19","video_url":"https://www.youtube.com/watch?v=CRneGN5LYqo"}],"bounty":false,"source_url":"https://www.youtube.com/watch?v=CRneGN5LYqo"},{"id":"ch-soulless-5","engine":"clone-hero","game_id":"clone-hero","rank":2,"title":"Soulless 5","artist":"ExileLord","charter":"ExileLord","speed":100,"tags":["Tech / Tapping","Speed / Shred","Endurance"],"first_victor":{"player":"Frif","date":"2019-10-17","video_url":"https://www.youtube.com/watch?v=Y2QIQtb9nlY"},"victors":[{"player":"Frif","type":"FC","date":"2019-10-17","video_url":"https://www.youtube.com/watch?v=Y2QIQtb9nlY"}],"bounty":false,"source_url":"https://www.youtube.com/watch?v=Y2QIQtb9nlY"},{"id":"ch-apathetic-inversions","engine":"clone-hero","game_id":"clone-hero","rank":151,"title":"Apathetic Inversions","artist":"Sidney600","charter":"Sidney600","speed":100,"tags":["Tech / Tapping","Strict Engine"],"first_victor":{"player":"TobeGH3","date":"2012-10","video_url":"https://www.fullcombo.net/songs/24/"},"victors":[{"player":"TobeGH3","type":"FC","date":"2012-10","video_url":"https://www.fullcombo.net/songs/24/"}],"bounty":false,"source_url":"https://www.fullcombo.net/songs/24/"},{"id":"ch-caverns-of-lolwut","engine":"clone-hero","game_id":"clone-hero","rank":152,"title":"Caverns of Lolwut","artist":"Plumato","charter":"Plumato","speed":100,"tags":["Speed / Shred","Strumming / Stamina"],"first_victor":{"player":"DeadShadowGH","date":"2018-10","video_url":"https://www.fullcombo.net/songs/54/"},"victors":[{"player":"DeadShadowGH","type":"FC","date":"2018-10","video_url":"https://www.fullcombo.net/songs/54/"}],"bounty":false,"source_url":"https://www.fullcombo.net/songs/54/"},{"id":"ch-zoidberg-cowboy","engine":"clone-hero","game_id":"clone-hero","rank":null,"title":"Zoidberg the Cowboy","artist":"Schmutz","charter":"Schmutz","speed":100,"tags":["Strumming / Stamina","Endurance"],"first_victor":null,"victors":[],"bounty":true,"source_url":"https://www.fullcombo.net/songs/460/"},{"id":"ch-spacerace","engine":"clone-hero","game_id":"clone-hero","rank":null,"title":"Spacerace","artist":"archwk","charter":"archwk","speed":100,"tags":["Tech / Tapping","Endurance"],"first_victor":null,"victors":[],"bounty":true,"source_url":"https://www.fullcombo.net/songs/950/"},{"id":"ch-supernovae-uber-solo","engine":"clone-hero","game_id":"clone-hero","rank":null,"title":"Supernovae Uber Solo","artist":"archwk","charter":"archwk","speed":100,"tags":["Tech / Tapping","Endurance"],"first_victor":null,"victors":[],"bounty":true,"source_url":"https://www.fullcombo.net/artists/archwk/"},{"id":"ch-supernovae-solo-buffed","engine":"clone-hero","game_id":"clone-hero","rank":null,"title":"Supernovae Solo Buffed","artist":"archwk","charter":"archwk","speed":100,"tags":["Speed / Shred","Tech / Tapping"],"first_victor":null,"victors":[],"bounty":true,"source_url":"https://www.fullcombo.net/artists/archwk/"},{"id":"ch-glacial-storm-5","engine":"clone-hero","game_id":"clone-hero","rank":null,"title":"Glacial Storm 5","artist":"Spunky","charter":"Spunky","speed":100,"tags":["Speed / Shred","Strumming / Stamina"],"first_victor":null,"victors":[],"bounty":true,"source_url":"https://www.fullcombo.net/artists/spunky/"},{"id":"ch-chasing-comets","engine":"clone-hero","game_id":"clone-hero","rank":null,"title":"Chasing Comets","artist":"archwk","charter":"archwk","speed":100,"tags":["Tech / Tapping","Endurance"],"first_victor":null,"victors":[],"bounty":true,"source_url":"https://www.fullcombo.net/artists/archwk/"},{"id":"ch-archwks-hell","engine":"clone-hero","game_id":"clone-hero","rank":null,"title":"ArchWks Hell","artist":"archwk","charter":"archwk","speed":100,"tags":["Endurance","Strict Engine"],"first_victor":null,"victors":[],"bounty":true,"source_url":"https://www.fullcombo.net/artists/archwk/"},{"id":"ch-supernovae","engine":"clone-hero","game_id":"clone-hero","rank":null,"title":"Supernovae","artist":"archwk","charter":"archwk","speed":100,"tags":["Tech / Tapping","Speed / Shred"],"first_victor":null,"victors":[],"bounty":true,"source_url":"https://www.fullcombo.net/artists/archwk/"},{"id":"yarg-vehemence","engine":"yarg","game_id":"yarg","rank":1,"title":"Vehemence","artist":"Reo","charter":"YARG Charting Team","speed":100,"tags":["Tech / Tapping","Strict Engine"],"first_victor":null,"victors":[{"player":"JarheadHME","type":"FC","date":"2026-05-08","video_url":"https://www.youtube.com/watch?v=wqIyMQH4dG4"}],"bounty":false,"source_url":"https://www.youtube.com/watch?v=wqIyMQH4dG4"},{"id":"yarg-tick-tock","engine":"yarg","game_id":"yarg","rank":2,"title":"Tick Tock","artist":"obkatiekat","charter":"YARG Charting Team","speed":100,"tags":["Speed / Shred","Strict Engine"],"first_victor":null,"victors":[{"player":"JarheadHME","type":"FC","date":"2026-05-08","video_url":"https://www.youtube.com/watch?v=wqIyMQH4dG4"}],"bounty":false,"source_url":"https://www.youtube.com/watch?v=wqIyMQH4dG4"},{"id":"yarg-stress","engine":"yarg","game_id":"yarg","rank":3,"title":"Stress","artist":"Jim's Big Ego","charter":"YARG Charting Team","speed":100,"tags":["Strumming / Stamina","Endurance"],"first_victor":null,"victors":[{"player":"JarheadHME","type":"FC","date":"2026-05-08","video_url":"https://www.youtube.com/watch?v=wqIyMQH4dG4"}],"bounty":false,"source_url":"https://www.youtube.com/watch?v=wqIyMQH4dG4"},{"id":"gh12-jordan","engine":"gh1-2","game_id":"gh2","rank":1,"title":"Jordan","artist":"Buckethead","charter":"Harmonix","speed":100,"tags":["Tech / Tapping","Speed / Shred","Strict Engine"],"first_victor":{"player":"HellAshes","date":"2008-01-09","video_url":"https://guitarhero.fandom.com/wiki/Jordan"},"victors":[{"player":"HellAshes","type":"FC","date":"2008-01-09","video_url":"https://guitarhero.fandom.com/wiki/Jordan"}],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Jordan"},{"id":"gh12-bark-at-the-moon","engine":"gh1-2","game_id":"gh1","rank":2,"title":"Bark at the Moon","artist":"Ozzy Osbourne","charter":"Harmonix","speed":100,"tags":["Strumming / Stamina","Speed / Shred"],"first_victor":{"player":"strikebowler585","date":"2008-04-23","video_url":"https://guitarhero.fandom.com/wiki/Bark_at_the_Moon"},"victors":[{"player":"strikebowler585","type":"FC","date":"2008-04-23","video_url":"https://guitarhero.fandom.com/wiki/Bark_at_the_Moon"}],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Bark_at_the_Moon"},{"id":"gh12-hangar-18","engine":"gh1-2","game_id":"gh2","rank":76,"title":"Hangar 18","artist":"Megadeth","charter":"Harmonix","speed":100,"tags":["Tech / Tapping","Speed / Shred"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Hangar_18"},{"id":"gh12-misirlou","engine":"gh1-2","game_id":"gh2","rank":77,"title":"Misirlou","artist":"Dick Dale","charter":"Harmonix","speed":100,"tags":["Strumming / Stamina","Endurance"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Misirlou"},{"id":"gh12-free-bird","engine":"gh1-2","game_id":"gh2","rank":151,"title":"Free Bird","artist":"Lynyrd Skynyrd","charter":"Harmonix","speed":100,"tags":["Endurance","Tech / Tapping"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Free_Bird"},{"id":"gh3-through-fire-flames","engine":"gh3","game_id":"gh3","rank":1,"title":"Through the Fire and Flames","artist":"DragonForce","charter":"Neversoft","speed":100,"tags":["Speed / Shred","Endurance","Tech / Tapping"],"first_victor":{"player":"Chris Chike","date":"2008-06-03","video_url":"https://www.iamchris4life.com/"},"victors":[{"player":"Chris Chike","type":"FC","date":"2008-06-03","video_url":"https://www.iamchris4life.com/"}],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Through_the_Fire_and_Flames"},{"id":"gh3-devil-went-down","engine":"gh3","game_id":"gh3","rank":2,"title":"The Devil Went Down to Georgia","artist":"The Charlie Daniels Band","charter":"Neversoft","speed":100,"tags":["Strumming / Stamina","Endurance"],"first_victor":{"player":"GuitarHeroPhenom","date":"2008-12-16","video_url":"https://www.youtube.com/watch?v=ixvNiuJk4To"},"victors":[{"player":"GuitarHeroPhenom","type":"FC","date":"2008-12-16","video_url":"https://www.youtube.com/watch?v=ixvNiuJk4To"}],"bounty":false,"source_url":"https://www.xboxachievements.com/forum/topic/95556-the-devil-went-down-to-georgia-fc/"},{"id":"gh3-one","engine":"gh3","game_id":"gh3","rank":76,"title":"One","artist":"Metallica","charter":"Neversoft","speed":100,"tags":["Tech / Tapping","Strumming / Stamina"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/One"},{"id":"gh3-raining-blood","engine":"gh3","game_id":"gh3","rank":77,"title":"Raining Blood","artist":"Slayer","charter":"Neversoft","speed":100,"tags":["Strumming / Stamina","Speed / Shred"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Raining_Blood"},{"id":"gh3-cliffs-of-dover","engine":"gh3","game_id":"gh3","rank":151,"title":"Cliffs of Dover","artist":"Eric Johnson","charter":"Neversoft","speed":100,"tags":["Tech / Tapping","Speed / Shred"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Cliffs_of_Dover"},{"id":"gh3-aerosmith-train-kept","engine":"gh3","game_id":"gh-aerosmith","rank":152,"title":"Train Kept A-Rollin'","artist":"Aerosmith","charter":"Neversoft","speed":100,"tags":["Strumming / Stamina","Endurance"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Train_Kept_A-Rollin%27"},{"id":"ghw-dyers-eve","engine":"ghwt-wor","game_id":"gh-metallica","rank":1,"title":"Dyer's Eve","artist":"Metallica","charter":"Neversoft","speed":100,"tags":["Speed / Shred","Strumming / Stamina","Endurance"],"first_victor":{"player":"JLC","date":"2009-09-14","video_url":"https://www.youtube.com/watch?v=TaybrSJcAso"},"victors":[{"player":"JLC","type":"FC","date":"2009-09-14","video_url":"https://www.youtube.com/watch?v=TaybrSJcAso"}],"bounty":false,"source_url":"https://www.youtube.com/watch?v=TaybrSJcAso"},{"id":"ghw-fury-of-the-storm","engine":"ghwt-wor","game_id":"gh-warriors-of-rock","rank":2,"title":"Fury of the Storm","artist":"DragonForce","charter":"Neversoft","speed":100,"tags":["Tech / Tapping","Speed / Shred","Endurance"],"first_victor":null,"victors":[{"player":"A Wise Moose","type":"FC","date":"2018-08-14","video_url":"https://www.youtube.com/watch?v=7UVjx9OhwMg"}],"bounty":false,"source_url":"https://www.youtube.com/watch?v=7UVjx9OhwMg"},{"id":"ghw-black-widow","engine":"ghwt-wor","game_id":"gh-warriors-of-rock","rank":3,"title":"Black Widow of La Porte","artist":"John 5 ft. Jim Root","charter":"Neversoft","speed":100,"tags":["Tech / Tapping","Speed / Shred"],"first_victor":null,"victors":[{"player":"GuitarHeroPhenom","type":"FC","date":"2012-11-17","video_url":"https://www.youtube.com/watch?v=MXmD7AzCNKU"},{"player":"A Wise Moose","type":"FC","date":"2019-04-19","video_url":"https://www.youtube.com/watch?v=keW_yskjRFU"}],"bounty":false,"source_url":"https://www.youtube.com/watch?v=MXmD7AzCNKU"},{"id":"ghw-satch-boogie","engine":"ghwt-wor","game_id":"gh-world-tour","rank":76,"title":"Satch Boogie","artist":"Joe Satriani","charter":"Neversoft","speed":100,"tags":["Tech / Tapping","Speed / Shred"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Satch_Boogie"},{"id":"ghw-sudden-death","engine":"ghwt-wor","game_id":"gh-warriors-of-rock","rank":77,"title":"Sudden Death","artist":"Megadeth","charter":"Neversoft","speed":100,"tags":["Speed / Shred","Strumming / Stamina"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/Sudden_Death"},{"id":"ghw-21st-century","engine":"ghwt-wor","game_id":"gh5","rank":151,"title":"21st Century Schizoid Man","artist":"King Crimson","charter":"Neversoft","speed":100,"tags":["Strumming / Stamina","Endurance"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/21st_Century_Schizoid_Man"},{"id":"ghw-this-day-we-fight","engine":"ghwt-wor","game_id":"gh-warriors-of-rock","rank":152,"title":"This Day We Fight!","artist":"Megadeth","charter":"Neversoft","speed":100,"tags":["Speed / Shred","Strumming / Stamina"],"first_victor":null,"victors":[],"bounty":false,"source_url":"https://guitarhero.fandom.com/wiki/This_Day_We_Fight!"}];
+let charts=BUNDLED_CHARTS.slice();
+let pending=readPending();
+let activeEngine=ENGINE_ID;
+let profileOpen=false;
+function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]})}
+function safeHttp(value){return typeof value==="string"&&/^https?:\/\//i.test(value)}
+function engineFor(id){return ENGINES.find(function(engine){return engine.id===id})||ENGINES[0]}
+function enginePath(id){return ROOT+id+"/"}
+function asset(path){return ROOT+"assets/"+path}
+function readPending(){try{const parsed=JSON.parse(localStorage.getItem(STORE_KEY)||"[]");return Array.isArray(parsed)?parsed:[]}catch(error){return []}}
+function normalDate(value){if(!value)return "Date not recorded";if(/^\d{4}-\d{2}$/.test(value))return value;return value}
+function victorList(chart){
+ const list=Array.isArray(chart.victors)?chart.victors.slice():[];
+ if(chart.first_victor&&!list.some(function(v){return v.player===chart.first_victor.player&&v.type==="FC"})){
+  list.unshift({player:chart.first_victor.player,type:"FC",date:chart.first_victor.date,video_url:chart.first_victor.video_url});
  }
+ return list;
 }
-function statusFor(c){return c.status==="pending"?"pending":c.demo?"sample":"verified"}
-function statusBadge(c){const s=statusFor(c),label=s==="pending"?"Pending review":s==="sample"?"Sample data":"Verified";return '<span class="badge '+s+'">'+label+'</span>'}
-function queryUrl(engine,kind){const p=new URLSearchParams();if(engine&&engine!=="all")p.set("engine",engine);if(kind&&kind!=="all")p.set("kind",kind);return ROOT_PREFIX+"leaderboard/"+(p.toString()?"?"+p.toString():"")}
-function renderHome(){
- const verified=allCharts.filter(c=>statusFor(c)==="verified");
- const verifiedPlayers=new Set(verified.flatMap(c=>c.victors||[]));
- const activeGames=new Set(allCharts.filter(c=>c.status!=="pending").map(c=>c.engine));
- const ranked=allCharts.filter(c=>c.status!=="pending").length;
- const recentSource=verified.length?verified:allCharts;
- const recent=[...recentSource].sort((a,b)=>String(b.verifiedAt||"").localeCompare(String(a.verifiedAt||""))).slice(0,4);
- $("#app").innerHTML=
- '<section class="hero"><div class="hero-copy-wrap"><span class="eyebrow">A home for five-fret records</span><h1>Overstrum <span>— Five-fret records, kept honest.</span></h1><p class="hero-copy">A community archive for Guitar Hero, Clone Hero and YARG. Browse the hardest charts, follow the players behind the records, and send in a run for review.</p><div class="hero-actions"><a class="button primary" href="'+ROOT_PREFIX+'games/">Explore The List <span aria-hidden="true">↗</span></a><a class="button secondary" href="'+ROOT_PREFIX+'submit/">Submit a Run</a></div></div><div class="hero-aside"><span class="hero-mark" aria-hidden="true">五</span><span class="hero-aside-label">FIVE-FRET ARCHIVE</span><span class="hero-aside-note">Records, charts and community credits.</span></div></section>'+
- '<section class="kpi-grid" aria-label="Overstrum statistics"><article class="kpi-card"><span>Total ranked charts</span><strong class="tabular">'+ranked.toLocaleString()+'</strong><small>Across every supported game</small></article><article class="kpi-card"><span>Verified players</span><strong class="tabular">'+verifiedPlayers.size.toLocaleString()+'</strong><small>Players on approved records</small></article><article class="kpi-card"><span>Active games</span><strong class="tabular">'+activeGames.size.toLocaleString()+'</strong><small>Games with listed charts</small></article></section>'+
- '<div class="section-heading"><div><h2>'+(verified.length?"Recent verified records":"Recent records preview")+'</h2><p>'+(verified.length?"The latest approved records added to the archive.":"No approved records are available yet. Sample entries are shown so you can preview the layout.")+'</p></div><a class="inline-link" href="'+ROOT_PREFIX+'games/">Browse The List ↗</a></div>'+
- '<section class="recent-grid">'+(recent.length?recent.map(c=>'<article class="recent-card"><div class="recent-card-top">'+statusBadge(c)+'<span class="recent-board">'+(c.kind==="fc"?"FC":"PASS")+'</span></div><strong>'+esc(c.title)+'</strong><p>'+esc(c.artist||"Artist not supplied")+' <span>·</span> '+esc(engineFor(c.engine).name)+'</p><div class="recent-card-bottom"><span>'+esc(c.charter||"Charter not supplied")+'</span><strong class="tabular">'+Number(c.points||0)+' pts</strong></div></article>').join(""):'<div class="empty-state">No records have been added yet.</div>')+'</section>'+
- '<div class="section-heading"><div><h2>Built around the games</h2><p>Separate boards, consistent standards, one archive.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'rules/">Read the rules ↗</a></div>'+
- '<section class="content-grid"><article class="content-card"><span class="content-icon" aria-hidden="true">01</span><h3>Every chart has a place</h3><p>Each supported game has its own FC and Pass boards, with chart identity and charter credits kept alongside every entry.</p></article><article class="content-card"><span class="content-icon" aria-hidden="true">02</span><h3>Evidence before points</h3><p>Submissions stay pending until reviewed. Sample entries are labelled clearly and never presented as verified runs.</p></article></section>'+
- '<p class="data-note">The bundled entries are sample data for preview purposes. They are not verified achievements. New submissions are saved in this browser and remain pending review.</p>';
- setNav();
+function basePoints(rank){
+ if(!Number.isFinite(Number(rank)))return 0;
+ rank=Number(rank);
+ if(rank>=1&&rank<=75)return 350-((rank-1)*250/74);
+ if(rank>=76&&rank<=150)return 99-((rank-76)*89/74);
+ return 0;
 }
-function albumCoverMarkup(c,extraClass){
- const raw=c&&(c.albumCover||c.cover||c.coverUrl);
- const source=typeof raw==="string"&&(/^(https?:\/\/|assets\/)/i.test(raw))?raw:"";
- const image=source?'<img src="'+esc(source.startsWith("assets/")?ROOT_PREFIX+source:source)+'" alt="Album artwork for '+esc(c.title||"selected chart")+'" loading="lazy" onerror="this.remove()">':"";
- return '<span class="album-cover '+(extraClass||"")+'"><span class="cover-fallback" aria-hidden="true"><i></i><b>♪</b></span>'+image+'</span>';
+function pointsFor(chart,player){
+ const base=basePoints(chart.rank);
+ if(!base)return 0;
+ return base+(chart.first_victor&&chart.first_victor.player===player?base*.1:0);
 }
-function trophyMarkup(position){
- const medals={1:"gold",2:"silver",3:"bronze"},tone=medals[position];
- if(!tone)return '<span class="rank-plain">'+position+'</span>';
- const suffix=position===1?"st":position===2?"nd":"rd";
- return '<span class="rank-medal medal-'+tone+'" title="'+position+suffix+' place trophy placeholder"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v3h3a1 1 0 0 1 1 1c0 3.2-1.9 5.6-5.1 6.3A6 6 0 0 1 13 16v2h4v2H7v-2h4v-2a6 6 0 0 1-2.9-2.7C4 12.6 2 10.2 2 7a1 1 0 0 1 1-1h4V3zm0 5H4.1c.2 1.5 1.1 2.6 2.8 3.2A9 9 0 0 1 7 8zm10 0a9 9 0 0 1 .1 3.2c1.7-.6 2.6-1.7 2.8-3.2H17z"/></svg><small>'+position+suffix+'</small></span>';
+function formatPoints(value){return Number(value||0).toFixed(1)}
+function rankLabel(rank){return rank==null?"OPEN":"#"+rank}
+function tierFor(chart){
+ if(chart.rank==null)return "bounty";
+ if(chart.rank<=75)return "main";
+ if(chart.rank<=150)return "extended";
+ return "legacy";
 }
-function renderChartInspector(c,kind){
- if(!c)return '<aside class="song-inspector-empty"><span class="empty-note-icon" aria-hidden="true">♪</span><strong>Select a song</strong><p>Choose a chart to inspect its cover, charter and board details.</p></aside>';
- const votes=Number.isFinite(Number(c.communityVotes??c.votes))&&(c.communityVotes!==undefined||c.votes!==undefined)?Number(c.communityVotes??c.votes).toLocaleString():"—";
- const first=c.firstVerifier||(Array.isArray(c.victors)&&c.victors[0])||"Not recorded";
- const hash=typeof c.hash==="string"&&/^[a-f0-9]{32}$/i.test(c.hash)?c.hash:"";
- const proof=typeof c.video==="string"&&/^https?:\/\//i.test(c.video)?'<a class="chart-proof-link" href="'+esc(c.video)+'" target="_blank" rel="noopener noreferrer">Watch proof ↗</a>':"";
- return '<div class="inspector-topline"><span class="inspector-kicker">SELECTED CHART</span><span class="inspector-board">'+(kind==="fc"?"FULL COMBO":"PASS")+'</span></div>'+
- '<div class="inspector-track">'+albumCoverMarkup(c,"inspector-cover")+'<div class="inspector-track-copy"><h2>'+esc(c.title)+'</h2><p class="inspector-artist">'+esc(c.artist||"Artist not supplied")+'</p><div class="inspector-charter"><span>CHARTER</span><strong>'+esc(c.charter||"Not supplied")+'</strong></div></div></div>'+
- '<div class="inspector-stats"><div class="inspector-stat"><span>POINTS</span><strong class="tabular">'+Number(c.points||0).toLocaleString()+'</strong></div><div class="inspector-stat"><span>BOARD</span><strong>'+(kind==="fc"?"FC":"PASS")+'</strong></div><div class="inspector-stat"><span>VOTES</span><strong class="tabular">'+votes+'</strong></div></div>'+
- '<div class="inspector-actions"><a class="list-primary-cta" href="'+ROOT_PREFIX+'submit/">Submit a Run <span>↗</span></a><button class="list-secondary-cta" type="button" data-toggle-chart-details>Chart details <span aria-hidden="true">⌄</span></button></div>'+
- '<div class="inspector-extra" id="inspector-extra" hidden><div><span>FIRST '+(kind==="fc"?"FC":"PASS")+'</span><strong>'+esc(first)+'</strong></div><div><span>PEAK NPS</span><strong>'+fmt(c.peakNps)+'</strong></div><div><span>AVERAGE NPS</span><strong>'+fmt(c.averageNps)+'</strong></div>'+(hash?'<div class="inspector-hash"><span>CHART MD5</span><div class="hash-line"><code class="hash-text">'+esc(hash)+'</code><button class="copy-button" type="button" data-copy="'+esc(hash)+'">Copy</button></div></div>':"")+(proof?proof:'<span class="inspector-no-proof">No video proof supplied.</span>')+'</div>';
+function tierLabel(tier){
+ return tier==="main"?"Main List":tier==="extended"?"Extended List":tier==="legacy"?"Legacy List":"Open Bounties";
 }
-function recordRows(rows,selectedId){
- if(!rows.length)return '<div class="list-empty">No songs match this board. Try another search.</div>';
- return rows.map((c,i)=>{
-  const position=Number(c.rank)||i+1,active=c.id===selectedId;
-  return '<button class="song-row'+(active?" is-selected":"")+'" type="button" data-select-chart="'+esc(c.id)+'" aria-pressed="'+String(active)+'">'+
-   '<span class="song-rank">'+trophyMarkup(position)+'</span>'+
-   '<span class="song-identity">'+albumCoverMarkup(c,"song-cover")+'<span class="song-copy"><strong>'+esc(c.title)+'</strong><span class="song-artist">'+esc(c.artist||"Artist not supplied")+'</span></span></span>'+
-   '<span class="song-charter"><small>CHARTER</small><strong>'+esc(c.charter||"Not supplied")+'</strong></span>'+
-   '<span class="song-points"><strong class="tabular">'+Number(c.points||0).toLocaleString()+'</strong><small>PTS</small></span></button>';
- }).join("");
+function proofLink(url,label){
+ if(!safeHttp(url))return "";
+ const external=new URL(url);
+ const text=label||(external.hostname.indexOf("youtube.com")>=0||external.hostname==="youtu.be"?"▶ Proof":"↗ Record");
+ return '<a class="proof-link" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+text+'</a>';
 }
-function playerStats(charts){
+function playerButton(name){return '<button class="player-link" type="button" data-player="'+esc(name)+'">'+esc(name)+'</button>'}
+function engineTabs(active){
+ return '<nav class="engine-switcher" aria-label="Choose an engine">'+ENGINES.map(function(engine){
+  return '<a href="'+enginePath(engine.id)+'" class="'+(engine.id===active?"active":"")+'" '+(engine.id===active?'aria-current="page"':'')+'><img src="'+asset("img/engines/"+engine.icon)+'" alt=""><span>'+esc(engine.name)+'</span></a>';
+ }).join("")+'</nav>';
+}
+function gameIcon(gameId){
+ const meta=GAMES[gameId]||{name:gameId,short:gameId};
+ return '<img src="'+asset("img/games/"+gameId+"/icon.png")+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+}
+function showPageTitle(kicker,title,description,action){
+ return '<div class="page-heading"><div><div class="page-kicker">'+esc(kicker)+'</div><h1>'+esc(title)+'</h1><p>'+esc(description)+'</p></div>'+(action||"")+'</div>';
+}
+function playerCounts(source){
  const map=new Map();
- charts.forEach(c=>(c.victors||[]).forEach(v=>{
-  if(!v)return;
-  const p=map.get(v)||{name:v,points:0,records:0,fcCount:0,passCount:0,pioneers:0,pending:0};
-  p.records++;
-  if(c.kind==="fc")p.fcCount++;else if(c.kind==="pass")p.passCount++;
-  if(c.status==="pending")p.pending++;
-  else p.points+=Number(c.points||0)+(v===c.firstVerifier?3:0);
-  if(v===c.firstVerifier)p.pioneers++;
-  map.set(v,p);
- }));
- return [...map.values()].sort((a,b)=>b.points-a.points||b.records-a.records||a.name.localeCompare(b.name));
+ source.forEach(function(chart){
+  if(chart.status==="pending")return;
+  victorList(chart).forEach(function(v){
+   if(!v.player)return;
+   const item=map.get(v.player)||{name:v.player,points:0,fc:0,pass:0,firsts:0,records:[]};
+   if(v.type==="FC"){
+    item.fc++;
+    item.points+=pointsFor(chart,v.player);
+    if(chart.first_victor&&chart.first_victor.player===v.player)item.firsts++;
+   }else if(v.type==="Pass"){item.pass++}
+   item.records.push({chart:chart,victor:v});
+   map.set(v.player,item);
+  });
+ });
+ return Array.from(map.values()).sort(function(a,b){return b.points-a.points||b.fc-a.fc||a.name.localeCompare(b.name)});
 }
-function renderPlayerTable(charts,query){
- const q=String(query||"").trim().toLowerCase();
- const players=playerStats(charts).filter(p=>p.name.toLowerCase().includes(q));
- if(!players.length)return '<tr><td colspan="5"><div class="empty-state">No players match that search.</div></td></tr>';
- return players.map((p,i)=>{
-  const initial=esc((p.name||"?").slice(0,1).toUpperCase());
-  return '<tr><td class="player-rank">'+String(i+1).padStart(2,"0")+'</td><td><div class="player-identity"><span class="player-avatar">'+initial+'</span><strong>'+esc(p.name)+'</strong></div></td><td class="points-total tabular">'+p.points.toLocaleString()+'</td><td class="numeric-cell tabular">'+p.fcCount.toLocaleString()+'</td><td class="numeric-cell tabular">'+p.passCount.toLocaleString()+'</td></tr>';
- }).join("");
+function getChartFirst(chart){
+ if(chart.first_victor)return chart.first_victor;
+ return null;
+}
+function rowFirstVictor(chart){
+ const first=getChartFirst(chart);
+ if(first){
+  return '<div class="first-victor-cell"><span class="first-victor-copy"><span class="first-label">First:</span> '+playerButton(first.player)+'</span>'+proofLink(first.video_url)+'</div>';
+ }
+ const any= victorList(chart).find(function(v){return v.type==="FC"});
+ if(any){
+  return '<div class="first-victor-cell"><span class="first-victor-copy"><span class="first-label">First FC:</span> not confirmed · '+playerButton(any.player)+'</span>'+proofLink(any.video_url)+'</div>';
+ }
+ return '<div class="first-victor-cell"><span class="first-victor-copy">First FC not recorded</span></div>';
+}
+function chartRow(chart,expanded,board){
+ const r=chart.rank;
+ const rankClass=r===1?"rank-1":r===2?"rank-2":r===3?"rank-3":"";
+ const point=basePoints(r);
+ const tags=(chart.tags||[]).slice(0,2).map(function(tag){return '<span class="skill-tag">'+esc(tag)+'</span>'}).join("");
+ const speed=Number(chart.speed||100)!==100?'<span class="speed-badge">'+Number(chart.speed)+'%</span>':"";
+ const game=(GAMES[chart.game_id]||{name:chart.game_id}).name;
+ const rowId="chart-"+chart.id;
+ return '<div class="chart-entry">'+
+  '<div class="chart-row'+(expanded?" expanded":"")+'" role="button" tabindex="0" data-chart-id="'+esc(chart.id)+'" aria-controls="'+rowId+'" aria-expanded="'+String(expanded)+'">'+
+   '<div class="rank '+rankClass+'">'+rankLabel(r)+'</div>'+
+   '<div class="chart-main"><div class="chart-title-line"><span class="chart-title">'+esc(chart.title)+'</span>'+speed+'</div><div class="chart-subtitle">'+esc(chart.artist)+'<span class="dot">·</span>Charted by '+esc(chart.charter)+'<span class="dot">·</span>'+esc(game)+'</div></div>'+
+   rowFirstVictor(chart)+
+   '<div class="skill-tags">'+tags+'</div>'+
+   '<div class="point-cell"><span class="point-value">'+formatPoints(point)+'</span><span class="point-unit">pts</span></div>'+
+  '</div>'+
+  '<div class="chart-accordion" id="'+rowId+'" '+(expanded?"":"hidden")+'>'+accordionContent(chart,board)+'</div>'+
+ '</div>';
+}
+function accordionContent(chart,board){
+ const victors=victorList(chart);
+ const sorted=victors.slice().sort(function(a,b){return String(a.date||"").localeCompare(String(b.date||""))});
+ const list=sorted.length?sorted.map(function(v){
+  const first=chart.first_victor&&chart.first_victor.player===v.player&&v.type==="FC";
+  return '<div class="victor-item"><span class="victor-type '+(v.type==="Pass"?"pass":"")+'">'+esc(v.type||"FC")+'</span>'+playerButton(v.player)+(first?'<span class="victor-date">FIRST VICTOR</span>':"")+'<span class="victor-date">'+esc(normalDate(v.date))+'</span>'+proofLink(v.video_url)+'</div>';
+ }).join(""):'<div class="victor-empty">No verified '+(board==="Pass"?"Pass":"FC")+' records have been entered for this chart.</div>';
+ const tags=(chart.tags||[]).map(function(tag){return '<span class="skill-tag">'+esc(tag)+'</span>'}).join("");
+ const query=new URLSearchParams({engine:chart.engine,game:chart.game_id,song:chart.title,artist:chart.artist,charter:chart.charter,speed:String(chart.speed||100),board:board});
+ return '<div class="accordion-grid"><div><h3 class="accordion-heading">Verified victors</h3><div class="victor-list">'+list+'</div></div><div><h3 class="accordion-heading">Chart details</h3><div class="accordion-tags">'+tags+'</div><div class="accordion-actions">'+(safeHttp(chart.source_url)?proofLink(chart.source_url,"↗ Chart source"):"")+'<a class="action-link primary" href="'+ROOT+'submit/?'+query.toString()+'">Submit a record for this chart</a></div></div></div>';
+}
+function tierCount(engineId,tier,gameId){
+ return charts.filter(function(chart){return chart.engine===engineId&&tierFor(chart)===tier&&(gameId==="all"||chart.game_id===gameId)}).length;
+}
+function renderEnginePage(){
+ const engine=engineFor(ENGINE_ID);
+ activeEngine=engine.id;
+ let selectedTier="main";
+ let selectedBoard=DEFAULT_BOARD==="Pass"?"Pass":"FC";
+ let selectedGame="all";
+ let selectedSkill="all";
+ let searchText="";
+ let expandedId=null;
+ const prefixTitle=engine.id==="gh1-2"?"Guitar Hero 1 & 2":engine.id==="ghwt-wor"?"GHWT – Warriors of Rock":engine.name;
+ const gameFilters=engine.games.map(function(pair){return '<button type="button" class="game-filter'+(selectedGame===pair[0]?' active':'')+'" data-game-filter="'+pair[0]+'">'+esc(pair[1])+'</button>'}).join("");
+ $("#app").innerHTML=engineTabs(engine.id)+
+  '<div class="engine-title-row"><div class="engine-title"><img src="'+asset("img/engines/"+engine.icon)+'" alt=""><div><h1>'+esc(prefixTitle)+'</h1><p class="engine-subtitle">'+esc(engine.description)+'</p></div></div><div class="engine-meta-links"><a href="'+ROOT+'leaderboard/?engine='+engine.id+'">Engine leaderboard ↗</a><a href="'+ROOT+'rules/">Rules ↗</a></div></div>'+
+  '<div class="game-filters" id="game-filters"><button type="button" class="game-filter active" data-game-filter="all">All games</button>'+gameFilters+'</div>'+
+  '<div class="list-toolbar"><div class="tier-tabs" role="tablist" aria-label="Chart tier"><button type="button" class="tier-tab active" data-tier="main" aria-selected="true">Main <span class="tier-count" data-tier-count="main"></span></button><button type="button" class="tier-tab" data-tier="extended" aria-selected="false">Extended <span class="tier-count" data-tier-count="extended"></span></button><button type="button" class="tier-tab" data-tier="legacy" aria-selected="false">Legacy <span class="tier-count" data-tier-count="legacy"></span></button><button type="button" class="tier-tab" data-tier="bounty" aria-selected="false">Open Bounties <span class="tier-count" data-tier-count="bounty"></span></button></div>'+
+  '<div class="board-tabs" role="tablist" aria-label="Record board"><button type="button" class="board-tab active" data-board="FC" aria-selected="true">FC List</button><button type="button" class="board-tab" data-board="Pass" aria-selected="false">Pass List</button></div>'+
+  '<input class="search-input" id="chart-search" type="search" placeholder="Search songs, artists, charters or players…" aria-label="Search charts">'+
+  '<select class="skill-filter" id="skill-filter" aria-label="Filter by skillset"><option value="all">All skillsets</option><option>Tech / Tapping</option><option>Speed / Shred</option><option>Strumming / Stamina</option><option>Endurance</option><option>Strict Engine</option></select></div>'+
+  '<div class="list-context"><span id="list-summary"></span><span id="list-count"></span></div>'+
+  '<div class="top-chart" id="top-chart"></div>'+
+  '<div class="table-head"><span>Rank</span><span>Chart / Song</span><span>First victor & proof</span><span>Skillsets</span><span class="align-right">Points</span></div>'+
+  '<section class="chart-list" id="chart-list" aria-live="polite"></section>'+
+  '<p class="list-footer-note">Main and Extended points are calculated from chart rank. First Victors receive a 10% bonus. Legacy records and Open Bounties award no points.</p>';
+ const paint=function(){
+  const q=searchText.toLowerCase();
+  const source=charts.filter(function(chart){
+   if(chart.engine!==engine.id)return false;
+   if(selectedGame!=="all"&&chart.game_id!==selectedGame)return false;
+   if(tierFor(chart)!==selectedTier)return false;
+   if(selectedBoard==="Pass"&&!victorList(chart).some(function(v){return v.type==="Pass"}))return false;
+   if(selectedBoard==="FC"&&selectedTier!=="bounty"&&!victorList(chart).some(function(v){return v.type==="FC"}))return false;
+   if(selectedTier==="bounty"&&!chart.bounty)return false;
+   if(selectedSkill!=="all"&&!(chart.tags||[]).includes(selectedSkill))return false;
+   const hay=[chart.title,chart.artist,chart.charter,chart.game_id].concat(victorList(chart).map(function(v){return v.player})).join(" ").toLowerCase();
+   return hay.includes(q);
+  }).sort(function(a,b){if(a.rank==null)return 1;if(b.rank==null)return -1;return a.rank-b.rank});
+  if(!source.some(function(chart){return chart.id===expandedId}))expandedId=null;
+  $("#list-count").textContent=source.length+" charts";
+  $("#list-summary").innerHTML='<strong>'+esc(tierLabel(selectedTier))+'</strong> · '+selectedBoard+" board";
+  $("#chart-list").innerHTML=source.length?source.map(function(chart){return chartRow(chart,chart.id===expandedId,selectedBoard)}).join(""):'<div class="empty-list">No charts match these filters yet.</div>';
+  $$("#tier-count").forEach(function(){});
+  $$("[data-tier-count]").forEach(function(node){node.textContent=tierCount(engine.id,node.dataset.tier,selectedGame)||""});
+  const top=charts.filter(function(chart){return chart.engine===engine.id&&chart.rank===1&&chart.game_id&&(selectedGame==="all"||chart.game_id===selectedGame)}).sort(function(a,b){return a.title.localeCompare(b.title)})[0];
+  if(top){
+   const first=top.first_victor?top.first_victor.player:"First FC not confirmed";
+   $("#top-chart").innerHTML='<span class="top-chart-rank">#1</span><div class="top-chart-copy"><strong>'+esc(top.title)+'</strong><span>'+esc(top.artist)+' · First victor: '+esc(first)+'</span></div><span class="top-chart-score">'+formatPoints(basePoints(top.rank))+' pts</span><a href="#chart-list" class="top-chart-link" data-jump-chart="'+esc(top.id)+'">View chart ↓</a>';
+   $("#top-chart").hidden=false;
+  }else{
+   $("#top-chart").innerHTML='<span class="top-chart-rank">#1</span><div class="top-chart-copy"><strong>No #1 chart is ranked yet</strong><span>Accepted records will appear here after ranking.</span></div>';
+   $("#top-chart").hidden=false;
+  }
+ };
+ $("#game-filters").addEventListener("click",function(event){
+  const button=event.target.closest("[data-game-filter]");if(!button)return;
+  selectedGame=button.dataset.gameFilter;
+  $$("[data-game-filter]").forEach(function(item){item.classList.toggle("active",item===button)});
+  expandedId=null;paint();
+ });
+ $$(".tier-tab").forEach(function(button){button.addEventListener("click",function(){
+  selectedTier=button.dataset.tier;
+  $$(".tier-tab").forEach(function(item){const active=item===button;item.classList.toggle("active",active);item.setAttribute("aria-selected",String(active))});
+  expandedId=null;paint();
+ })});
+ $$(".board-tab").forEach(function(button){button.addEventListener("click",function(){
+  selectedBoard=button.dataset.board;
+  $$(".board-tab").forEach(function(item){const active=item===button;item.classList.toggle("active",active);item.setAttribute("aria-selected",String(active))});
+  expandedId=null;paint();
+ })});
+ $("#chart-search").addEventListener("input",function(event){searchText=event.target.value;paint()});
+ $("#skill-filter").addEventListener("change",function(event){selectedSkill=event.target.value;paint()});
+ $("#chart-list").addEventListener("click",function(event){
+  const row=event.target.closest("[data-chart-id]");
+  if(!row||event.target.closest("a,button"))return;
+  expandedId=expandedId===row.dataset.chartId?null:row.dataset.chartId;paint();
+ });
+ $("#chart-list").addEventListener("keydown",function(event){
+  if(event.key!=="Enter"&&event.key!==" ")return;
+  const row=event.target.closest("[data-chart-id]");if(!row)return;
+  event.preventDefault();expandedId=expandedId===row.dataset.chartId?null:row.dataset.chartId;paint();
+ });
+ $("#top-chart").addEventListener("click",function(event){
+  const link=event.target.closest("[data-jump-chart]");if(!link)return;
+  event.preventDefault();selectedTier="main";selectedBoard="FC";expandedId=link.dataset.jumpChart;
+  $$(".tier-tab").forEach(function(b){const active=b.dataset.tier==="main";b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
+  $$(".board-tab").forEach(function(b){const active=b.dataset.board==="FC";b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
+  paint();
+  const row=$('[data-chart-id="'+CSS.escape(expandedId)+'"]');if(row)row.scrollIntoView({block:"center",behavior:"smooth"});
+ });
+ if(DEFAULT_BOARD==="Pass"){$$('.board-tab[data-board="Pass"]')[0].click()}
+ paint();
+}
+function getPlayerRecord(name,source){
+ const result={name:name,points:0,fc:[],pass:[],firsts:[]};
+ source.forEach(function(chart){
+  victorList(chart).forEach(function(v){
+   if(v.player!==name)return;
+   if(v.type==="FC"){
+    result.fc.push({chart:chart,victor:v});
+    result.points+=pointsFor(chart,name);
+    if(chart.first_victor&&chart.first_victor.player===name)result.firsts.push(chart);
+   }else if(v.type==="Pass"){result.pass.push({chart:chart,victor:v})}
+  });
+ });
+ return result;
 }
 function renderLeaderboard(){
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">The people behind the scores</span><h1>Leaderboard</h1><p>Player rankings across the Overstrum archive, with points, full combos and passes in one clear view.</p></div></div>'+
- '<section class="leaderboard-card"><div class="leaderboard-card-heading"><div><h2>Player rankings</h2><p id="player-count"></p></div><label class="player-search"><span aria-hidden="true">⌕</span><input id="player-search-input" type="search" placeholder="Find a player…" aria-label="Search players" autocomplete="off"></label></div>'+
- '<div class="table-wrap"><table class="players-table"><thead><tr><th>RANK</th><th>PLAYER</th><th class="align-right">TOTAL POINTS</th><th class="align-right">FC COUNT</th><th class="align-right">PASS COUNT</th></tr></thead><tbody id="player-body"></tbody></table></div></section>'+
- '<p class="data-note">Rankings are calculated from the listed victor credits. Sample records are included for interface preview and are not verified achievements; pending submissions do not earn points.</p>';
- const search=$("#player-search-input");
- const paint=()=>{
-  const rows=playerStats(allCharts).filter(p=>p.name.toLowerCase().includes(search.value.trim().toLowerCase()));
-  $("#player-body").innerHTML=renderPlayerTable(allCharts,search.value);
-  $("#player-count").textContent=rows.length+" players in the archive";
+ let active="all";
+ const params=new URLSearchParams(location.search);
+ if(ENGINES.some(function(engine){return engine.id===params.get("engine")}))active=params.get("engine");
+ $("#app").innerHTML=showPageTitle("PLAYER RANKINGS","Leaderboard","Scores are kept separately for each engine. Combined totals are available only in this view.")+
+  '<nav class="leaderboard-tabs" aria-label="Leaderboard engine">'+
+  '<button class="leaderboard-tab active" data-leaderboard-engine="all" type="button">Combined / Multi-Engine</button>'+
+  ENGINES.map(function(engine){return '<button class="leaderboard-tab" data-leaderboard-engine="'+engine.id+'" type="button">'+esc(engine.name)+'</button>'}).join("")+'</nav>'+
+  '<div class="leaderboard-tools"><p id="leaderboard-description"></p><span class="num" id="leaderboard-total"></span></div>'+
+  '<div class="leaderboard-table-wrap"><table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th class="align-right">Total points</th><th>Hardest FC</th><th class="align-right">Total FCs</th><th class="align-right">First Victor count</th></tr></thead><tbody id="leaderboard-body"></tbody></table></div>'+
+  '<p class="table-note">Only verified FC records in Main and Extended tiers score points. First Victor bonus: +10% of the chart base score. Passes are recorded but do not add points. Legacy and Open Bounty records are worth 0 points.</p>';
+ const paint=function(){
+  const source=active==="all"?charts:charts.filter(function(chart){return chart.engine===active});
+  const players=playerCounts(source).map(function(player){
+   const fcs=[];
+   player.records.forEach(function(item){
+    if(item.victor.type==="FC"&&item.chart.rank!=null)fcs.push(item.chart);
+   });
+   fcs.sort(function(a,b){return (a.rank||9999)-(b.rank||9999)});
+   player.hardest=fcs[0]||null;
+   return player;
+  });
+  $("#leaderboard-description").textContent=active==="all"?"Combined points across all five independent engine lists.":engineFor(active).name+" points only. No other engine is included.";
+  $("#leaderboard-total").textContent=players.length+" players";
+  $("#leaderboard-body").innerHTML=players.length?players.map(function(player,index){
+   const hardest=player.hardest?engineFor(player.hardest.engine).short+" "+rankLabel(player.hardest.rank):"—";
+   return '<tr><td class="leaderboard-rank '+(index===0?"top1":index===1?"top2":index===2?"top3":"")+'">'+String(index+1).padStart(2,"0")+'</td><td><div class="player-cell"><span class="avatar">'+esc(player.name.slice(0,1).toUpperCase())+'</span>'+playerButton(player.name)+'</div></td><td class="align-right num">'+formatPoints(player.points)+'</td><td class="hardest-cell">'+esc(hardest)+'</td><td class="align-right num">'+player.fc+'</td><td class="align-right num">'+player.firsts+'</td></tr>';
+  }).join(""):'<tr><td colspan="6" class="empty-list">No verified player records for this board yet.</td></tr>';
+  $$(".leaderboard-tab").forEach(function(button){const chosen=button.dataset.leaderboardEngine===active;button.classList.toggle("active",chosen);button.setAttribute("aria-pressed",String(chosen))});
  };
- search.addEventListener("input",paint);
- paint();setNav();
+ $$(".leaderboard-tab").forEach(function(button){button.addEventListener("click",function(){
+  active=button.dataset.leaderboardEngine;
+  const query=new URLSearchParams();if(active!=="all")query.set("engine",active);
+  history.replaceState({}, "",location.pathname+(query.toString()?"?"+query.toString():""));
+  paint();
+ })});
+ paint();
+}
+function showProfile(name){
+ const profile=getPlayerRecord(name,charts);
+ const engineStats=ENGINES.map(function(engine){
+  const points=profile.fc.filter(function(item){return item.chart.engine===engine.id}).reduce(function(total,item){return total+pointsFor(item.chart,name)},0);
+  const fcs=profile.fc.filter(function(item){return item.chart.engine===engine.id}).length;
+  return {engine:engine,points:points,fcs:fcs};
+ }).filter(function(item){return item.fcs>0});
+ const fcRows=profile.fc.slice().sort(function(a,b){
+  const ea=ENGINES.findIndex(function(e){return e.id===a.chart.engine});
+  const eb=ENGINES.findIndex(function(e){return e.id===b.chart.engine});
+  return ea-eb||(Number(a.chart.rank)||9999)-(Number(b.chart.rank)||9999);
+ });
+ const body='<div class="profile-stats"><div class="profile-stat"><span>Total points</span><strong>'+formatPoints(profile.points)+'</strong></div><div class="profile-stat"><span>Verified FCs</span><strong>'+profile.fc.length+'</strong></div><div class="profile-stat"><span>First Victors</span><strong>'+profile.firsts.length+'</strong></div><div class="profile-stat"><span>Passes</span><strong>'+profile.pass.length+'</strong></div></div>'+
+  '<h3 class="profile-section-title">Engine totals</h3>'+
+  (engineStats.length?engineStats.map(function(item){return '<div class="profile-record"><strong>'+esc(item.engine.name)+'</strong><span>'+item.fcs+' FCs</span><span>'+formatPoints(item.points)+' pts</span></div>'}).join(""):'<div class="victor-empty">No ranked FCs yet.</div>')+
+  '<h3 class="profile-section-title">Verified FCs</h3>'+
+  (fcRows.length?fcRows.map(function(item){return '<div class="profile-record"><strong>'+esc(item.chart.title)+' <span>· '+esc(engineFor(item.chart.engine).short)+'</span></strong><span>'+rankLabel(item.chart.rank)+'</span><span>'+formatPoints(pointsFor(item.chart,name))+' pts</span></div>'}).join(""):'<div class="victor-empty">No verified FCs on record.</div>')+
+  '<h3 class="profile-section-title">First Victors</h3>'+
+  (profile.firsts.length?profile.firsts.map(function(chart){return '<div class="profile-record"><strong>'+esc(chart.title)+'</strong><span>'+esc(engineFor(chart.engine).short)+'</span><span>'+esc(normalDate(chart.first_victor.date))+'</span></div>'}).join(""):'<div class="victor-empty">No first-victor credits yet.</div>');
+ $("#modal-root").innerHTML='<div class="profile-modal-backdrop" data-close-profile><section class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-heading"><header class="profile-modal-header"><div><h2 id="profile-heading">'+esc(name)+'</h2><p>Overstrum player profile</p></div><button class="modal-close" type="button" aria-label="Close profile" data-close-profile>×</button></header><div class="profile-modal-body">'+body+'</div></section></div>';
+ profileOpen=true;
+ document.body.classList.add("modal-open");
+}
+function closeProfile(){
+ $("#modal-root").innerHTML="";profileOpen=false;document.body.classList.remove("modal-open");
+}
+function renderOverview(){
+ const players=playerCounts(charts);
+ const fcTotal=charts.reduce(function(total,chart){return total+victorList(chart).filter(function(v){return v.type==="FC"}).length},0);
+ const openTotal=charts.filter(function(chart){return chart.rank==null}).length;
+ $("#app").innerHTML=
+  '<div class="page-heading"><div><div class="page-kicker">FIVE-FRET DEMONLIST</div><h1>Overstrum</h1><p>Five-fret records, kept honest.</p></div><a class="button" href="'+ROOT+'submit/">Submit a record</a></div>'+
+  '<div class="stats-strip"><div class="stat-card"><div class="stat-label">Charts tracked</div><div class="stat-value">'+charts.length+'</div></div><div class="stat-card"><div class="stat-label">Verified FC entries</div><div class="stat-value">'+fcTotal+'</div></div><div class="stat-card"><div class="stat-label">Open bounty charts</div><div class="stat-value">'+openTotal+'</div></div></div>'+
+  '<h2 class="section-title">Engine leaders</h2>'+
+  '<div class="engine-summary-grid">'+ENGINES.map(function(engine){
+   const top=charts.filter(function(chart){return chart.engine===engine.id&&chart.rank===1})[0];
+   const count=charts.filter(function(chart){return chart.engine===engine.id}).length;
+   return '<a class="engine-summary-card" href="'+enginePath(engine.id)+'"><img src="'+asset("img/engines/"+engine.icon)+'" alt=""><div class="engine-summary-copy"><strong>'+esc(engine.name)+'</strong><span>'+(top?esc(top.title)+" · "+esc(top.artist):"No #1 chart yet")+' · '+count+' charts</span></div><div class="engine-summary-rank"><strong>'+(top?"#1":"—")+'</strong><small>'+ (top?formatPoints(basePoints(1))+" pts":"Unranked")+'</small></div></a>';
+  }).join("")+'</div>'+
+  '<h2 class="section-title">Recent verified FCs</h2>'+
+  '<div class="recent-feed" id="recent-feed">'+recentFeed()+'</div>'+
+  '<p class="data-caution">Seed data includes public chart and FC references where available. Some First Victor fields remain unconfirmed and are intentionally left blank. Bounty entries are sourced from charts currently marked undefeated by their public chart archive.</p>';
+}
+function recentFeed(){
+ const items=[];
+ charts.forEach(function(chart){
+  victorList(chart).forEach(function(v){if(v.type==="FC"&&v.date)items.push({chart:chart,v:v})});
+ });
+ items.sort(function(a,b){return String(b.v.date).localeCompare(String(a.v.date))});
+ return items.slice(0,8).map(function(item){
+  return '<div class="recent-item"><span class="recent-date">'+esc(normalDate(item.v.date))+'</span><div class="recent-track"><strong>'+esc(item.chart.title)+'</strong><span>'+esc(item.chart.artist)+' · '+esc(engineFor(item.chart.engine).short)+'</span></div><span class="recent-player">'+playerButton(item.v.player)+'</span><span class="recent-board">FC VERIFIED</span></div>';
+ }).join("")||'<div class="empty-list">No dated FC records yet.</div>';
 }
 function renderGames(){
- const params=new URLSearchParams(location.search);
- let selectedId=params.get("game")||"clone-hero";
- if(!engines.some(e=>e.id===selectedId))selectedId="clone-hero";
- let selectedKind=params.get("kind")==="fc"?"fc":"pass";
- const selectedGame=()=>engineFor(selectedId);
- const updateAddress=()=>{
-  const p=new URLSearchParams();p.set("game",selectedId);p.set("kind",selectedKind);
-  history.replaceState({}, "",location.pathname+"?"+p.toString());
- };
- const tabs=engines.map(g=>'<button class="list-game-tab'+(g.id===selectedId?' active':'')+'" type="button" role="tab" aria-selected="'+(g.id===selectedId?'true':'false')+'" data-game-tab="'+esc(g.id)+'"><img src="'+ROOT_PREFIX+g.icon+'" alt=""><span>'+esc(g.short)+'</span></button>').join("");
- $("#app").innerHTML='<div class="page-intro list-page-heading"><div><span class="eyebrow">CHART ARCHIVE</span><h1>The List</h1><p>Ranked songs, full combos and passes across every supported five-fret game.</p></div></div>'+
- '<div class="list-game-tabs" role="tablist" aria-label="Choose a game">'+tabs+'</div>'+
- '<section class="list-game-info" aria-label="Selected game"><img class="list-game-icon" id="list-game-icon" src="'+ROOT_PREFIX+selectedGame().icon+'" alt=""><div class="list-game-copy"><div class="list-game-title-line"><h2 id="list-game-title">'+esc(selectedGame().name)+'</h2><span id="list-game-year">'+esc(selectedGame().year||"Community engine")+'</span></div><p id="list-game-description">'+esc(selectedGame().description)+'</p><div class="list-game-links"><a id="game-youtube" href="'+esc(selectedGame().youtube||"#")+'" target="_blank" rel="noopener noreferrer">YouTube ↗</a><a id="game-website" href="'+esc(selectedGame().website||"#")+'" target="_blank" rel="noopener noreferrer">Official Site ↗</a></div></div></section>'+
- '<div class="list-main-layout"><section class="list-song-column" aria-label="Ranked songs"><div class="list-controls"><div class="achievement-tabs" role="tablist" aria-label="Board type"><button type="button" class="'+(selectedKind==="fc"?'active':'')+'" data-game-kind="fc" role="tab" aria-selected="'+(selectedKind==="fc"?'true':'false')+'">FC</button><button type="button" class="'+(selectedKind==="pass"?'active':'')+'" data-game-kind="pass" role="tab" aria-selected="'+(selectedKind==="pass"?'true':'false')+'">Pass</button></div><label class="list-search"><span aria-hidden="true">⌕</span><input id="game-record-search" type="search" placeholder="Search songs, artists or charters…" autocomplete="off" aria-label="Search songs, artists or charters"></label></div><div class="list-column-heading"><div><h2>Ranked songs</h2><p id="game-record-summary"></p></div><span class="list-count" id="game-record-count"></span></div><div class="song-list" id="game-record-body"></div></section><aside class="song-inspector" id="game-chart-inspector" aria-live="polite"></aside></div>';
- const search=$("#game-record-search"),recordBody=$("#game-record-body");
- let selectedChartId=null;
- const paint=()=>{
-  const q=search.value.trim().toLowerCase();
-  const rows=allCharts.filter(c=>c.engine===selectedId&&c.kind===selectedKind&&[c.title,c.artist,c.charter,c.firstVerifier,...(c.victors||[])].join(" ").toLowerCase().includes(q))
-   .sort((a,b)=>Number(a.rank||9999)-Number(b.rank||9999)||Number(b.points||0)-Number(a.points||0));
-  if(!rows.some(c=>c.id===selectedChartId))selectedChartId=rows.length?rows[0].id:null;
-  recordBody.innerHTML=recordRows(rows,selectedChartId);
-  $("#game-record-count").textContent=rows.length+" songs";
-  $("#game-record-summary").textContent=selectedKind==="fc"?"Full Combo board":"Pass board";
-  $("#game-chart-inspector").innerHTML=renderChartInspector(rows.find(c=>c.id===selectedChartId)||null,selectedKind);
- };
- const setGame=id=>{
-  if(!engines.some(g=>g.id===id))return;
-  selectedId=id;
-  document.querySelectorAll("[data-game-tab]").forEach(button=>{
-   const active=button.dataset.gameTab===id;button.classList.toggle("active",active);button.setAttribute("aria-selected",String(active));
-  });
-  const game=selectedGame();
-  $("#list-game-icon").src=ROOT_PREFIX+game.icon;
-  $("#list-game-title").textContent=game.name;
-  $("#list-game-year").textContent=game.year||"Community engine";
-  $("#list-game-description").textContent=game.description;
-  $("#game-youtube").href=game.youtube||"#";
-  const site=$("#game-website");site.hidden=!game.website;if(game.website)site.href=game.website;
-  selectedChartId=null;updateAddress();paint();
- };
- recordBody.addEventListener("click",event=>{
-  const item=event.target.closest("[data-select-chart]");if(!item)return;
-  selectedChartId=item.dataset.selectChart;paint();
- });
- $("#game-chart-inspector").addEventListener("click",event=>{
-  const toggle=event.target.closest("[data-toggle-chart-details]");if(!toggle)return;
-  const extra=$("#inspector-extra");if(!extra)return;
-  extra.hidden=!extra.hidden;toggle.classList.toggle("expanded",!extra.hidden);
-  const label=toggle.querySelector("span");if(label)label.textContent=extra.hidden?"⌄":"⌃";
- });
- document.querySelectorAll("[data-game-tab]").forEach(button=>button.addEventListener("click",()=>setGame(button.dataset.gameTab)));
- document.querySelectorAll("[data-game-kind]").forEach(button=>button.addEventListener("click",()=>{
-  selectedKind=button.dataset.gameKind;
-  document.querySelectorAll("[data-game-kind]").forEach(b=>{
-   const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));
-  });
-  selectedChartId=null;updateAddress();paint();
- }));
- search.addEventListener("input",paint);
- paint();setNav();
+ $("#app").innerHTML=showPageTitle("ENGINE LISTS","The List","Each engine has its own difficulty ladder and points table. No chart ranks are merged between engines.")+
+  '<div class="engine-card-grid">'+ENGINES.map(function(engine){
+   const top=charts.filter(function(chart){return chart.engine===engine.id&&chart.rank===1})[0];
+   const count=charts.filter(function(chart){return chart.engine===engine.id}).length;
+   return '<a class="engine-card" href="'+enginePath(engine.id)+'"><img src="'+asset("img/engines/"+engine.icon)+'" alt=""><div><strong>'+esc(engine.name)+'</strong><span>'+(top?"#1 · "+esc(top.title):"No #1 chart yet")+' · '+count+' charts</span></div></a>';
+  }).join("")+'</div>'+
+  '<h2 class="section-title">Board structure</h2><p class="data-caution">Main #1–75: 350.0 down to 100.0 points. Extended #76–150: 99.0 down to 10.0 points. Legacy #151+: archived, 0 points. Open Bounties: unranked, 0 points until verified.</p>';
 }
 function renderSubmit(){
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">ADD TO THE ARCHIVE</span><h1>Submit a Run</h1><p>Send the details and proof for a record. Every submission stays pending until it has been reviewed.</p></div></div>'+
- '<form class="form-card" id="submission-form"><div class="form-grid">'+
- '<div class="form-field"><label for="player-name">Player name</label><input id="player-name" name="player" required maxlength="40" placeholder="Your player name"></div>'+
- '<div class="form-field"><label for="engine-choice">Game</label><select id="engine-choice" name="engine" required>'+engines.map(e=>'<option value="'+e.id+'">'+esc(e.name)+'</option>').join("")+'</select></div>'+
- '<div class="form-field"><label for="song-title">Song</label><input id="song-title" name="title" required maxlength="100" placeholder="Song title"></div>'+
- '<div class="form-field"><label for="achievement-kind">Board</label><select id="achievement-kind" name="kind" required><option value="fc">FC</option><option value="pass">Pass</option></select></div>'+
- '<div class="form-field full"><label for="proof-url">Video proof URL</label><input id="proof-url" name="video" type="url" required placeholder="https://youtu.be/…"><span class="field-hint">Use a public video link reviewers can open.</span></div>'+
- '<div class="form-field full"><label for="submission-notes">Notes <span class="field-hint">(optional)</span></label><textarea id="submission-notes" name="notes" maxlength="500" placeholder="Chart version, setup details or anything reviewers should know…"></textarea></div>'+
- '</div><div class="form-footer"><button class="button primary" type="submit">Send for review <span aria-hidden="true">↗</span></button><span id="form-message" class="form-message" aria-live="polite">Submissions are stored in this browser only. They are not published automatically.</span></div></form>'+
- '<p class="data-note">This project is hosted as a static GitHub Pages site. The form saves pending entries to local storage in this browser; a shared public submission queue requires a backend.</p>';
- $("#submission-form").addEventListener("submit",event=>{
+ const params=new URLSearchParams(location.search);
+ const requestedEngine=params.get("engine")||"clone-hero";
+ const requestedGame=params.get("game")||"";
+ const requestedBoard=params.get("board")||"FC";
+ const requestedSpeed=params.get("speed")||"100";
+ const options=ENGINES.map(function(engine){return '<option value="'+engine.id+'" '+(engine.id===requestedEngine?"selected":"")+'>'+esc(engine.name)+'</option>'}).join("");
+ $("#app").innerHTML=showPageTitle("RECORD SUBMISSION","Submit a record","Send the chart, game, board and proof details. This creates a local preview for copying; it does not approve or publish a record.")+
+  '<form class="form-card" id="submit-form"><div class="form-grid">'+
+  '<div class="form-field"><label for="submit-engine">Engine</label><select id="submit-engine" name="engine" required>'+options+'</select></div>'+
+  '<div class="form-field"><label for="submit-game">Game</label><select id="submit-game" name="game_id" required></select></div>'+
+  '<div class="form-field"><label for="submit-song">Song / chart title</label><input id="submit-song" name="title" maxlength="120" required placeholder="Chart title" value="'+esc(params.get("song")||"")+'"></div>'+
+  '<div class="form-field"><label for="submit-artist">Artist</label><input id="submit-artist" name="artist" maxlength="120" placeholder="Original artist / chart artist" value="'+esc(params.get("artist")||"")+'"></div>'+
+  '<div class="form-field"><label for="submit-charter">Charter</label><input id="submit-charter" name="charter" maxlength="80" required placeholder="Chart creator" value="'+esc(params.get("charter")||"")+'"></div>'+
+  '<div class="form-field"><label for="submit-speed">Speed (%)</label><input id="submit-speed" name="speed" type="number" min="100" max="300" step="5" value="'+esc(requestedSpeed)+'" required><small>Speed changes must be recorded in 5-point increments.</small></div>'+
+  '<div class="form-field"><label for="submit-board">Board</label><select id="submit-board" name="board"><option value="FC" '+(requestedBoard==="FC"?"selected":"")+'>FC</option><option value="Pass" '+(requestedBoard==="Pass"?"selected":"")+'>Pass</option></select></div>'+
+  '<div class="form-field"><label for="submit-player">Player name</label><input id="submit-player" name="player" maxlength="48" required placeholder="Your leaderboard name"></div>'+
+  '<div class="form-field full"><label for="submit-video">Video proof URL</label><input id="submit-video" name="video_url" type="url" required placeholder="https://youtu.be/…"><small>Keep the full run available for review. The recording must include audible strum clicks or an input viewer.</small></div>'+
+  '<div class="form-field full"><label for="submit-tags">Skillset tags</label><select id="submit-tags" name="tags" multiple size="5"><option>Tech / Tapping</option><option>Speed / Shred</option><option>Strumming / Stamina</option><option>Endurance</option><option>Strict Engine</option></select><small>Use Ctrl or Command to select more than one skillset.</small></div>'+
+  '</div><div class="form-actions"><button class="button primary" type="submit">Save local preview</button><button class="button" type="button" id="copy-submission" disabled>Copy Submission JSON</button></div><p class="form-status" id="submit-status" aria-live="polite">Your preview stays in this browser until you copy and send it to the moderators.</p><section class="submission-preview" id="submission-preview" hidden><h2>Submission JSON</h2><pre id="submission-json"></pre></section><div class="pending-preview-list" id="pending-preview-list"></div></form>';
+ const engineSelect=$("#submit-engine"),gameSelect=$("#submit-game"),form=$("#submit-form");
+ let lastPayload=null;
+ function syncGames(){
+  const engine=engineFor(engineSelect.value);
+  gameSelect.innerHTML=engine.games.map(function(pair){return '<option value="'+pair[0]+'">'+esc(pair[1])+'</option>'}).join("");
+  if(engine.games.some(function(pair){return pair[0]===requestedGame}))gameSelect.value=requestedGame;
+ }
+ engineSelect.addEventListener("change",syncGames);
+ syncGames();
+ form.addEventListener("submit",function(event){
   event.preventDefault();
-  const form=event.currentTarget,data=new FormData(form);
-  const player=String(data.get("player")||"").trim(),title=String(data.get("title")||"").trim(),engine=data.get("engine"),kind=data.get("kind"),video=String(data.get("video")||"").trim();
-  if(!player||!title||!engines.some(e=>e.id===engine)||!["fc","pass"].includes(kind)||!/^https?:\/\//i.test(video))return;
-  const e=engineFor(engine);
-  const record={id:"local-"+Date.now(),engine,engineName:e.name,kind,title,artist:"",charter:"Awaiting review",player,victors:[player],firstVerifier:null,points:0,hash:"",peakNps:null,averageNps:null,video,score:"",notes:String(data.get("notes")||"").trim(),verifiedAt:new Date().toISOString().slice(0,10),status:"pending",demo:false};
-  submissions.unshift(record);syncCharts();
-  const message=$("#form-message");
-  try{
-   localStorage.setItem(STORE_KEY,JSON.stringify(submissions));
-   message.className="form-message success";message.textContent="Submission saved in this browser. It is now pending review.";
-  }catch{
-   message.className="form-message error";message.textContent="This browser could not save the submission. Check local storage settings and try again.";
+  const data=new FormData(form);
+  const engine=String(data.get("engine"));
+  const gameId=String(data.get("game_id"));
+  const title=String(data.get("title")||"").trim();
+  const artist=String(data.get("artist")||"").trim();
+  const charter=String(data.get("charter")||"").trim();
+  const player=String(data.get("player")||"").trim();
+  const video=String(data.get("video_url")||"").trim();
+  const speed=Number(data.get("speed"));
+  const board=String(data.get("board"));
+  const tags=Array.from(form.querySelector('[name="tags"]').selectedOptions).map(function(option){return option.value});
+  const gameAllowed=engineFor(engine).games.some(function(pair){return pair[0]===gameId});
+  if(!title||!charter||!player||!safeHttp(video)||!Number.isFinite(speed)||speed<100||speed>300||speed%5!==0||!gameAllowed){
+   $("#submit-status").textContent="Check the required fields, proof URL and 5-point speed increment.";
+   return;
   }
-  const link=document.createElement("a");link.href=queryUrl(engine,kind);link.className="inline-link";link.textContent="View this board ↗";message.append(" ");message.append(link);
-  form.reset();
+  lastPayload={
+   id:"pending-"+Date.now(),
+   engine:engine,
+   game_id:gameId,
+   rank:null,
+   title:title,
+   artist:artist,
+   charter:charter,
+   speed:speed,
+   tags:tags,
+   first_victor:null,
+   victors:[{player:player,type:board,date:new Date().toISOString().slice(0,10),video_url:video}],
+   bounty:false,
+   status:"pending",
+   source_url:video
+  };
+  pending.unshift(lastPayload);
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(pending))}
+  catch(error){$("#submit-status").textContent="Local storage is unavailable. You can still copy the JSON below.";pending.shift()}
+  $("#submission-json").textContent=JSON.stringify(lastPayload,null,2);
+  $("#submission-preview").hidden=false;
+  $("#copy-submission").disabled=false;
+  $("#submit-status").textContent="Local preview saved. Copy the JSON and send it for moderator review. It has not been verified.";
+  paintPending();
  });
- setNav();
-}
-function renderCommunity(){
- const players=playerStats(allCharts);
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">THE PEOPLE BEHIND THE RECORDS</span><h1>Community</h1><p>Meet the players contributing runs, first clears and verification credits to the Overstrum archive.</p></div></div>'+
- '<section class="community-intro-grid"><article class="content-card"><span class="content-icon" aria-hidden="true">01</span><h2>Play, record, contribute</h2><p>Submit a run with clear proof, help keep chart details accurate, and give credit to the players who put in the work.</p><a class="text-link" href="'+ROOT_PREFIX+'submit/">Submit a run ↗</a></article><article class="content-card"><span class="content-icon" aria-hidden="true">02</span><h2>Find the conversation</h2><p>Overstrum does not currently have a Discord invite configured in this repository. Use Discord to access your communities, or add the official server invite here when it is ready.</p><a class="text-link" href="https://discord.com/app" target="_blank" rel="noopener noreferrer">Open Discord ↗</a></article></section>'+
- '<div class="section-heading"><div><h2>Player directory</h2><p>'+players.length+' players represented in the current archive.</p></div></div>'+
- '<section class="player-grid">'+players.map((p,i)=>'<article class="player-card"><div class="player-card-top"><span class="player-avatar">'+esc((p.name||"?").slice(0,1).toUpperCase())+'</span><span class="player-position tabular">#'+(i+1)+'</span></div><h3>'+esc(p.name)+'</h3><p>Community player</p><div class="player-card-stats"><div><strong class="tabular">'+p.records+'</strong><span>Records</span></div><div><strong class="tabular">'+p.fcCount+'</strong><span>FCs</span></div><div><strong class="tabular">'+p.passCount+'</strong><span>Passes</span></div></div></article>').join("")+'</section>'+
- '<p class="data-note">Player totals are calculated from listed victor credits. Sample entries are not verified results, and local pending submissions are only visible in the browser where they were created.</p>';
- setNav();
+ $("#copy-submission").addEventListener("click",function(){
+  if(!lastPayload)return;
+  copyText(JSON.stringify(lastPayload,null,2),$("#submit-status"),"Submission JSON copied.");
+ });
+ function paintPending(){
+  $("#pending-preview-list").innerHTML=pending.slice(0,5).map(function(item){return '<div class="pending-preview-item"><strong>'+esc(item.title)+'</strong><span>'+esc(engineFor(item.engine).short)+' · '+esc(item.victors[0].type)+' · pending</span></div>'}).join("");
+ }
+ paintPending();
 }
 function renderRules(){
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">A CONSISTENT STANDARD FOR EVERY GAME</span><h1>Rules</h1><p>Every record should be clear, attributable and tied to the exact chart that was played.</p></div></div>'+
- '<section class="rules-list">'+
- '<article class="rule-item"><span class="rule-number">01</span><div><h3>Continuous gameplay footage</h3><p>Provide a recording that shows the run from a clear start through the result screen. Avoid cuts, splices, speed changes or edits that interrupt the attempt.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">02</span><div><h3>Player and input visibility</h3><p>Show the player&#39;s hands or input method clearly when the game or chart rules require it. Evidence should make the performance attributable to the submitting player.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">03</span><div><h3>Original gameplay audio</h3><p>Keep gameplay audio unedited and synchronised with the video. Do not replace the game audio or use processing that could conceal timing or gameplay events.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">04</span><div><h3>Exact chart identity</h3><p>Provide the MD5 hash of the exact chart file used when available. A 32-character hexadecimal hash helps reviewers distinguish chart revisions and duplicates.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">05</span><div><h3>Review and first-clear credit</h3><p>A submission remains pending until reviewed. First-verifier recognition is assigned after acceptance, and points are calculated from approved records rather than unreviewed submissions.</p></div></article>'+
- '</section><section class="rules-footer content-card"><div><h2>Ready to submit?</h2><p>Check that your proof is public and the chart details match the run before sending it in.</p></div><a class="button primary" href="'+ROOT_PREFIX+'submit/">Submit a Run ↗</a></section>'+
- '<p class="data-note">The bundled entries currently shown on the site are sample data for interface testing, not verified achievements.</p>';
- setNav();
+ const items=[
+  ["01","Engine lists stay separate","Clone Hero, YARG, GH3, GH1–2 and GHWT–WoR each have their own ranking and points ladder. A chart only scores in the engine recorded on its entry."],
+  ["02","A five-point minimum speed jump","Speed-based records must move in increments of at least 5 percentage points. For example, 100% → 105% is valid; 100% → 102% is not. The speed setting must be visible in the proof."],
+  ["03","Full, continuous video proof","Submit one continuous recording that shows the run and its result screen. The video must include audible strum clicks or a visible input viewer so reviewers can inspect the inputs."],
+  ["04","Unmodified timing and inputs","Bots, macros, autoplay, scripted inputs, altered hit windows and timing modifications are not accepted. The run must use the standard timing and input rules of the listed engine."],
+  ["05","Exact chart and game details","The title, charter, game release, speed and chart version must match the run. Include a chart source or file hash when one is available."],
+  ["06","First Victor and scoring","The earliest accepted FC receives First Victor credit. Passes are tracked but do not score points. Main and Extended FCs score from their rank; First Victors receive an additional 10% of the chart's base points."],
+  ["07","Legacy and Open Bounties","Legacy entries remain visible at 0 points. Open Bounties have no verified first FC on the Overstrum list and remain unranked until a moderator accepts the evidence."]
+ ];
+ $("#app").innerHTML=showPageTitle("RULES","Rules and verification","Plain standards for every five-fret engine. Moderators can request more evidence when a submission is unclear.")+
+  '<section class="rules-list">'+items.map(function(item){return '<article class="rule-card"><span class="rule-number">'+item[0]+'</span><div><h2>'+item[1]+'</h2><p>'+item[2]+'</p></div></article>'}).join("")+'</section>'+
+  '<p class="data-caution">A submitted record remains pending until a moderator checks the proof and confirms the correct engine, chart and speed. Pending entries do not appear in verified player totals.</p>';
 }
-function renderCurrentRoute(){
- syncCharts();
- try{
-  if(route==="home")renderHome();
-  else if(route==="games")renderGames();
-  else if(route==="submit")renderSubmit();
-  else if(route==="rules")renderRules();
-  else if(route==="community")renderCommunity();
-  else if(route==="leaderboard")renderLeaderboard();
-  else if(route.includes("/")){const [legacyEngine,kind]=route.split("/");const engine=legacyEngine==="gh1-2"?"gh1":legacyEngine==="ghwt-wor"?"gh-world-tour":legacyEngine;renderLeaderboard(engine,kind)}
-  else renderHome();
- }catch(error){
-  console.error("Overstrum page render failed:",error);
-  $("#app").innerHTML='<div class="empty-state" role="alert">Overstrum could not render this page. Reload the page to try again.</div>';
+function renderCommunity(){
+ const players=playerCounts(charts);
+ const staff=[{name:"ajxiye",role:"Repository owner / maintainer"}];
+ $("#app").innerHTML=showPageTitle("COMMUNITY","Community","Players, record contributors and the people maintaining the archive.")+
+  '<div class="community-grid"><section class="community-panel"><h2>Moderators and maintainers</h2><p>'+staff.map(function(person){return '<strong>'+esc(person.name)+'</strong> · '+esc(person.role)}).join("<br>")+'<br><br>No additional moderator names or Overstrum Discord invite are published in the repository yet.</p></section><section class="community-panel"><h2>Contribute a record</h2><p>Share a complete video with input evidence and the exact chart details. New submissions are stored locally and copied as JSON for moderator review.</p><div class="accordion-actions"><a class="action-link primary" href="'+ROOT+'submit/">Submit a record</a><a class="action-link" href="https://github.com/ajxiye/overstrum" target="_blank" rel="noopener noreferrer">View the repository ↗</a></div></section></div>'+
+  '<h2 class="section-title">Player directory</h2>'+
+  '<div class="directory-list">'+
+  '<div class="directory-row"><strong>Player</strong><span class="directory-role">Status</span><span class="directory-number">FCs</span><span class="directory-number">Points</span></div>'+
+  players.map(function(player){return '<div class="directory-row"><strong>'+playerButton(player.name)+'</strong><span class="directory-role">Contributor</span><span class="directory-number">'+player.fc+'</span><span class="directory-number">'+formatPoints(player.points)+'</span></div>'}).join("")+
+  '</div><p class="data-caution">Directory totals are calculated from verified victor records in the bundled chart data. Community roles are only shown when they have been published by the project maintainers.</p>';
+}
+function setNavigation(){
+ const active=PAGE==="overview"?"overview":(PAGE==="engine"||PAGE==="games")?"list":PAGE;
+ $$("[data-nav]").forEach(function(link){const isActive=link.dataset.nav===active;link.classList.toggle("active",isActive);if(isActive)link.setAttribute("aria-current","page")});
+ const toggle=$(".menu-toggle");
+ const nav=$(".primary-nav");
+ if(toggle&&nav)toggle.addEventListener("click",function(){const open=nav.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open))});
+}
+function copyText(text,status,message){
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(text).then(function(){if(status)status.textContent=message}).catch(function(){fallback()});
+ }else fallback();
+ function fallback(){
+  const area=document.createElement("textarea");area.value=text;document.body.appendChild(area);area.select();
+  try{document.execCommand("copy");if(status)status.textContent=message}catch(error){if(status)status.textContent="Copy failed. Select and copy the JSON manually."}
+  area.remove();
  }
 }
-function init(){
- // Render bundled records first. The site never waits for a network request to leave its loading state.
- baseCharts=FALLBACK_CHARTS.slice();
- syncCharts();
- renderCurrentRoute();
-
- document.addEventListener("click",event=>{
-  const trigger=event.target.closest("[data-open]");
-  if(trigger){const panel=document.getElementById("details-"+trigger.dataset.open);if(!panel)return;const open=panel.hidden;panel.hidden=!open;trigger.setAttribute("aria-expanded",String(open));return;}
-  const copy=event.target.closest("[data-copy]");
-  if(copy){const value=copy.dataset.copy;const done=()=>{const old=copy.textContent;copy.textContent="Copied";setTimeout(()=>copy.textContent=old,1100)};if(navigator.clipboard?.writeText)navigator.clipboard.writeText(value).then(done).catch(()=>fallback());else fallback();function fallback(){const input=document.createElement("textarea");input.value=value;document.body.appendChild(input);input.select();try{document.execCommand("copy");done()}finally{input.remove()}}}
+function bindGlobalActions(){
+ document.addEventListener("click",function(event){
+  const player=event.target.closest("[data-player]");
+  if(player){event.preventDefault();event.stopPropagation();showProfile(player.dataset.player);return}
+  const close=event.target.closest("[data-close-profile]");
+  if(close&&event.target.closest(".profile-modal-backdrop")&&(!event.target.closest(".profile-modal")||event.target.closest(".modal-close"))){closeProfile();return}
  });
-
- // This same-origin JSON request only refreshes the bundled data. Failure or timeout leaves
- // the fallback charts and community data already rendered above intact.
- if(typeof fetch==="function"&&typeof AbortController!=="undefined"){
-  const controller=new AbortController();
-  const timeoutId=setTimeout(()=>controller.abort(),3500);
-  fetch(ROOT_PREFIX+"data/charts.json",{signal:controller.signal,cache:"no-store"})
-   .then(response=>{if(!response.ok)throw new Error("Chart JSON unavailable");return response.json()})
-   .then(data=>{if(!Array.isArray(data))throw new Error("Chart JSON must contain an array");baseCharts=data;renderCurrentRoute()})
-   .catch(error=>{console.info("Using bundled Overstrum sample data:",error.message)})
-   .finally(()=>clearTimeout(timeoutId));
+ document.addEventListener("keydown",function(event){if(event.key==="Escape"&&profileOpen)closeProfile()});
+}
+function render(){
+ setNavigation();
+ if(PAGE==="overview")renderOverview();
+ else if(PAGE==="engine")renderEnginePage();
+ else if(PAGE==="games")renderGames();
+ else if(PAGE==="leaderboard")renderLeaderboard();
+ else if(PAGE==="submit")renderSubmit();
+ else if(PAGE==="rules")renderRules();
+ else if(PAGE==="community")renderCommunity();
+ else renderOverview();
+}
+function init(){
+ bindGlobalActions();
+ render();
+ const prefix=ROOT+"data/charts.json";
+ if(typeof fetch==="function"){
+  fetch(prefix,{cache:"no-store"}).then(function(response){if(!response.ok)throw new Error("Chart data unavailable");return response.json()}).then(function(remote){
+   if(!Array.isArray(remote))throw new Error("Chart data must be an array");
+   charts=remote;
+   render();
+  }).catch(function(){charts=BUNDLED_CHARTS.slice()});
  }
 }
 init();

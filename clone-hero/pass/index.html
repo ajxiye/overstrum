@@ -3,30 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#121214">
-<meta name="description" content="overstrum. A community leaderboard for five-fret rhythm games.">
-<link rel="stylesheet" href="../../assets/css/styles.css">
-<title>Clone Hero Passes · overstrum.</title>
+<meta name="theme-color" content="#0e1014">
+<meta name="description" content="Overstrum. Five-fret records, kept honest.">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<title>Clone Hero Pass · Overstrum</title>
 </head>
-<body data-route="clone-hero/pass" data-root-prefix="../../">
-<header class="site-header">
-  <a class="brand" href="../../" aria-label="overstrum home"><img class="brand-logo" src="../../assets/logo-white.png" alt="overstrum."></a>
-  <nav class="main-nav" aria-label="Main navigation">
-    <a href="../../" data-nav="home">Overview</a>
-    <a href="../../games/" data-nav="games">Games</a>
-    <a href="../../leaderboard/" data-nav="leaderboard">Leaderboard</a>
-    <a href="../../submit/" data-nav="submit">Submit</a>
-    <a href="../../rules/" data-nav="rules">Rules</a>
-    <a href="../../community/" data-nav="community">Community</a>
-  </nav>
-  <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
-</header>
-<main id="app" class="page-shell"><div class="loading-state">Loading Overstrum…</div></main>
-<footer class="site-footer">
-  <a class="footer-brand" href="../../">overstrum.</a>
-  <span>Five-fret records, kept honest.</span>
-  <div><a href="../../rules/">Verification rules</a><a href="../../community/">Community</a></div>
-</footer>
+<body data-page="engine" data-prefix="../../" data-engine="clone-hero" data-board="Pass">
+<header class="topbar"><a class="brand" href="../../" aria-label="Overstrum overview"><img src="../../assets/logo-white.png" alt="overstrum."></a><nav class="primary-nav" aria-label="Main navigation"><a href="../../" data-nav="overview"><span class="nav-icon" aria-hidden="true">⌂</span>Overview</a><a href="../../games/" data-nav="list"><span class="nav-icon" aria-hidden="true">≡</span>The List</a><a href="../../leaderboard/" data-nav="leaderboard"><span class="nav-icon" aria-hidden="true">▤</span>Leaderboard</a><a href="../../submit/" data-nav="submit"><span class="nav-icon" aria-hidden="true">＋</span>Submit</a><a href="../../rules/" data-nav="rules"><span class="nav-icon" aria-hidden="true">§</span>Rules</a><a href="../../community/" data-nav="community"><span class="nav-icon" aria-hidden="true">◎</span>Community</a></nav><button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span></button></header>
+<main id="app" class="page-shell"><div class="empty-list">Loading Overstrum…</div></main>
+<footer class="site-footer"><span>Overstrum · five-fret records</span><div class="footer-links"><a href="../../rules/">Rules</a><a href="../../community/">Community</a></div></footer>
+<div id="modal-root"></div>
 <script src="../../assets/js/app.js" defer></script>
 </body>
 </html>
