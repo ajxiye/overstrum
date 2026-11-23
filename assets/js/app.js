@@ -718,18 +718,49 @@ function renderHome(){
  '<div class="notice">The records currently bundled with this site are sample data for layout testing, not verified achievements. New submissions are saved locally and remain pending review.</div>';
  setNav();
 }
-function recordRows(rows){
- if(!rows.length)return '<tr><td colspan="7"><div class="empty-state">No records match these filters.</div></td></tr>';
+function albumCoverMarkup(c,extraClass){
+ const raw=c&&(c.albumCover||c.cover||c.coverUrl);
+ const source=typeof raw==="string"&&(/^(https?:\/\/|assets\/)/i.test(raw))?raw:"";
+ const image=source?'<img src="'+esc(source.startsWith("assets/")?ROOT_PREFIX+source:source)+'" alt="Album cover for '+esc(c.title||"selected chart")+'" loading="lazy">':"";
+ const monogram=String(c&&c.title||"♪").trim().charAt(0).toUpperCase()||"♪";
+ return '<span class="album-cover '+(extraClass||"")+'"><span class="album-cover-fallback"><i class="cover-orbit"></i><b>'+esc(monogram)+'</b></span>'+image+'</span>';
+}
+function trophyMarkup(position){
+ const medals={1:"gold",2:"silver",3:"bronze"};
+ const tone=medals[position];
+ if(!tone)return '<span class="rank-number">'+String(position).padStart(2,"0")+'</span>';
+ const suffix=position===1?"st":position===2?"nd":"rd";
+ return '<span class="rank-medal medal-'+tone+'" title="'+position+suffix+' place trophy placeholder" aria-label="'+position+suffix+' place"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v3h3a1 1 0 0 1 1 1c0 3.2-1.9 5.6-5.1 6.3A6 6 0 0 1 13 16v2h4v2H7v-2h4v-2a6 6 0 0 1-2.9-2.7C4 12.6 2 10.2 2 7a1 1 0 0 1 1-1h4V3zm0 5H4.1c.2 1.5 1.1 2.6 2.8 3.2A9 9 0 0 1 7 8zm10 0a9 9 0 0 1 .1 3.2c1.7-.6 2.6-1.7 2.8-3.2H17z"/></svg><small>'+position+suffix+'</small></span>';
+}
+function renderChartInspector(c,kind){
+ if(!c)return '<div class="inspector-empty"><span class="inspector-empty-icon">♪</span><strong>Select a chart</strong><p>Choose a song from the list to see its artwork, charter and first '+(kind==="fc"?"FC":"pass")+'.</p></div>';
+ const first=c.firstVerifier||(Array.isArray(c.victors)&&c.victors[0])||"No first record yet";
+ const hash=typeof c.hash==="string"&&/^[a-f0-9]{32}$/i.test(c.hash)?c.hash:"";
+ const proof=typeof c.video==="string"&&/^https?:\/\//i.test(c.video)?'<a class="button primary inspector-proof" href="'+esc(c.video)+'" target="_blank" rel="noopener noreferrer">Watch proof <span aria-hidden="true">↗</span></a>':"";
+ const category=kind==="fc"?"First FC":"First Pass";
+ return '<div class="inspector-topline"><span class="eyebrow">NOW SELECTED</span>'+statusBadge(c)+'</div>'+
+ '<div class="inspector-track">'+albumCoverMarkup(c,"inspector-cover")+'<div class="inspector-track-copy"><span class="inspector-kind">'+(kind==="fc"?"FULL COMBO":"PASS")+'</span><h2>'+esc(c.title)+'</h2><p class="inspector-artist">'+esc(c.artist||"Artist not supplied")+'</p></div></div>'+
+ '<div class="inspector-charter"><span class="detail-label">CHARTER</span><strong>'+esc(c.charter||"Not supplied")+'</strong></div>'+
+ '<div class="inspector-first"><div><span class="detail-label">'+category+'</span><strong>'+esc(first)+'</strong></div><span class="inspector-first-mark">'+(kind==="fc"?"FC":"PASS")+'</span></div>'+
+ '<div class="inspector-stat-grid"><div><span>Points</span><strong>'+Number(c.points||0)+'</strong></div><div><span>Peak NPS</span><strong>'+fmt(c.peakNps)+'</strong></div><div><span>Average NPS</span><strong>'+fmt(c.averageNps)+'</strong></div></div>'+
+ '<div class="inspector-foot"><div><span class="detail-label">GAME</span><strong>'+esc(engineFor(c.engine).name)+'</strong></div><div><span class="detail-label">VICTORS</span><strong>'+((c.victors||[]).length)+' '+((c.victors||[]).length===1?"player":"players")+'</strong></div></div>'+
+ (hash?'<div class="inspector-hash"><span class="detail-label">CHART MD5</span><div class="hash-line"><span class="hash-text">'+esc(hash)+'</span><button class="copy-button" type="button" data-copy="'+esc(hash)+'">Copy</button></div></div>':"")+
+ (proof?proof:'<span class="inspector-no-proof">No video proof linked yet.</span>');
+}
+function recordRows(rows,selectedId){
+ if(!rows.length)return '<div class="empty-state list-empty">No charts match these filters. Try another search or category.</div>';
  return rows.map((c,i)=>{
+  const position=i+1;
   const victors=Array.isArray(c.victors)?c.victors:[];
-  const hash=typeof c.hash==="string"&&/^[a-f0-9]{32}$/i.test(c.hash)?c.hash:"";
-  const artist=c.artist||"Artist not supplied";
-  const charter=c.charter||"Charter not supplied";
-  const proof=typeof c.video==="string"&&/^https?:\/\//i.test(c.video)?'<a class="proof-link" href="'+esc(c.video)+'" target="_blank" rel="noopener noreferrer">Open video proof ↗</a>':"";
-  return '<tr><td class="rank-cell">'+String(i+1).padStart(2,"0")+'</td><td><button class="record-trigger" type="button" data-open="'+esc(c.id)+'" aria-expanded="false"><strong>'+esc(c.title)+'</strong><span>'+esc(artist)+' · '+esc(charter)+'</span></button></td><td class="engine-name">'+esc(engineFor(c.engine).name)+'</td><td><span class="badge">'+(c.kind==="fc"?"FC":"Pass")+'</span></td><td>'+victors.length+' '+(victors.length===1?"victor":"victors")+'</td><td class="nps-cell">'+fmt(c.peakNps)+'</td><td>'+statusBadge(c)+'</td></tr>'+
-  '<tr class="detail-row" id="details-'+esc(c.id)+'" hidden><td colspan="7"><div class="detail-panel"><div><span class="detail-label">Victors · first verifier</span><div class="victor-tags">'+(victors.map(v=>'<span class="victor-tag">'+esc(v)+(v===c.firstVerifier?" · Pioneer":"")+'</span>').join("")||'<span class="victor-tag">Awaiting review</span>')+'</div><span class="detail-label" style="margin-top:13px">Score / result</span><span>'+esc(c.score||"Not supplied")+'</span><span class="detail-label" style="margin-top:13px">Points</span><span>'+Number(c.points||0)+'</span></div><div><span class="detail-label">Chart MD5</span><div class="hash-line"><span class="hash-text">'+(hash?esc(hash):"Awaiting chart hash")+'</span>'+(hash?'<button class="copy-button" type="button" data-copy="'+esc(hash)+'">Copy hash</button>':"")+'</div><span class="detail-label" style="margin-top:13px">Charter</span><span>'+esc(charter)+'</span></div><div><span class="detail-label">NPS profile</span><span>Peak '+fmt(c.peakNps)+' · Average '+fmt(c.averageNps)+'</span><span class="detail-label" style="margin-top:13px">Proof</span>'+(proof||'<span class="form-message">No proof link supplied.</span>')+'</div></div></td></tr>';
+  const active=c.id===selectedId;
+  return '<button class="record-item'+(active?" selected":"")+'" type="button" data-select-chart="'+esc(c.id)+'" aria-pressed="'+String(active)+'">'+
+   '<span class="record-position">'+trophyMarkup(position)+'</span>'+albumCoverMarkup(c,"record-cover")+
+   '<span class="record-main"><strong class="record-title">'+esc(c.title)+'</strong><span class="record-artist">'+esc(c.artist||"Artist not supplied")+'</span><span class="record-byline">Charter · '+esc(c.charter||"Not supplied")+'</span></span>'+
+   '<span class="record-side"><span class="record-topline"><span class="record-game">'+esc(engineFor(c.engine).short)+'</span><span class="record-kind">'+(c.kind==="fc"?"FC":"PASS")+'</span></span><span class="record-score">'+Number(c.points||0)+' <small>pts</small></span><span class="record-victors">'+victors.length+' '+(victors.length===1?"victor":"victors")+'</span></span>'+
+   '<span class="record-row-status">'+statusBadge(c)+'</span></button>';
  }).join("");
 }
+function playerStats
 function playerStats(charts){
  const map=new Map();
  charts.forEach(c=>(c.victors||[]).forEach(v=>{
@@ -752,19 +783,19 @@ function renderLeaderboard(seedEngine,seedKind){
  const params=new URLSearchParams(location.search);
  const defaultEngine=seedEngine||params.get("engine")||"all";
  const defaultKind=(seedKind||params.get("kind"))==="fc"?"fc":"pass";
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Browse the archive</span><h1>Leaderboard</h1><p>Explore separate Full Combo and Pass boards for every game. Open any entry for its verification details.</p></div></div>'+
+ $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Browse the archive</span><h1>Leaderboard</h1><p>Explore separate Full Combo and Pass boards for every game. Select a chart to inspect its artwork, charter and first clear.</p></div></div>'+
  '<div class="achievement-tabs view-tabs" role="tablist" aria-label="Achievement category"><button type="button" class="'+(defaultKind==="fc"?"active":"")+'" data-leaderboard-kind="fc" role="tab" aria-selected="'+(defaultKind==="fc"?"true":"false")+'">FC</button><button type="button" class="'+(defaultKind==="pass"?"active":"")+'" data-leaderboard-kind="pass" role="tab" aria-selected="'+(defaultKind==="pass"?"true":"false")+'">Pass</button></div>'+
  '<div class="game-tabs leaderboard-game-tabs" role="tablist" aria-label="Choose a game"><button class="game-tab'+(defaultEngine==="all"?" active":"")+'" type="button" data-leaderboard-game="all" role="tab" aria-selected="'+(defaultEngine==="all"?"true":"false")+'"><span>All</span></button>'+engines.map(g=>'<button class="game-tab'+(g.id===defaultEngine?' active':'')+'" type="button" data-leaderboard-game="'+esc(g.id)+'" role="tab" aria-selected="'+(g.id===defaultEngine?'true':'false')+'"><img src="'+ROOT_PREFIX+g.icon+'" alt=""><span>'+esc(g.short)+'</span></button>').join("")+'</div>'+
- '<div class="filters"><label class="search-field"><input id="record-search" type="search" placeholder="Search song, artist, charter or victor…" autocomplete="off" aria-label="Search records"></label>'+
- '<select class="select-field" id="status-filter" aria-label="Filter by status"><option value="all">All statuses</option><option value="verified">Verified</option><option value="sample">Sample data</option><option value="pending">Pending review</option></select><span class="filter-count" id="filter-count"></span></div>'+
- '<div class="view-tabs" role="tablist" aria-label="Leaderboard view"><button class="active" type="button" data-view="records" role="tab" aria-selected="true">Chart records</button><button type="button" data-view="players" role="tab" aria-selected="false">Player rankings</button></div>'+
- '<section id="records-view"><div class="table-wrap"><table class="records-table"><thead><tr><th>#</th><th>Song / artist / charter</th><th>Engine</th><th>Type</th><th>Victors</th><th>Peak NPS</th><th>Status</th></tr></thead><tbody id="record-body"></tbody></table></div></section>'+
+ '<div class="leaderboard-layout"><section class="leaderboard-primary"><div class="leaderboard-toolbar"><label class="search-field"><input id="record-search" type="search" placeholder="Search charts, artists, charters or players…" autocomplete="off" aria-label="Search records"></label><select class="select-field" id="status-filter" aria-label="Filter by status"><option value="all">All statuses</option><option value="verified">Verified</option><option value="sample">Sample data</option><option value="pending">Pending review</option></select></div>'+
+ '<div class="list-heading"><div class="view-tabs" role="tablist" aria-label="Leaderboard view"><button class="active" type="button" data-view="records" role="tab" aria-selected="true">Chart list</button><button type="button" data-view="players" role="tab" aria-selected="false">Player rankings</button></div><span class="filter-count" id="filter-count"></span></div>'+
+ '<section id="records-view"><div class="leaderboard-list" id="record-body"></div></section>'+
  '<section id="players-view" hidden><div class="table-wrap"><table class="players-table"><thead><tr><th>#</th><th>Player</th><th>Records</th><th>Pioneer verifications</th><th style="text-align:right">Points</th></tr></thead><tbody id="player-body"></tbody></table></div><p class="field-hint" style="margin-top:10px">Pioneer recognition adds 3 points to a reviewed record. Pending submissions do not earn points until approved.</p></section>'+
- '<div class="notice">Sample records are included to demonstrate the interface and are not verified achievements. Submissions from this browser appear as pending review and are visible only in this browser.</div>';
- const statusEl=$("#status-filter"),searchEl=$("#record-search");
+ '<div class="notice">Sample records are included to demonstrate the interface and are not verified achievements. Submissions from this browser appear as pending review and are visible only in this browser.</div></section>'+
+ '<aside class="chart-inspector" id="chart-inspector" aria-live="polite"></aside></div>';
+ const statusEl=$("#status-filter"),searchEl=$("#record-search"),recordBody=$("#record-body");
  let selectedKind=defaultKind;
  let selectedEngine=engines.some(e=>e.id===defaultEngine)?defaultEngine:"all";
- 
+ let selectedChartId=null;
  function updateUrl(){const p=new URLSearchParams();if(selectedEngine!=="all")p.set("engine",selectedEngine);p.set("kind",selectedKind);const q=p.toString();history.replaceState({}, "",location.pathname+(q?"?"+q:""))}
  function paint(){
   const q=searchEl.value.trim().toLowerCase();
@@ -775,10 +806,16 @@ function renderLeaderboard(seedEngine,seedKind){
    const haystack=[c.title,c.artist,c.charter,c.firstVerifier,...(c.victors||[]),c.player].join(" ").toLowerCase();
    return engineOk&&kindOk&&statusOk&&haystack.includes(q);
   }).sort((a,b)=>Number(b.points||0)-Number(a.points||0)||String(a.title).localeCompare(String(b.title)));
-  $("#record-body").innerHTML=recordRows(filtered);
+  if(!filtered.some(c=>c.id===selectedChartId))selectedChartId=filtered.length?filtered[0].id:null;
+  recordBody.innerHTML=recordRows(filtered,selectedChartId);
   $("#player-body").innerHTML=renderPlayerTable(filtered);
-  $("#filter-count").textContent=filtered.length+" entries";
+  $("#filter-count").textContent=filtered.length+" charts";
+  $("#chart-inspector").innerHTML=renderChartInspector(filtered.find(c=>c.id===selectedChartId)||null,selectedKind);
  }
+ recordBody.addEventListener("click",event=>{
+  const item=event.target.closest("[data-select-chart]");if(!item)return;
+  selectedChartId=item.dataset.selectChart;paint();
+ });
  statusEl.addEventListener("change",()=>{updateUrl();paint()});
  document.querySelectorAll("[data-leaderboard-game]").forEach(button=>button.addEventListener("click",()=>{
   selectedEngine=button.dataset.leaderboardGame;
@@ -805,24 +842,25 @@ function renderGames(){
  let selectedKind=params.get("kind")==="fc"?"fc":"pass";
  const selectedGame=()=>engineFor(selectedId);
  const updateAddress=()=>{
-  const p=new URLSearchParams();p.set("game",selectedId);
-  p.set("kind",selectedKind);
+  const p=new URLSearchParams();p.set("game",selectedId);p.set("kind",selectedKind);
   history.replaceState({}, "",location.pathname+"?"+p.toString());
  };
  const tabs=engines.map(g=>'<button class="game-tab'+(g.id===selectedId?' active':'')+'" type="button" role="tab" aria-selected="'+(g.id===selectedId?'true':'false')+'" data-game-tab="'+esc(g.id)+'"><img src="'+ROOT_PREFIX+g.icon+'" alt=""><span>'+esc(g.short)+'</span></button>').join("");
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Separate leaderboard for every release</span><h1>The List</h1><p>Pick a game to see its own hardest charts, full combos, passes, and official links. Nothing is bundled together.</p></div></div>'+
+ $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Separate leaderboard for every release</span><h1>The List</h1><p>Every game gets its own chart list, Full Combo board and Pass board. Pick a release to explore its hardest songs.</p></div></div>'+
  '<div class="game-tabs" role="tablist" aria-label="Choose a game">'+tabs+'</div>'+
  '<section class="game-feature"><div class="game-art"><img id="game-icon-large" class="game-page-icon" src="'+ROOT_PREFIX+selectedGame().icon+'" alt=""><img id="game-logo-large" class="game-page-logo" src="'+ROOT_PREFIX+selectedGame().logo+'" alt="'+esc(selectedGame().name)+' logo"></div><div class="game-info"><span class="eyebrow" id="game-type">'+esc(selectedGame().type)+(selectedGame().year?' · '+esc(selectedGame().year):'')+'</span><h2 id="game-heading">'+esc(selectedGame().name)+'</h2><p id="game-description">'+esc(selectedGame().description)+'</p><div class="game-links"><a id="game-youtube" class="button primary" href="'+esc(selectedGame().youtube||'#')+'" target="_blank" rel="noopener noreferrer">Official YouTube ↗</a>'+(selectedGame().website?'<a id="game-website" class="button ghost" href="'+esc(selectedGame().website)+'" target="_blank" rel="noopener noreferrer">Official site ↗</a>':'')+'</div></div></section>'+
- '<div class="section-heading"><div><h2>Hardest songs & records</h2><p id="game-record-summary">Records for this game only.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'submit/">Submit a run ↗</a></div>'+
- '<div class="game-record-controls"><div class="achievement-tabs view-tabs" role="tablist" aria-label="Achievement type"><button type="button" class="'+(selectedKind==="fc"?'active':'')+'" data-game-kind="fc" role="tab" aria-selected="'+(selectedKind==="fc"?'true':'false')+'">FC</button><button type="button" class="'+(selectedKind==="pass"?'active':'')+'" data-game-kind="pass" role="tab" aria-selected="'+(selectedKind==="pass"?'true':'false')+'">Pass</button></div><label class="search-field game-search"><input id="game-record-search" type="search" placeholder="Search songs, players or charters…" autocomplete="off" aria-label="Search this game records"></label></div>'+
- '<div class="table-wrap"><table class="records-table"><thead><tr><th>#</th><th>Song / artist / charter</th><th>Game</th><th>Type</th><th>Victors</th><th>Peak NPS</th><th>Status</th></tr></thead><tbody id="game-record-body"></tbody></table></div>'+
- '<div class="notice">Each game has its own record list. The bundled entries are sample data for layout testing, not actual verified achievements.</div>';
+ '<div class="section-heading"><div><h2>Hardest songs</h2><p id="game-record-summary">Choose a chart to see its details.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'submit/">Submit a run ↗</a></div>'+
+ '<div class="leaderboard-layout game-leaderboard-layout"><section class="leaderboard-primary"><div class="game-record-controls"><div class="achievement-tabs view-tabs" role="tablist" aria-label="Achievement type"><button type="button" class="'+(selectedKind==="fc"?'active':'')+'" data-game-kind="fc" role="tab" aria-selected="'+(selectedKind==="fc"?'true':'false')+'">FC</button><button type="button" class="'+(selectedKind==="pass"?'active':'')+'" data-game-kind="pass" role="tab" aria-selected="'+(selectedKind==="pass"?'true':'false')+'">Pass</button></div><label class="search-field game-search"><input id="game-record-search" type="search" placeholder="Search songs, players or charters…" autocomplete="off" aria-label="Search this game's records"></label></div><div class="leaderboard-list" id="game-record-body"></div><div class="notice">Each game has its own record list. Bundled entries are sample data for layout testing, not actual verified achievements.</div></section><aside class="chart-inspector" id="game-chart-inspector" aria-live="polite"></aside></div>';
+ const search=$("#game-record-search"),recordBody=$("#game-record-body");
+ let selectedChartId=null;
  const paint=()=>{
-  const q=$("#game-record-search").value.trim().toLowerCase();
-  const rows=allCharts.filter(c=>c.engine===selectedId&&(selectedKind==="all"||c.kind===selectedKind)&&[c.title,c.artist,c.charter,c.firstVerifier,...(c.victors||[])].join(" ").toLowerCase().includes(q))
+  const q=search.value.trim().toLowerCase();
+  const rows=allCharts.filter(c=>c.engine===selectedId&&c.kind===selectedKind&&[c.title,c.artist,c.charter,c.firstVerifier,...(c.victors||[])].join(" ").toLowerCase().includes(q))
    .sort((a,b)=>Number(a.rank||9999)-Number(b.rank||9999)||Number(b.peakNps||0)-Number(a.peakNps||0));
-  $("#game-record-body").innerHTML=recordRows(rows);
-  $("#game-record-summary").textContent=rows.length+" entries for "+selectedGame().name+" · ordered by chart rank";
+  if(!rows.some(c=>c.id===selectedChartId))selectedChartId=rows.length?rows[0].id:null;
+  recordBody.innerHTML=recordRows(rows,selectedChartId);
+  $("#game-record-summary").textContent=rows.length+" charts · "+(selectedKind==="fc"?"Full Combo board":"Pass board")+" for "+selectedGame().name;
+  $("#game-chart-inspector").innerHTML=renderChartInspector(rows.find(c=>c.id===selectedChartId)||null,selectedKind);
  };
  const setGame=id=>{
   if(!engines.some(g=>g.id===id))return;
@@ -839,15 +877,19 @@ function renderGames(){
   $("#game-description").textContent=game.description;
   $("#game-youtube").href=game.youtube||"#";
   const site=$("#game-website");if(site&&game.website)site.href=game.website;if(site)site.hidden=!game.website;
-  updateAddress();paint();
+  selectedChartId=null;updateAddress();paint();
  };
+ recordBody.addEventListener("click",event=>{
+  const item=event.target.closest("[data-select-chart]");if(!item)return;
+  selectedChartId=item.dataset.selectChart;paint();
+ });
  document.querySelectorAll("[data-game-tab]").forEach(button=>button.addEventListener("click",()=>setGame(button.dataset.gameTab)));
  document.querySelectorAll("[data-game-kind]").forEach(button=>button.addEventListener("click",()=>{
   selectedKind=button.dataset.gameKind;
   document.querySelectorAll("[data-game-kind]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
-  updateAddress();paint();
+  selectedChartId=null;updateAddress();paint();
  }));
- $("#game-record-search").addEventListener("input",paint);
+ search.addEventListener("input",paint);
  paint();setNav();
 }
 function renderSubmit(){
