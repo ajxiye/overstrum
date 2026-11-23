@@ -186,7 +186,7 @@ function renderEnginePage(){
    if(chart.engine!==engine.id)return false;
    if(selectedGame!=="all"&&chart.game_id!==selectedGame)return false;
    if(tierFor(chart)!==selectedTier)return false;
-   if(selectedBoard==="Pass"&&!victorList(chart).some(function(v){return v.type==="Pass"}))return false;
+   if(selectedTier!=="bounty"&&selectedBoard==="Pass"&&!victorList(chart).some(function(v){return v.type==="Pass"}))return false;
    if(selectedBoard==="FC"&&selectedTier==="bounty"&&chart.rank!==null)return false;
    if(selectedTier==="bounty"&&!chart.bounty)return false;
    if(selectedSkill!=="all"&&!(chart.tags||[]).includes(selectedSkill))return false;
