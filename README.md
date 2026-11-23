@@ -1,4 +1,5 @@
 <div align="center">
+  <br>
   <a href="https://github.io">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/logo-white.png">
@@ -6,28 +7,30 @@
       <img alt="Overstrum" src="assets/logo-white.png" width="320">
     </picture>
   </a>
+  <br><br>
 
   <p><strong>Five-fret records, kept honest.</strong></p>
 
   <p>
-    <a href="https://github.io">Visit Overstrum</a> ·
+    <a href="https://github.io">Live Site</a> ·
     <a href="https://github.ioleaderboard/">Leaderboard</a> ·
-    <a href="https://github.iosubmit/">Submit a Record</a> ·
+    <a href="https://github.iosubmit/">Submit a Run</a> ·
     <a href="https://github.iorules/">Rules</a>
   </p>
+  <br>
 </div>
 
 ---
 
-## About Overstrum
+## What is Overstrum?
 
-**Overstrum** is a community record archive and demonlist for 5-fret rhythm games. It tracks the hardest legitimate Full Combos (FCs), passes, charters, first victors, and top players across **Clone Hero**, **YARG**, and the classic **Guitar Hero** series.
+**Overstrum** is a 5-fret rhythm game record list and leaderboard. It tracks the hardest legit Full Combos (FCs), passes, charters, first FCs, and top grinders across **Clone Hero**, **YARG**, and the classic **Guitar Hero** games.
 
-Because every rhythm game engine plays differently—from Clone Hero's loose tap mechanics to Guitar Hero 1 and 2's strict hit windows—Overstrum separates every engine into its own ranking list and player leaderboard instead of lumping them together.
+Every game engine plays completely differently—Clone Hero's infinite front-end and tap notes feel nothing like GH3's loose HOPOs or GH1 and GH2's tight hit windows. Because of that, every engine gets its own separate ranking ladder and leaderboard instead of stuffing everything into one messy list.
 
 ---
 
-## Supported Games
+## Supported Games & Engines
 
 * **Clone Hero** — Custom charts, speedups, and community setlists
 * **YARG** — Yet Another Rhythm Game (5-fret)
@@ -37,33 +40,35 @@ Because every rhythm game engine plays differently—from Clone Hero's loose tap
 
 ---
 
-## How the Rankings Work
+## How the List Works
 
-Every engine has its own difficulty ladder divided into clear tiers:
+Each engine has its own ranked list split into clear tiers:
 
-* **Main List (`#1 – #75`):** The hardest verified charts in the game, ranked in exact order of difficulty. Beating these awards the highest leaderboard points.
-* **Extended List (`#76 – #150`):** Tough charts ranked below the Main List that still award points so rising players can climb the leaderboard.
-* **Legacy List (`#151+`):** Older or pushed-off charts archived with their charter and victor history.
-* **Open Bounties:** The hardest known charts that still haven't been FC'd legitimately.
+| Tier | Ranks | Points | What It Means |
+| :--- | :--- | :--- | :--- |
+| **Main List** | `#1 – #75` | `100 – 350 pts` | The hardest verified charts in the game, ordered by difficulty. |
+| **Extended List** | `#76 – #150` | `10 – 99 pts` | Tough charts right below the Main List that still pay out points for the grind. |
+| **Legacy List** | `#151+` | `0 pts` | Older charts pushed off the top 150, kept up with their charter and victor history. |
+| **Open Bounties** | Unranked | `0 pts` | The hardest charts that still haven't been FC'd legit. |
 
-### Points & First Victors
-* **FCs Earn Points:** Both FCs and Passes are recorded on chart pages, but only verified **FCs** give you leaderboard points.
-* **First Victor Bonus:** Being the first person to ever FC a ranked chart earns a **+10% point bonus** on top of that chart's score.
-* **Speedups:** Sped-up charts are ranked separately when increased by at least **5% increments** (such as `115%`, `125%`, `150%`, or `200%`).
-
----
-
-## Verification & Rules
-
-Overstrum only lists legitimate, human-played records:
-* Every submission must include a **public or unlisted video** (YouTube or Twitch).
-* Videos must have **audible strum/fret clicks** or an **on-screen input viewer** so runs can be verified.
-* Bots, macros, modified hit windows, and spliced runs are permanently banned.
+### Scoring & First FCs
+* **Only FCs Pay Points:** Passes still get saved on chart pages so you get credit for surviving insane charts, but only **100% Full Combos** earn leaderboard points.
+* **First FC Bonus:** Being the first person to hit a legit FC on a ranked chart gives you a **+10% point bonus** on top of that chart's base score.
+* **Speedups:** Sped-up charts get their own spot on the list as long as the speed jumps by at least **5%** (like `115%`, `125%`, `150%`, or `200%`).
 
 ---
 
-## Submitting a Record
+## Rules & Proof
 
-1. Go to the **[Submit Page](https://github.iosubmit/)**.
-2. Choose your game, chart, record type (`FC` or `Pass`), and paste your video link.
-3. Copy your generated submission and send it via **[GitHub Issues](https://github.com)** to have it reviewed and added to the live leaderboard.
+No fakes, no bots, no nonsense:
+* **Video Proof Required:** Every run needs a public or unlisted YouTube or Twitch video.
+* **Hear or See the Inputs:** Your video must have **audible strum bar and fret clicks** or an **on-screen input viewer** so runs can be checked properly.
+* **Keep It Legit:** Macros, bots, modded hit windows, and spliced videos will get your runs wiped and your profile banned.
+
+---
+
+## How to Submit a Run
+
+1. Head over to the **[Submit Page](https://github.iosubmit/)**.
+2. Pick your game, chart, run type (`FC` or `Pass`), and paste your video link.
+3. Copy the generated submission and post it in **[GitHub Issues](https://github.com)** so it can be checked and added to the board.
