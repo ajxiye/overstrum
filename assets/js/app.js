@@ -37,6 +37,12 @@ let activeEngine=ENGINE_ID;
 let profileOpen=false;
 function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]})}
 function safeHttp(value){return typeof value==="string"&&/^https?:\/\//i.test(value)}
+function chartCoverSource(chart){
+ const raw=String(chart&&chart.album_art||"").trim();
+ if(!raw)return "";
+ if(safeHttp(raw)||raw.indexOf("data:image/")===0)return raw;
+ return ROOT+raw.replace(/^\.\//,"").replace(/^\//,"");
+}
 function engineFor(id){return ENGINES.find(function(engine){return engine.id===id})||ENGINES[0]}
 function enginePath(id){return ROOT+id+"/"}
 function asset(path){return ROOT+"assets/"+path}
@@ -161,7 +167,7 @@ function chartRow(chart,expanded,board){
  const speed=Number(chart.speed||100)!==100?'<span class="speed-badge">'+Number(chart.speed)+'%</span>':"";
  const game=(GAMES[chart.game_id]||{name:chart.game_id}).name;
  const rowId="chart-"+chart.id;
- const cover=chart.album_art?'<img class="chart-cover" src="'+esc(chart.album_art)+'" alt="" loading="lazy" onerror="this.remove()">':"";
+ const cover=chartCoverSource(chart)?'<img class="chart-cover" src="'+esc(chartCoverSource(chart))+'" alt="" loading="lazy" onerror="this.remove()">':"";
  return '<div class="chart-entry">'+
   '<div class="chart-row'+(expanded?" expanded":"")+'" role="button" tabindex="0" data-chart-id="'+esc(chart.id)+'" aria-controls="'+rowId+'" aria-expanded="'+String(expanded)+'">'+
    '<div class="rank '+rankClass+'">'+rankLabel(r)+'</div>'+
@@ -183,7 +189,7 @@ function accordionContent(chart,board){
  }).join(""):'<div class="victor-empty">No proof-linked victors have been added yet.</div>';
  const tags=(chart.tags||[]).map(function(tag){return '<span class="skill-tag">'+esc(tag)+'</span>'}).join("");
  const query=new URLSearchParams({engine:chart.engine,game:chart.game_id,song:chart.title,artist:chart.artist,charter:chart.charter,speed:String(chart.speed||100),board:board});
- const cover=chart.album_art?'<img class="accordion-cover" src="'+esc(chart.album_art)+'" alt="Album artwork for '+esc(chart.title)+'" loading="lazy">':"";
+ const cover=chartCoverSource(chart)?'<img class="accordion-cover" src="'+esc(chartCoverSource(chart))+'" alt="Album artwork for '+esc(chart.title)+'" loading="lazy" onerror="this.remove()">':"";
  return '<div class="accordion-grid"><div><h3 class="accordion-heading">Verified records</h3><div class="victor-list">'+list+'</div></div><div><h3 class="accordion-heading">Chart details</h3>'+cover+'<div class="accordion-tags">'+tags+'</div><div class="accordion-actions">'+(safeHttp(chart.source_url)?proofLink(chart.source_url,"↗ Chart source"):"")+'<a class="action-link primary" href="'+ROOT+'submit/?'+query.toString()+'">Submit for this chart</a></div></div></div>';
 }
 
