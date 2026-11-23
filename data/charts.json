@@ -27,7 +27,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.youtube.com/watch?v=CRneGN5LYqo"
+    "source_url": "https://www.youtube.com/watch?v=CRneGN5LYqo",
+    "album_art": null
   },
   {
     "id": "ch-soulless-5",
@@ -57,7 +58,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.youtube.com/watch?v=Y2QIQtb9nlY"
+    "source_url": "https://www.youtube.com/watch?v=Y2QIQtb9nlY",
+    "album_art": null
   },
   {
     "id": "ch-apathetic-inversions",
@@ -86,7 +88,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.fullcombo.net/songs/24/"
+    "source_url": "https://www.fullcombo.net/songs/24/",
+    "album_art": null
   },
   {
     "id": "ch-caverns-of-lolwut",
@@ -115,7 +118,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.fullcombo.net/songs/54/"
+    "source_url": "https://www.fullcombo.net/songs/54/",
+    "album_art": null
   },
   {
     "id": "ch-zoidberg-cowboy",
@@ -133,7 +137,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": true,
-    "source_url": "https://www.fullcombo.net/songs/460/"
+    "source_url": "https://www.fullcombo.net/songs/460/",
+    "album_art": null
   },
   {
     "id": "ch-spacerace",
@@ -151,7 +156,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": true,
-    "source_url": "https://www.fullcombo.net/songs/950/"
+    "source_url": "https://www.fullcombo.net/songs/950/",
+    "album_art": null
   },
   {
     "id": "ch-supernovae-uber-solo",
@@ -169,7 +175,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": true,
-    "source_url": "https://www.fullcombo.net/artists/archwk/"
+    "source_url": "https://www.fullcombo.net/artists/archwk/",
+    "album_art": null
   },
   {
     "id": "ch-supernovae-solo-buffed",
@@ -187,7 +194,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": true,
-    "source_url": "https://www.fullcombo.net/artists/archwk/"
+    "source_url": "https://www.fullcombo.net/artists/archwk/",
+    "album_art": null
   },
   {
     "id": "ch-glacial-storm-5",
@@ -205,7 +213,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": true,
-    "source_url": "https://www.fullcombo.net/artists/spunky/"
+    "source_url": "https://www.fullcombo.net/artists/spunky/",
+    "album_art": null
   },
   {
     "id": "ch-chasing-comets",
@@ -223,7 +232,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": true,
-    "source_url": "https://www.fullcombo.net/artists/archwk/"
+    "source_url": "https://www.fullcombo.net/artists/archwk/",
+    "album_art": null
   },
   {
     "id": "ch-archwks-hell",
@@ -241,7 +251,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": true,
-    "source_url": "https://www.fullcombo.net/artists/archwk/"
+    "source_url": "https://www.fullcombo.net/artists/archwk/",
+    "album_art": null
   },
   {
     "id": "ch-supernovae",
@@ -259,7 +270,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": true,
-    "source_url": "https://www.fullcombo.net/artists/archwk/"
+    "source_url": "https://www.fullcombo.net/artists/archwk/",
+    "album_art": null
   },
   {
     "id": "yarg-vehemence",
@@ -284,7 +296,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
+    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4",
+    "album_art": null
   },
   {
     "id": "yarg-tick-tock",
@@ -309,7 +322,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
+    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4",
+    "album_art": null
   },
   {
     "id": "yarg-stress",
@@ -334,7 +348,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4"
+    "source_url": "https://www.youtube.com/watch?v=wqIyMQH4dG4",
+    "album_art": null
   },
   {
     "id": "gh12-jordan",
@@ -364,7 +379,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Jordan"
+    "source_url": "https://guitarhero.fandom.com/wiki/Jordan",
+    "album_art": null
   },
   {
     "id": "gh12-bark-at-the-moon",
@@ -393,7 +409,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Bark_at_the_Moon"
+    "source_url": "https://guitarhero.fandom.com/wiki/Bark_at_the_Moon",
+    "album_art": null
   },
   {
     "id": "gh12-hangar-18",
@@ -411,7 +428,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Hangar_18"
+    "source_url": "https://guitarhero.fandom.com/wiki/Hangar_18",
+    "album_art": null
   },
   {
     "id": "gh12-misirlou",
@@ -429,7 +447,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Misirlou"
+    "source_url": "https://guitarhero.fandom.com/wiki/Misirlou",
+    "album_art": null
   },
   {
     "id": "gh12-free-bird",
@@ -447,7 +466,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Free_Bird"
+    "source_url": "https://guitarhero.fandom.com/wiki/Free_Bird",
+    "album_art": null
   },
   {
     "id": "gh3-through-fire-flames",
@@ -477,7 +497,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Through_the_Fire_and_Flames"
+    "source_url": "https://guitarhero.fandom.com/wiki/Through_the_Fire_and_Flames",
+    "album_art": null
   },
   {
     "id": "gh3-devil-went-down",
@@ -506,7 +527,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.xboxachievements.com/forum/topic/95556-the-devil-went-down-to-georgia-fc/"
+    "source_url": "https://www.xboxachievements.com/forum/topic/95556-the-devil-went-down-to-georgia-fc/",
+    "album_art": null
   },
   {
     "id": "gh3-one",
@@ -524,7 +546,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/One"
+    "source_url": "https://guitarhero.fandom.com/wiki/One",
+    "album_art": null
   },
   {
     "id": "gh3-raining-blood",
@@ -542,7 +565,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Raining_Blood"
+    "source_url": "https://guitarhero.fandom.com/wiki/Raining_Blood",
+    "album_art": null
   },
   {
     "id": "gh3-cliffs-of-dover",
@@ -560,7 +584,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Cliffs_of_Dover"
+    "source_url": "https://guitarhero.fandom.com/wiki/Cliffs_of_Dover",
+    "album_art": null
   },
   {
     "id": "gh3-aerosmith-train-kept",
@@ -578,7 +603,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Train_Kept_A-Rollin%27"
+    "source_url": "https://guitarhero.fandom.com/wiki/Train_Kept_A-Rollin%27",
+    "album_art": null
   },
   {
     "id": "ghw-dyers-eve",
@@ -608,7 +634,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.youtube.com/watch?v=TaybrSJcAso"
+    "source_url": "https://www.youtube.com/watch?v=TaybrSJcAso",
+    "album_art": null
   },
   {
     "id": "ghw-fury-of-the-storm",
@@ -634,7 +661,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.youtube.com/watch?v=7UVjx9OhwMg"
+    "source_url": "https://www.youtube.com/watch?v=7UVjx9OhwMg",
+    "album_art": null
   },
   {
     "id": "ghw-black-widow",
@@ -665,7 +693,8 @@
       }
     ],
     "bounty": false,
-    "source_url": "https://www.youtube.com/watch?v=MXmD7AzCNKU"
+    "source_url": "https://www.youtube.com/watch?v=MXmD7AzCNKU",
+    "album_art": null
   },
   {
     "id": "ghw-satch-boogie",
@@ -683,7 +712,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Satch_Boogie"
+    "source_url": "https://guitarhero.fandom.com/wiki/Satch_Boogie",
+    "album_art": null
   },
   {
     "id": "ghw-sudden-death",
@@ -701,7 +731,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/Sudden_Death"
+    "source_url": "https://guitarhero.fandom.com/wiki/Sudden_Death",
+    "album_art": null
   },
   {
     "id": "ghw-21st-century",
@@ -719,7 +750,8 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/21st_Century_Schizoid_Man"
+    "source_url": "https://guitarhero.fandom.com/wiki/21st_Century_Schizoid_Man",
+    "album_art": null
   },
   {
     "id": "ghw-this-day-we-fight",
@@ -737,6 +769,7 @@
     "first_victor": null,
     "victors": [],
     "bounty": false,
-    "source_url": "https://guitarhero.fandom.com/wiki/This_Day_We_Fight!"
+    "source_url": "https://guitarhero.fandom.com/wiki/This_Day_We_Fight!",
+    "album_art": null
   }
 ]

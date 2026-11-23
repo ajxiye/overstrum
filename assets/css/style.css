@@ -284,3 +284,170 @@ img{max-width:100%;display:block}
 .directory-row{grid-template-columns:minmax(0,1fr) 74px 57px 57px;padding:9px 7px;gap:5px}
 .directory-number{font-size:10px}
 }
+
+
+.game-selector{
+display:grid;
+grid-template-columns:repeat(7,minmax(0,1fr));
+gap:7px;
+margin:0 0 16px;
+}
+.game-tab{
+min-width:0;
+min-height:62px;
+display:flex;
+align-items:center;
+justify-content:flex-start;
+gap:10px;
+padding:8px 11px;
+border:1px solid var(--border);
+border-radius:7px;
+background:var(--surface);
+color:var(--muted);
+font-size:12px;
+font-weight:750;
+text-decoration:none;
+transition:background .13s,border-color .13s,color .13s;
+}
+.game-tab img{
+width:32px;
+height:32px;
+flex:0 0 32px;
+object-fit:contain;
+}
+.game-tab span{
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+.game-tab:hover{background:var(--hover);color:var(--text);border-color:#39414e}
+.game-tab.active{background:#242a34;color:#fff;border-color:#596477}
+.game-tab-combined{justify-content:center}
+.combined-icon{font-size:21px;line-height:1}
+.engine-title-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+margin:0 0 15px;
+}
+.engine-title{display:flex;align-items:center;gap:12px;min-width:0}
+.engine-title>img{width:42px;height:42px;object-fit:contain}
+.engine-title h1{margin:1px 0 0;font-size:21px;font-weight:800;letter-spacing:-.025em}
+.engine-group-label{display:block;color:var(--subtle);font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.engine-subtitle{margin:2px 0 0;color:var(--muted);font-size:12px}
+.engine-board-link{flex:0 0 auto;color:var(--muted);font-size:12px;font-weight:700}
+.engine-board-link:hover{color:var(--text)}
+.list-toolbar{
+display:grid;
+grid-template-columns:auto auto minmax(150px,1fr) minmax(145px,180px);
+align-items:center;
+gap:8px;
+margin:0 0 12px;
+}
+.tier-tabs,.board-tabs{max-width:100%;overflow-x:auto}
+.tier-tab,.board-tab{font-size:12px}
+.chart-main{min-width:0;display:flex;align-items:center;gap:10px}
+.chart-main-copy{min-width:0}
+.chart-cover{
+width:38px;
+height:38px;
+flex:0 0 38px;
+border-radius:5px;
+object-fit:cover;
+background:#222833;
+}
+.chart-row{grid-template-columns:55px minmax(200px,1fr) minmax(175px,210px) minmax(110px,145px) 90px}
+.chart-title{font-size:13px}
+.chart-subtitle{font-size:11px}
+.unknown-first{color:var(--subtle);font-size:10px}
+.game-directory{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:9px;
+}
+.game-directory-page{margin-top:2px}
+.game-directory-card{
+min-width:0;
+min-height:72px;
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px;
+border:1px solid var(--border);
+border-radius:7px;
+background:var(--surface);
+transition:background .13s,border-color .13s;
+}
+.game-directory-card:hover{background:var(--hover);border-color:#3a4350}
+.game-directory-card>img{width:43px;height:43px;flex:0 0 43px;object-fit:contain}
+.game-directory-card>span{min-width:0;flex:1}
+.game-directory-card strong{display:block;overflow:hidden;font-size:13px;text-overflow:ellipsis;white-space:nowrap}
+.game-directory-card small{display:block;margin-top:2px;color:var(--muted);font-size:11px}
+.game-directory-card>b{flex:0 0 auto;color:var(--muted);font-family:var(--mono);font-size:11px}
+.overview-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 19px}
+.overview-heading h1{margin:0;font-size:30px;letter-spacing:-.04em}
+.overview-heading p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.overview-section{margin-top:23px}
+.compact-section-heading{margin:0 0 10px}
+.compact-section-heading h2{font-size:16px}
+.compact-section-heading p{font-size:12px}
+.engine-summary-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.engine-summary-card{min-width:0;padding:10px}
+.engine-summary-card>img{width:30px;height:30px}
+.engine-summary-copy strong{font-size:11px}
+.engine-summary-copy span{font-size:10px}
+.engine-summary-rank strong{font-size:11px}
+.engine-summary-rank small{max-width:76px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px}
+.leaderboard-game-selector{margin:0 0 13px}
+.leaderboard-game-selector .game-tab{min-height:53px;padding:7px}
+.leaderboard-game-selector .game-tab img{width:27px;height:27px;flex-basis:27px}
+.recent-feed{overflow:hidden}
+.recent-item{grid-template-columns:92px minmax(0,1fr) minmax(110px,auto) 82px}
+@media(max-width:1050px){
+.game-selector{grid-template-columns:repeat(5,minmax(0,1fr))}
+.engine-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.list-toolbar{grid-template-columns:auto auto minmax(140px,1fr)}
+.skill-filter{grid-column:1/-1}
+}
+@media(max-width:760px){
+.game-selector{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.game-tab{min-height:56px;justify-content:center;flex-direction:column;gap:3px;padding:5px}
+.game-tab img{width:27px;height:27px;flex-basis:27px}
+.game-tab span{font-size:10px}
+.engine-title-row{align-items:flex-start}
+.engine-board-link{padding-top:12px}
+.list-toolbar{grid-template-columns:1fr 1fr}
+.tier-tabs,.board-tabs{grid-column:1/-1}
+.search-input{grid-column:1/-1}
+.skill-filter{grid-column:1/-1}
+.chart-row{grid-template-columns:44px minmax(0,1fr) 80px;gap:8px}
+.chart-row .first-victor-cell{grid-column:2;grid-row:2;margin-top:-2px}
+.chart-row .chart-main{grid-column:2;grid-row:1}
+.chart-row .skill-tags{display:none}
+.chart-row .point-cell{grid-column:3;grid-row:1/3}
+.chart-main{gap:8px}
+.chart-cover{width:34px;height:34px;flex-basis:34px}
+.game-directory{grid-template-columns:repeat(2,minmax(0,1fr))}
+.engine-summary-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){
+.game-selector{grid-template-columns:repeat(3,minmax(0,1fr))}
+.game-tab{min-height:61px}
+.game-tab img{width:30px;height:30px;flex-basis:30px}
+.game-tab span{font-size:11px}
+.engine-title-row{flex-direction:column;gap:5px}
+.engine-board-link{padding:0}
+.overview-heading{align-items:flex-start}
+.overview-heading h1{font-size:26px}
+.overview-heading>.button{min-height:34px;padding:0 9px;font-size:11px}
+.game-directory{grid-template-columns:1fr}
+.engine-summary-grid{grid-template-columns:1fr}
+.list-toolbar{grid-template-columns:1fr}
+.tier-tabs,.board-tabs,.search-input,.skill-filter{grid-column:auto}
+.tier-tabs,.board-tabs{width:100%}
+.tier-tab,.board-tab{flex:1;padding:0 6px}
+.recent-item{grid-template-columns:73px minmax(0,1fr) auto}
+.recent-player{grid-column:2}
+.recent-board{grid-column:3;grid-row:1/3}
+}
