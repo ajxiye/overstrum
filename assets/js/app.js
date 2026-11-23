@@ -187,7 +187,7 @@ function renderEnginePage(){
    if(selectedGame!=="all"&&chart.game_id!==selectedGame)return false;
    if(tierFor(chart)!==selectedTier)return false;
    if(selectedBoard==="Pass"&&!victorList(chart).some(function(v){return v.type==="Pass"}))return false;
-   if(selectedBoard==="FC"&&selectedTier!=="bounty"&&!victorList(chart).some(function(v){return v.type==="FC"}))return false;
+   if(selectedBoard==="FC"&&selectedTier==="bounty"&&chart.rank!==null)return false;
    if(selectedTier==="bounty"&&!chart.bounty)return false;
    if(selectedSkill!=="all"&&!(chart.tags||[]).includes(selectedSkill))return false;
    const hay=[chart.title,chart.artist,chart.charter,chart.game_id].concat(victorList(chart).map(function(v){return v.player})).join(" ").toLowerCase();
@@ -197,10 +197,10 @@ function renderEnginePage(){
   $("#list-count").textContent=source.length+" charts";
   $("#list-summary").innerHTML='<strong>'+esc(tierLabel(selectedTier))+'</strong> · '+selectedBoard+" board";
   $("#chart-list").innerHTML=source.length?source.map(function(chart){return chartRow(chart,chart.id===expandedId,selectedBoard)}).join(""):'<div class="empty-list">No charts match these filters yet.</div>';
-  $$("#tier-count").forEach(function(){});
   $$("[data-tier-count]").forEach(function(node){node.textContent=tierCount(engine.id,node.dataset.tier,selectedGame)||""});
-  const top=charts.filter(function(chart){return chart.engine===engine.id&&chart.rank===1&&chart.game_id&&(selectedGame==="all"||chart.game_id===selectedGame)}).sort(function(a,b){return a.title.localeCompare(b.title)})[0];
-  if(top){
+  const top=selectedTier==="main"&&selectedBoard==="FC"?charts.filter(function(chart){return chart.engine===engine.id&&chart.rank===1&&chart.game_id&&(selectedGame==="all"||chart.game_id===selectedGame)}).sort(function(a,b){return a.title.localeCompare(b.title)})[0]:null;
+  if(selectedTier!=="main"||selectedBoard!=="FC"){$("#top-chart").hidden=true}
+  else if(top){
    const first=top.first_victor?top.first_victor.player:"First FC not confirmed";
    $("#top-chart").innerHTML='<span class="top-chart-rank">#1</span><div class="top-chart-copy"><strong>'+esc(top.title)+'</strong><span>'+esc(top.artist)+' · First victor: '+esc(first)+'</span></div><span class="top-chart-score">'+formatPoints(basePoints(top.rank))+' pts</span><a href="#chart-list" class="top-chart-link" data-jump-chart="'+esc(top.id)+'">View chart ↓</a>';
    $("#top-chart").hidden=false;
