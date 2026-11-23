@@ -697,25 +697,37 @@ function readSubmissions(){try{const value=JSON.parse(localStorage.getItem(STORE
 function syncCharts(){allCharts=[...baseCharts,...submissions]}
 function setNav(){
  const navKey=route==="home"?"home":route==="games"?"games":route==="submit"?"submit":route==="rules"?"rules":route==="community"?"community":"leaderboard";
- document.querySelectorAll("[data-nav]").forEach(a=>{a.classList.toggle("active",a.dataset.nav===navKey);if(a.dataset.nav==="games")a.textContent="The List"});
+ document.querySelectorAll("[data-nav]").forEach(a=>{
+  a.classList.toggle("active",a.dataset.nav===navKey);
+  if(a.dataset.nav==="games")a.textContent="The List";
+ });
  const toggle=$(".menu-toggle"),nav=$(".main-nav");
- if(toggle&&!toggle.dataset.bound){toggle.dataset.bound="true";toggle.addEventListener("click",()=>{const open=nav.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open))})}
+ if(toggle&&!toggle.dataset.bound){
+  toggle.dataset.bound="true";
+  toggle.addEventListener("click",()=>{
+   const open=nav.classList.toggle("open");
+   toggle.setAttribute("aria-expanded",String(open));
+  });
+ }
 }
 function statusFor(c){return c.status==="pending"?"pending":c.demo?"sample":"verified"}
 function statusBadge(c){const s=statusFor(c),label=s==="pending"?"Pending review":s==="sample"?"Sample data":"Verified";return '<span class="badge '+s+'">'+label+'</span>'}
 function queryUrl(engine,kind){const p=new URLSearchParams();if(engine&&engine!=="all")p.set("engine",engine);if(kind&&kind!=="all")p.set("kind",kind);return ROOT_PREFIX+"leaderboard/"+(p.toString()?"?"+p.toString():"")}
 function renderHome(){
- const uniquePlayers=new Set(allCharts.flatMap(c=>c.victors||[]).concat(submissions.map(c=>c.player).filter(Boolean)));
- const fc=allCharts.filter(c=>c.kind==="fc").length,passes=allCharts.filter(c=>c.kind==="pass").length;
- const recent=[...allCharts].sort((a,b)=>String(b.verifiedAt||"").localeCompare(String(a.verifiedAt||""))).slice(0,3);
- $("#app").innerHTML='<section class="hero"><div><span class="eyebrow">A community archive for five-fret rhythm games</span><h1>Good runs deserve <span>a place.</span></h1><p class="hero-copy">Overstrum collects full combos and hardest passes across the games we play. Browse records, explore the players behind them, and submit a run for review.</p><div class="hero-actions"><a class="button primary" href="'+ROOT_PREFIX+'leaderboard/">Explore leaderboard <span aria-hidden="true">↗</span></a><a class="button ghost" href="'+ROOT_PREFIX+'submit/">Submit a record</a></div></div><aside class="hero-summary"><div class="summary-top"><span>List overview</span><span><i class="live-dot"></i>Community maintained</span></div><div class="summary-grid"><div class="summary-stat"><strong>'+allCharts.length+'</strong><span>Listed entries</span></div><div class="summary-stat"><strong>'+uniquePlayers.size+'</strong><span>Players</span></div><div class="summary-stat"><strong>'+fc+'</strong><span>Full combos</span></div><div class="summary-stat"><strong>'+passes+'</strong><span>Passes</span></div></div></aside></section>'+
- '<div class="section-heading"><div><h2>Choose a game</h2><p>Each release has its own leaderboard and hardest-song list.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'leaderboard/">All records ↗</a></div>'+
- '<section class="engine-grid">'+engines.map(e=>'<a class="engine-card" href="'+ROOT_PREFIX+'games/?game='+encodeURIComponent(e.id)+'"><div class="engine-card-top"><span class="engine-icon"><img src="'+ROOT_PREFIX+e.icon+'" alt=""></span><span class="engine-arrow">↗</span></div><strong>'+esc(e.name)+'</strong><small>'+allCharts.filter(c=>c.engine===e.id).length+' listed entries</small><div class="engine-badges"><span>Full combo</span><span>Pass</span></div></a>').join("")+'</section>'+
- '<div class="section-heading"><div><h2>Recently added</h2><p>The latest entries in the archive.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'leaderboard/">View leaderboard ↗</a></div>'+
- '<section class="recent-grid">'+recent.map(c=>'<article class="recent-card"><div class="recent-card-top">'+statusBadge(c)+'<span class="badge">'+(c.kind==="fc"?"Full combo":"Pass")+'</span></div><strong>'+esc(c.title)+'</strong><p>'+esc(c.artist||"Artist not supplied")+' · '+esc(engineFor(c.engine).name)+'</p></article>').join("")+'</section>'+
- '<div class="section-heading"><div><h2>How the list works</h2><p>Clear standards, careful review, and useful records.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'rules/">Read verification rules ↗</a></div>'+
- '<section class="content-grid"><article class="content-card"><h3>Evidence first</h3><p>Runs should be supported by continuous gameplay footage, appropriate handcam or input visibility, and original gameplay audio.</p></article><article class="content-card"><h3>Exact chart identity</h3><p>Chart hashes help distinguish different versions of a chart. A record is not considered reviewed until its chart details are checked.</p></article></section>'+
- '<div class="notice">The records currently bundled with this site are sample data for layout testing, not verified achievements. New submissions are saved locally and remain pending review.</div>';
+ const verified=allCharts.filter(c=>statusFor(c)==="verified");
+ const verifiedPlayers=new Set(verified.flatMap(c=>c.victors||[]));
+ const activeGames=new Set(allCharts.filter(c=>c.status!=="pending").map(c=>c.engine));
+ const ranked=allCharts.filter(c=>c.status!=="pending").length;
+ const recentSource=verified.length?verified:allCharts;
+ const recent=[...recentSource].sort((a,b)=>String(b.verifiedAt||"").localeCompare(String(a.verifiedAt||""))).slice(0,4);
+ $("#app").innerHTML=
+ '<section class="hero"><div class="hero-copy-wrap"><span class="eyebrow">A home for five-fret records</span><h1>Overstrum <span>— Five-fret records, kept honest.</span></h1><p class="hero-copy">A community archive for Guitar Hero, Clone Hero and YARG. Browse the hardest charts, follow the players behind the records, and send in a run for review.</p><div class="hero-actions"><a class="button primary" href="'+ROOT_PREFIX+'games/">Explore The List <span aria-hidden="true">↗</span></a><a class="button secondary" href="'+ROOT_PREFIX+'submit/">Submit a Run</a></div></div><div class="hero-aside"><span class="hero-mark" aria-hidden="true">五</span><span class="hero-aside-label">FIVE-FRET ARCHIVE</span><span class="hero-aside-note">Records, charts and community credits.</span></div></section>'+
+ '<section class="kpi-grid" aria-label="Overstrum statistics"><article class="kpi-card"><span>Total ranked charts</span><strong class="tabular">'+ranked.toLocaleString()+'</strong><small>Across every supported game</small></article><article class="kpi-card"><span>Verified players</span><strong class="tabular">'+verifiedPlayers.size.toLocaleString()+'</strong><small>Players on approved records</small></article><article class="kpi-card"><span>Active games</span><strong class="tabular">'+activeGames.size.toLocaleString()+'</strong><small>Games with listed charts</small></article></section>'+
+ '<div class="section-heading"><div><h2>'+(verified.length?"Recent verified records":"Recent records preview")+'</h2><p>'+(verified.length?"The latest approved records added to the archive.":"No approved records are available yet. Sample entries are shown so you can preview the layout.")+'</p></div><a class="inline-link" href="'+ROOT_PREFIX+'games/">Browse The List ↗</a></div>'+
+ '<section class="recent-grid">'+(recent.length?recent.map(c=>'<article class="recent-card"><div class="recent-card-top">'+statusBadge(c)+'<span class="recent-board">'+(c.kind==="fc"?"FC":"PASS")+'</span></div><strong>'+esc(c.title)+'</strong><p>'+esc(c.artist||"Artist not supplied")+' <span>·</span> '+esc(engineFor(c.engine).name)+'</p><div class="recent-card-bottom"><span>'+esc(c.charter||"Charter not supplied")+'</span><strong class="tabular">'+Number(c.points||0)+' pts</strong></div></article>').join(""):'<div class="empty-state">No records have been added yet.</div>')+'</section>'+
+ '<div class="section-heading"><div><h2>Built around the games</h2><p>Separate boards, consistent standards, one archive.</p></div><a class="inline-link" href="'+ROOT_PREFIX+'rules/">Read the rules ↗</a></div>'+
+ '<section class="content-grid"><article class="content-card"><span class="content-icon" aria-hidden="true">01</span><h3>Every chart has a place</h3><p>Each supported game has its own FC and Pass boards, with chart identity and charter credits kept alongside every entry.</p></article><article class="content-card"><span class="content-icon" aria-hidden="true">02</span><h3>Evidence before points</h3><p>Submissions stay pending until reviewed. Sample entries are labelled clearly and never presented as verified runs.</p></article></section>'+
+ '<p class="data-note">The bundled entries are sample data for preview purposes. They are not verified achievements. New submissions are saved in this browser and remain pending review.</p>';
  setNav();
 }
 function albumCoverMarkup(c,extraClass){
@@ -731,34 +743,35 @@ function trophyMarkup(position){
  return '<span class="rank-medal medal-'+tone+'" title="'+position+suffix+' place trophy placeholder"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v3h3a1 1 0 0 1 1 1c0 3.2-1.9 5.6-5.1 6.3A6 6 0 0 1 13 16v2h4v2H7v-2h4v-2a6 6 0 0 1-2.9-2.7C4 12.6 2 10.2 2 7a1 1 0 0 1 1-1h4V3zm0 5H4.1c.2 1.5 1.1 2.6 2.8 3.2A9 9 0 0 1 7 8zm10 0a9 9 0 0 1 .1 3.2c1.7-.6 2.6-1.7 2.8-3.2H17z"/></svg><small>'+position+suffix+'</small></span>';
 }
 function renderChartInspector(c,kind){
- if(!c)return '<aside class="song-inspector-empty"><span>♪</span><strong>Select a song</strong><p>Choose a chart to see its artwork, details and community standing.</p></aside>';
+ if(!c)return '<aside class="song-inspector-empty"><span class="empty-note-icon" aria-hidden="true">♪</span><strong>Select a song</strong><p>Choose a chart to inspect its cover, charter and board details.</p></aside>';
  const votes=Number.isFinite(Number(c.communityVotes??c.votes))&&(c.communityVotes!==undefined||c.votes!==undefined)?Number(c.communityVotes??c.votes).toLocaleString():"—";
  const first=c.firstVerifier||(Array.isArray(c.victors)&&c.victors[0])||"Not recorded";
  const hash=typeof c.hash==="string"&&/^[a-f0-9]{32}$/i.test(c.hash)?c.hash:"";
  const proof=typeof c.video==="string"&&/^https?:\/\//i.test(c.video)?'<a class="chart-proof-link" href="'+esc(c.video)+'" target="_blank" rel="noopener noreferrer">Watch proof ↗</a>':"";
  return '<div class="inspector-topline"><span class="inspector-kicker">SELECTED CHART</span><span class="inspector-board">'+(kind==="fc"?"FULL COMBO":"PASS")+'</span></div>'+
  '<div class="inspector-track">'+albumCoverMarkup(c,"inspector-cover")+'<div class="inspector-track-copy"><h2>'+esc(c.title)+'</h2><p class="inspector-artist">'+esc(c.artist||"Artist not supplied")+'</p><div class="inspector-charter"><span>CHARTER</span><strong>'+esc(c.charter||"Not supplied")+'</strong></div></div></div>'+
- '<div class="inspector-stats"><div class="inspector-stat"><span>POINTS</span><strong>'+Number(c.points||0)+'</strong></div><div class="inspector-stat"><span>BOARD TYPE</span><strong>'+(kind==="fc"?"FC":"PASS")+'</strong></div><div class="inspector-stat"><span>COMMUNITY VOTES</span><strong>'+votes+'</strong></div></div>'+
- '<div class="inspector-actions"><a class="list-primary-cta" href="'+ROOT_PREFIX+'submit/">Submit a Run <span>↗</span></a><button class="list-secondary-cta" type="button" data-toggle-chart-details>View Chart Details <span aria-hidden="true">⌄</span></button></div>'+
+ '<div class="inspector-stats"><div class="inspector-stat"><span>POINTS</span><strong class="tabular">'+Number(c.points||0).toLocaleString()+'</strong></div><div class="inspector-stat"><span>BOARD</span><strong>'+(kind==="fc"?"FC":"PASS")+'</strong></div><div class="inspector-stat"><span>VOTES</span><strong class="tabular">'+votes+'</strong></div></div>'+
+ '<div class="inspector-actions"><a class="list-primary-cta" href="'+ROOT_PREFIX+'submit/">Submit a Run <span>↗</span></a><button class="list-secondary-cta" type="button" data-toggle-chart-details>Chart details <span aria-hidden="true">⌄</span></button></div>'+
  '<div class="inspector-extra" id="inspector-extra" hidden><div><span>FIRST '+(kind==="fc"?"FC":"PASS")+'</span><strong>'+esc(first)+'</strong></div><div><span>PEAK NPS</span><strong>'+fmt(c.peakNps)+'</strong></div><div><span>AVERAGE NPS</span><strong>'+fmt(c.averageNps)+'</strong></div>'+(hash?'<div class="inspector-hash"><span>CHART MD5</span><div class="hash-line"><code class="hash-text">'+esc(hash)+'</code><button class="copy-button" type="button" data-copy="'+esc(hash)+'">Copy</button></div></div>':"")+(proof?proof:'<span class="inspector-no-proof">No video proof supplied.</span>')+'</div>';
 }
 function recordRows(rows,selectedId){
  if(!rows.length)return '<div class="list-empty">No songs match this board. Try another search.</div>';
  return rows.map((c,i)=>{
-  const position=i+1,active=c.id===selectedId;
-  const votes=Number.isFinite(Number(c.communityVotes??c.votes))&&(c.communityVotes!==undefined||c.votes!==undefined)?Number(c.communityVotes??c.votes).toLocaleString():"—";
+  const position=Number(c.rank)||i+1,active=c.id===selectedId;
   return '<button class="song-row'+(active?" is-selected":"")+'" type="button" data-select-chart="'+esc(c.id)+'" aria-pressed="'+String(active)+'">'+
-   '<span class="song-rank">'+trophyMarkup(position)+'</span>'+albumCoverMarkup(c,"song-cover")+
-   '<span class="song-copy"><strong>'+esc(c.title)+'</strong><span class="song-artist">'+esc(c.artist||"Artist not supplied")+'</span><span class="song-charter">Charter · '+esc(c.charter||"Not supplied")+'</span></span>'+
-   '<span class="song-metadata"><span class="song-tags"><i>'+esc(engineFor(c.engine).short)+'</i><i>'+(c.kind==="fc"?"FC":"PASS")+'</i></span><strong>'+Number(c.points||0)+' <small>pts</small></strong><span class="song-votes">'+votes+' votes</span></span></button>';
+   '<span class="song-rank">'+trophyMarkup(position)+'</span>'+
+   '<span class="song-identity">'+albumCoverMarkup(c,"song-cover")+'<span class="song-copy"><strong>'+esc(c.title)+'</strong><span class="song-artist">'+esc(c.artist||"Artist not supplied")+'</span></span></span>'+
+   '<span class="song-charter"><small>CHARTER</small><strong>'+esc(c.charter||"Not supplied")+'</strong></span>'+
+   '<span class="song-points"><strong class="tabular">'+Number(c.points||0).toLocaleString()+'</strong><small>PTS</small></span></button>';
  }).join("");
 }
 function playerStats(charts){
  const map=new Map();
  charts.forEach(c=>(c.victors||[]).forEach(v=>{
   if(!v)return;
-  const p=map.get(v)||{name:v,points:0,records:0,pioneers:0,pending:0};
+  const p=map.get(v)||{name:v,points:0,records:0,fcCount:0,passCount:0,pioneers:0,pending:0};
   p.records++;
+  if(c.kind==="fc")p.fcCount++;else if(c.kind==="pass")p.passCount++;
   if(c.status==="pending")p.pending++;
   else p.points+=Number(c.points||0)+(v===c.firstVerifier?3:0);
   if(v===c.firstVerifier)p.pioneers++;
@@ -766,65 +779,27 @@ function playerStats(charts){
  }));
  return [...map.values()].sort((a,b)=>b.points-a.points||b.records-a.records||a.name.localeCompare(b.name));
 }
-function renderPlayerTable(charts){
- const players=playerStats(charts);
- if(!players.length)return '<tr><td colspan="5"><div class="empty-state">No player records yet.</div></td></tr>';
- return players.map((p,i)=>'<tr><td class="player-rank">'+String(i+1).padStart(2,"0")+'</td><td><strong>'+esc(p.name)+'</strong></td><td>'+p.records+'</td><td>'+p.pioneers+'</td><td class="points-total">'+p.points.toLocaleString()+'</td></tr>').join("");
+function renderPlayerTable(charts,query){
+ const q=String(query||"").trim().toLowerCase();
+ const players=playerStats(charts).filter(p=>p.name.toLowerCase().includes(q));
+ if(!players.length)return '<tr><td colspan="5"><div class="empty-state">No players match that search.</div></td></tr>';
+ return players.map((p,i)=>{
+  const initial=esc((p.name||"?").slice(0,1).toUpperCase());
+  return '<tr><td class="player-rank">'+String(i+1).padStart(2,"0")+'</td><td><div class="player-identity"><span class="player-avatar">'+initial+'</span><strong>'+esc(p.name)+'</strong></div></td><td class="points-total tabular">'+p.points.toLocaleString()+'</td><td class="numeric-cell tabular">'+p.fcCount.toLocaleString()+'</td><td class="numeric-cell tabular">'+p.passCount.toLocaleString()+'</td></tr>';
+ }).join("");
 }
-function renderLeaderboard(seedEngine,seedKind){
- const params=new URLSearchParams(location.search);
- const defaultEngine=seedEngine||params.get("engine")||"all";
- const defaultKind=(seedKind||params.get("kind"))==="fc"?"fc":"pass";
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Browse the archive</span><h1>Leaderboard</h1><p>Explore separate Full Combo and Pass boards for every game. Select a chart to inspect its artwork, charter and first clear.</p></div></div>'+
- '<div class="achievement-tabs view-tabs" role="tablist" aria-label="Achievement category"><button type="button" class="'+(defaultKind==="fc"?"active":"")+'" data-leaderboard-kind="fc" role="tab" aria-selected="'+(defaultKind==="fc"?"true":"false")+'">FC</button><button type="button" class="'+(defaultKind==="pass"?"active":"")+'" data-leaderboard-kind="pass" role="tab" aria-selected="'+(defaultKind==="pass"?"true":"false")+'">Pass</button></div>'+
- '<div class="game-tabs leaderboard-game-tabs" role="tablist" aria-label="Choose a game"><button class="game-tab'+(defaultEngine==="all"?" active":"")+'" type="button" data-leaderboard-game="all" role="tab" aria-selected="'+(defaultEngine==="all"?"true":"false")+'"><span>All</span></button>'+engines.map(g=>'<button class="game-tab'+(g.id===defaultEngine?' active':'')+'" type="button" data-leaderboard-game="'+esc(g.id)+'" role="tab" aria-selected="'+(g.id===defaultEngine?'true':'false')+'"><img src="'+ROOT_PREFIX+g.icon+'" alt=""><span>'+esc(g.short)+'</span></button>').join("")+'</div>'+
- '<div class="leaderboard-layout"><section class="leaderboard-primary"><div class="leaderboard-toolbar"><label class="search-field"><input id="record-search" type="search" placeholder="Search charts, artists, charters or players…" autocomplete="off" aria-label="Search records"></label><select class="select-field" id="status-filter" aria-label="Filter by status"><option value="all">All statuses</option><option value="verified">Verified</option><option value="sample">Sample data</option><option value="pending">Pending review</option></select></div>'+
- '<div class="list-heading"><div class="view-tabs" role="tablist" aria-label="Leaderboard view"><button class="active" type="button" data-view="records" role="tab" aria-selected="true">Chart list</button><button type="button" data-view="players" role="tab" aria-selected="false">Player rankings</button></div><span class="filter-count" id="filter-count"></span></div>'+
- '<section id="records-view"><div class="leaderboard-list" id="record-body"></div></section>'+
- '<section id="players-view" hidden><div class="table-wrap"><table class="players-table"><thead><tr><th>#</th><th>Player</th><th>Records</th><th>Pioneer verifications</th><th style="text-align:right">Points</th></tr></thead><tbody id="player-body"></tbody></table></div><p class="field-hint" style="margin-top:10px">Pioneer recognition adds 3 points to a reviewed record. Pending submissions do not earn points until approved.</p></section>'+
- '<div class="notice">Sample records are included to demonstrate the interface and are not verified achievements. Submissions from this browser appear as pending review and are visible only in this browser.</div></section>'+
- '<aside class="chart-inspector" id="chart-inspector" aria-live="polite"></aside></div>';
- const statusEl=$("#status-filter"),searchEl=$("#record-search"),recordBody=$("#record-body");
- let selectedKind=defaultKind;
- let selectedEngine=engines.some(e=>e.id===defaultEngine)?defaultEngine:"all";
- let selectedChartId=null;
- function updateUrl(){const p=new URLSearchParams();if(selectedEngine!=="all")p.set("engine",selectedEngine);p.set("kind",selectedKind);const q=p.toString();history.replaceState({}, "",location.pathname+(q?"?"+q:""))}
- function paint(){
-  const q=searchEl.value.trim().toLowerCase();
-  const filtered=allCharts.filter(c=>{
-   const engineOk=selectedEngine==="all"||c.engine===selectedEngine;
-   const kindOk=c.kind===selectedKind;
-   const statusOk=statusEl.value==="all"||statusFor(c)===statusEl.value;
-   const haystack=[c.title,c.artist,c.charter,c.firstVerifier,...(c.victors||[]),c.player].join(" ").toLowerCase();
-   return engineOk&&kindOk&&statusOk&&haystack.includes(q);
-  }).sort((a,b)=>Number(b.points||0)-Number(a.points||0)||String(a.title).localeCompare(String(b.title)));
-  if(!filtered.some(c=>c.id===selectedChartId))selectedChartId=filtered.length?filtered[0].id:null;
-  recordBody.innerHTML=recordRows(filtered,selectedChartId);
-  $("#player-body").innerHTML=renderPlayerTable(filtered);
-  $("#filter-count").textContent=filtered.length+" charts";
-  $("#chart-inspector").innerHTML=renderChartInspector(filtered.find(c=>c.id===selectedChartId)||null,selectedKind);
- }
- recordBody.addEventListener("click",event=>{
-  const item=event.target.closest("[data-select-chart]");if(!item)return;
-  selectedChartId=item.dataset.selectChart;paint();
- });
- statusEl.addEventListener("change",()=>{updateUrl();paint()});
- document.querySelectorAll("[data-leaderboard-game]").forEach(button=>button.addEventListener("click",()=>{
-  selectedEngine=button.dataset.leaderboardGame;
-  document.querySelectorAll("[data-leaderboard-game]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
-  updateUrl();paint();
- }));
- document.querySelectorAll("[data-leaderboard-kind]").forEach(button=>button.addEventListener("click",()=>{
-  selectedKind=button.dataset.leaderboardKind;
-  document.querySelectorAll("[data-leaderboard-kind]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
-  updateUrl();paint();
- }));
- searchEl.addEventListener("input",paint);
- document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>{
-  const view=button.dataset.view;
-  document.querySelectorAll("[data-view]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
-  $("#records-view").hidden=view!=="records";$("#players-view").hidden=view!=="players";
- }));
+function renderLeaderboard(){
+ $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">The people behind the scores</span><h1>Leaderboard</h1><p>Player rankings across the Overstrum archive, with points, full combos and passes in one clear view.</p></div></div>'+
+ '<section class="leaderboard-card"><div class="leaderboard-card-heading"><div><h2>Player rankings</h2><p id="player-count"></p></div><label class="player-search"><span aria-hidden="true">⌕</span><input id="player-search-input" type="search" placeholder="Find a player…" aria-label="Search players" autocomplete="off"></label></div>'+
+ '<div class="table-wrap"><table class="players-table"><thead><tr><th>RANK</th><th>PLAYER</th><th class="align-right">TOTAL POINTS</th><th class="align-right">FC COUNT</th><th class="align-right">PASS COUNT</th></tr></thead><tbody id="player-body"></tbody></table></div></section>'+
+ '<p class="data-note">Rankings are calculated from the listed victor credits. Sample records are included for interface preview and are not verified achievements; pending submissions do not earn points.</p>';
+ const search=$("#player-search-input");
+ const paint=()=>{
+  const rows=playerStats(allCharts).filter(p=>p.name.toLowerCase().includes(search.value.trim().toLowerCase()));
+  $("#player-body").innerHTML=renderPlayerTable(allCharts,search.value);
+  $("#player-count").textContent=rows.length+" players in the archive";
+ };
+ search.addEventListener("input",paint);
  paint();setNav();
 }
 function renderGames(){
@@ -833,13 +808,15 @@ function renderGames(){
  if(!engines.some(e=>e.id===selectedId))selectedId="clone-hero";
  let selectedKind=params.get("kind")==="fc"?"fc":"pass";
  const selectedGame=()=>engineFor(selectedId);
- const updateAddress=()=>{const p=new URLSearchParams();p.set("game",selectedId);p.set("kind",selectedKind);history.replaceState({}, "",location.pathname+"?"+p.toString())};
+ const updateAddress=()=>{
+  const p=new URLSearchParams();p.set("game",selectedId);p.set("kind",selectedKind);
+  history.replaceState({}, "",location.pathname+"?"+p.toString());
+ };
  const tabs=engines.map(g=>'<button class="list-game-tab'+(g.id===selectedId?' active':'')+'" type="button" role="tab" aria-selected="'+(g.id===selectedId?'true':'false')+'" data-game-tab="'+esc(g.id)+'"><img src="'+ROOT_PREFIX+g.icon+'" alt=""><span>'+esc(g.short)+'</span></button>').join("");
- $("#app").innerHTML='<div class="list-page-heading"><div class="breadcrumbs"><span>Pages</span><span aria-hidden="true">/</span><strong>The List</strong></div><h1>The List</h1><p>Ranked charts, full combos and passes across every five-fret game.</p></div>'+
+ $("#app").innerHTML='<div class="page-intro list-page-heading"><div><span class="eyebrow">CHART ARCHIVE</span><h1>The List</h1><p>Ranked songs, full combos and passes across every supported five-fret game.</p></div></div>'+
  '<div class="list-game-tabs" role="tablist" aria-label="Choose a game">'+tabs+'</div>'+
- '<section class="list-game-info" aria-label="Selected game"><img id="list-game-icon" src="'+ROOT_PREFIX+selectedGame().icon+'" alt=""><div class="list-game-copy"><div><h2 id="list-game-title">'+esc(selectedGame().name)+'</h2><span id="list-game-year">'+esc(selectedGame().year||"Community engine")+'</span></div><p id="list-game-description">'+esc(selectedGame().description)+'</p></div><div class="list-game-links"><a id="game-youtube" href="'+esc(selectedGame().youtube||"#")+'" target="_blank" rel="noopener noreferrer">Official YouTube ↗</a>'+(selectedGame().website?'<a id="game-website" href="'+esc(selectedGame().website)+'" target="_blank" rel="noopener noreferrer">Official Site ↗</a>':'')+'</div></section>'+
- '<div class="list-controls"><div class="achievement-tabs view-tabs" role="tablist" aria-label="Leaderboard type"><button type="button" class="'+(selectedKind==="fc"?'active':'')+'" data-game-kind="fc" role="tab" aria-selected="'+(selectedKind==="fc"?'true':'false')+'">FC</button><button type="button" class="'+(selectedKind==="pass"?'active':'')+'" data-game-kind="pass" role="tab" aria-selected="'+(selectedKind==="pass"?'true':'false')+'">Pass</button></div><label class="list-search"><span aria-hidden="true">⌕</span><input id="game-record-search" type="search" placeholder="Search songs, players, or charters..." autocomplete="off" aria-label="Search songs, players, or charters"></label><span class="list-count" id="game-record-count"></span></div>'+
- '<div class="list-main-layout"><section class="list-song-column" aria-label="Ranked songs"><div class="list-column-heading"><span>RANKED CHARTS</span><span id="game-record-summary"></span></div><div class="song-list" id="game-record-body"></div></section><aside class="song-inspector" id="game-chart-inspector" aria-live="polite"></aside></div>';
+ '<section class="list-game-info" aria-label="Selected game"><img class="list-game-icon" id="list-game-icon" src="'+ROOT_PREFIX+selectedGame().icon+'" alt=""><div class="list-game-copy"><div class="list-game-title-line"><h2 id="list-game-title">'+esc(selectedGame().name)+'</h2><span id="list-game-year">'+esc(selectedGame().year||"Community engine")+'</span></div><p id="list-game-description">'+esc(selectedGame().description)+'</p><div class="list-game-links"><a id="game-youtube" href="'+esc(selectedGame().youtube||"#")+'" target="_blank" rel="noopener noreferrer">YouTube ↗</a><a id="game-website" href="'+esc(selectedGame().website||"#")+'" target="_blank" rel="noopener noreferrer">Official Site ↗</a></div></div></section>'+
+ '<div class="list-main-layout"><section class="list-song-column" aria-label="Ranked songs"><div class="list-controls"><div class="achievement-tabs" role="tablist" aria-label="Board type"><button type="button" class="'+(selectedKind==="fc"?'active':'')+'" data-game-kind="fc" role="tab" aria-selected="'+(selectedKind==="fc"?'true':'false')+'">FC</button><button type="button" class="'+(selectedKind==="pass"?'active':'')+'" data-game-kind="pass" role="tab" aria-selected="'+(selectedKind==="pass"?'true':'false')+'">Pass</button></div><label class="list-search"><span aria-hidden="true">⌕</span><input id="game-record-search" type="search" placeholder="Search songs, artists or charters…" autocomplete="off" aria-label="Search songs, artists or charters"></label></div><div class="list-column-heading"><div><h2>Ranked songs</h2><p id="game-record-summary"></p></div><span class="list-count" id="game-record-count"></span></div><div class="song-list" id="game-record-body"></div></section><aside class="song-inspector" id="game-chart-inspector" aria-live="polite"></aside></div>';
  const search=$("#game-record-search"),recordBody=$("#game-record-body");
  let selectedChartId=null;
  const paint=()=>{
@@ -848,77 +825,96 @@ function renderGames(){
    .sort((a,b)=>Number(a.rank||9999)-Number(b.rank||9999)||Number(b.points||0)-Number(a.points||0));
   if(!rows.some(c=>c.id===selectedChartId))selectedChartId=rows.length?rows[0].id:null;
   recordBody.innerHTML=recordRows(rows,selectedChartId);
-  $("#game-record-count").textContent=rows.length+" charts";
-  $("#game-record-summary").textContent=selectedKind==="fc"?"FULL COMBO BOARD":"PASS BOARD";
+  $("#game-record-count").textContent=rows.length+" songs";
+  $("#game-record-summary").textContent=selectedKind==="fc"?"Full Combo board":"Pass board";
   $("#game-chart-inspector").innerHTML=renderChartInspector(rows.find(c=>c.id===selectedChartId)||null,selectedKind);
  };
  const setGame=id=>{
-  if(!engines.some(g=>g.id===id))return;selectedId=id;
-  document.querySelectorAll("[data-game-tab]").forEach(button=>{const active=button.dataset.gameTab===id;button.classList.toggle("active",active);button.setAttribute("aria-selected",String(active))});
-  const game=selectedGame();$("#list-game-icon").src=ROOT_PREFIX+game.icon;$("#list-game-title").textContent=game.name;$("#list-game-year").textContent=game.year||"Community engine";$("#list-game-description").textContent=game.description;$("#game-youtube").href=game.youtube||"#";
-  const site=$("#game-website");if(site){site.hidden=!game.website;if(game.website)site.href=game.website}
+  if(!engines.some(g=>g.id===id))return;
+  selectedId=id;
+  document.querySelectorAll("[data-game-tab]").forEach(button=>{
+   const active=button.dataset.gameTab===id;button.classList.toggle("active",active);button.setAttribute("aria-selected",String(active));
+  });
+  const game=selectedGame();
+  $("#list-game-icon").src=ROOT_PREFIX+game.icon;
+  $("#list-game-title").textContent=game.name;
+  $("#list-game-year").textContent=game.year||"Community engine";
+  $("#list-game-description").textContent=game.description;
+  $("#game-youtube").href=game.youtube||"#";
+  const site=$("#game-website");site.hidden=!game.website;if(game.website)site.href=game.website;
   selectedChartId=null;updateAddress();paint();
  };
- recordBody.addEventListener("click",event=>{const item=event.target.closest("[data-select-chart]");if(!item)return;selectedChartId=item.dataset.selectChart;paint()});
+ recordBody.addEventListener("click",event=>{
+  const item=event.target.closest("[data-select-chart]");if(!item)return;
+  selectedChartId=item.dataset.selectChart;paint();
+ });
  $("#game-chart-inspector").addEventListener("click",event=>{
   const toggle=event.target.closest("[data-toggle-chart-details]");if(!toggle)return;
-  const extra=$("#inspector-extra");if(!extra)return;extra.hidden=!extra.hidden;toggle.classList.toggle("expanded",!extra.hidden);toggle.querySelector("span").textContent=extra.hidden?"⌄":"⌃";
+  const extra=$("#inspector-extra");if(!extra)return;
+  extra.hidden=!extra.hidden;toggle.classList.toggle("expanded",!extra.hidden);
+  const label=toggle.querySelector("span");if(label)label.textContent=extra.hidden?"⌄":"⌃";
  });
  document.querySelectorAll("[data-game-tab]").forEach(button=>button.addEventListener("click",()=>setGame(button.dataset.gameTab)));
  document.querySelectorAll("[data-game-kind]").forEach(button=>button.addEventListener("click",()=>{
   selectedKind=button.dataset.gameKind;
-  document.querySelectorAll("[data-game-kind]").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});
+  document.querySelectorAll("[data-game-kind]").forEach(b=>{
+   const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));
+  });
   selectedChartId=null;updateAddress();paint();
  }));
- search.addEventListener("input",paint);paint();setNav();
+ search.addEventListener("input",paint);
+ paint();setNav();
 }
 function renderSubmit(){
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">Add to the archive</span><h1>Submit a record</h1><p>Share the essentials of your run. New submissions are saved in this browser and marked pending until a moderator verifies them.</p></div></div>'+
+ $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">ADD TO THE ARCHIVE</span><h1>Submit a Run</h1><p>Send the details and proof for a record. Every submission stays pending until it has been reviewed.</p></div></div>'+
  '<form class="form-card" id="submission-form"><div class="form-grid">'+
  '<div class="form-field"><label for="player-name">Player name</label><input id="player-name" name="player" required maxlength="40" placeholder="Your player name"></div>'+
- '<div class="form-field"><label for="song-title">Song title</label><input id="song-title" name="title" required maxlength="100" placeholder="Song title"></div>'+
- '<div class="form-field"><label for="engine-choice">Game engine</label><select id="engine-choice" name="engine" required>'+engines.map(e=>'<option value="'+e.id+'">'+esc(e.name)+'</option>').join("")+'</select></div>'+
- '<div class="form-field"><label for="achievement-kind">Achievement</label><select id="achievement-kind" name="kind" required><option value="fc">Full combo (FC)</option><option value="pass">Pass</option></select></div>'+
- '<div class="form-field"><label for="score">Score / FC result <span class="field-hint">(optional)</span></label><input id="score" name="score" maxlength="60" placeholder="e.g. 98%, 1,234,567"></div>'+
- '<div class="form-field"><label for="artist">Artist <span class="field-hint">(optional)</span></label><input id="artist" name="artist" maxlength="100" placeholder="Artist name"></div>'+
- '<div class="form-field full"><label for="proof-url">Video proof URL</label><input id="proof-url" name="video" type="url" required placeholder="https://youtu.be/…"><span class="field-hint">Use a public video link that reviewers can open.</span></div>'+
- '<div class="form-field full"><label for="submission-notes">Notes <span class="field-hint">(optional)</span></label><textarea id="submission-notes" name="notes" maxlength="500" placeholder="Anything reviewers should know about this run?"></textarea></div>'+
- '</div><div class="form-footer"><button class="button primary" type="submit">Add submission</button><span id="form-message" class="form-message" aria-live="polite">This does not publish a verified record or send data to a server.</span></div></form>'+
- '<div class="notice"><strong>How this works:</strong> GitHub Pages is a static host, so this form stores submissions in your browser&#39;s local storage. They will not appear on another visitor&#39;s device. For a shared public submission queue, Overstrum will need a backend or a connected form service.</div>';
+ '<div class="form-field"><label for="engine-choice">Game</label><select id="engine-choice" name="engine" required>'+engines.map(e=>'<option value="'+e.id+'">'+esc(e.name)+'</option>').join("")+'</select></div>'+
+ '<div class="form-field"><label for="song-title">Song</label><input id="song-title" name="title" required maxlength="100" placeholder="Song title"></div>'+
+ '<div class="form-field"><label for="achievement-kind">Board</label><select id="achievement-kind" name="kind" required><option value="fc">FC</option><option value="pass">Pass</option></select></div>'+
+ '<div class="form-field full"><label for="proof-url">Video proof URL</label><input id="proof-url" name="video" type="url" required placeholder="https://youtu.be/…"><span class="field-hint">Use a public video link reviewers can open.</span></div>'+
+ '<div class="form-field full"><label for="submission-notes">Notes <span class="field-hint">(optional)</span></label><textarea id="submission-notes" name="notes" maxlength="500" placeholder="Chart version, setup details or anything reviewers should know…"></textarea></div>'+
+ '</div><div class="form-footer"><button class="button primary" type="submit">Send for review <span aria-hidden="true">↗</span></button><span id="form-message" class="form-message" aria-live="polite">Submissions are stored in this browser only. They are not published automatically.</span></div></form>'+
+ '<p class="data-note">This project is hosted as a static GitHub Pages site. The form saves pending entries to local storage in this browser; a shared public submission queue requires a backend.</p>';
  $("#submission-form").addEventListener("submit",event=>{
   event.preventDefault();
   const form=event.currentTarget,data=new FormData(form);
   const player=String(data.get("player")||"").trim(),title=String(data.get("title")||"").trim(),engine=data.get("engine"),kind=data.get("kind"),video=String(data.get("video")||"").trim();
   if(!player||!title||!engines.some(e=>e.id===engine)||!["fc","pass"].includes(kind)||!/^https?:\/\//i.test(video))return;
   const e=engineFor(engine);
-  const record={id:"local-"+Date.now(),engine,engineName:e.name,kind,title,artist:String(data.get("artist")||"").trim(),charter:"Awaiting review",player,victors:[player],firstVerifier:null,points:0,hash:"",peakNps:null,averageNps:null,video,score:String(data.get("score")||"").trim(),notes:String(data.get("notes")||"").trim(),verifiedAt:new Date().toISOString().slice(0,10),status:"pending",demo:false};
+  const record={id:"local-"+Date.now(),engine,engineName:e.name,kind,title,artist:"",charter:"Awaiting review",player,victors:[player],firstVerifier:null,points:0,hash:"",peakNps:null,averageNps:null,video,score:"",notes:String(data.get("notes")||"").trim(),verifiedAt:new Date().toISOString().slice(0,10),status:"pending",demo:false};
   submissions.unshift(record);syncCharts();
   const message=$("#form-message");
-  try{localStorage.setItem(STORE_KEY,JSON.stringify(submissions));message.className="form-message success";message.textContent="Submission saved in this browser. It is now listed as pending review."; }
-  catch{message.className="form-message error";message.textContent="This browser could not save the submission. Check local storage settings and try again.";}
-  const link=document.createElement("a");link.href=queryUrl(engine,kind);link.className="inline-link";link.textContent="View this engine in the leaderboard ↗";message.append(" ");message.append(link);
+  try{
+   localStorage.setItem(STORE_KEY,JSON.stringify(submissions));
+   message.className="form-message success";message.textContent="Submission saved in this browser. It is now pending review.";
+  }catch{
+   message.className="form-message error";message.textContent="This browser could not save the submission. Check local storage settings and try again.";
+  }
+  const link=document.createElement("a");link.href=queryUrl(engine,kind);link.className="inline-link";link.textContent="View this board ↗";message.append(" ");message.append(link);
   form.reset();
  });
  setNav();
 }
 function renderCommunity(){
  const players=playerStats(allCharts);
- const pendingCount=submissions.length;
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">The people behind the records</span><h1>Community</h1><p>Browse players who have contributed achievements to the Overstrum archive.</p></div></div>'+
- '<div class="section-heading"><div><h2>Players</h2><p>'+players.length+' names across the current archive'+(pendingCount?' · includes local pending submissions':'')+'</p></div></div>'+
- '<section class="player-grid">'+players.map((p,i)=>'<article class="player-card"><div class="player-card-top"><span class="badge">#'+(i+1)+' contributor</span>'+(p.pending?'<span class="badge pending">'+p.pending+' pending</span>':'')+'</div><h3>'+esc(p.name)+'</h3><p>Community player</p><div class="player-card-stats"><div><strong>'+p.records+'</strong><span>Records</span></div><div><strong>'+p.pioneers+'</strong><span>Pioneers</span></div><div><strong>'+p.points+'</strong><span>Points</span></div></div></article>').join("")+'</section>'+
- '<div class="notice">Player totals are calculated from listed victor credits. Sample entries are not verified results. Local submissions are visible only in the browser where they were created.</div>';
+ $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">THE PEOPLE BEHIND THE RECORDS</span><h1>Community</h1><p>Meet the players contributing runs, first clears and verification credits to the Overstrum archive.</p></div></div>'+
+ '<section class="community-intro-grid"><article class="content-card"><span class="content-icon" aria-hidden="true">01</span><h2>Play, record, contribute</h2><p>Submit a run with clear proof, help keep chart details accurate, and give credit to the players who put in the work.</p><a class="text-link" href="'+ROOT_PREFIX+'submit/">Submit a run ↗</a></article><article class="content-card"><span class="content-icon" aria-hidden="true">02</span><h2>Find the conversation</h2><p>Overstrum does not currently have a Discord invite configured in this repository. Use Discord to access your communities, or add the official server invite here when it is ready.</p><a class="text-link" href="https://discord.com/app" target="_blank" rel="noopener noreferrer">Open Discord ↗</a></article></section>'+
+ '<div class="section-heading"><div><h2>Player directory</h2><p>'+players.length+' players represented in the current archive.</p></div></div>'+
+ '<section class="player-grid">'+players.map((p,i)=>'<article class="player-card"><div class="player-card-top"><span class="player-avatar">'+esc((p.name||"?").slice(0,1).toUpperCase())+'</span><span class="player-position tabular">#'+(i+1)+'</span></div><h3>'+esc(p.name)+'</h3><p>Community player</p><div class="player-card-stats"><div><strong class="tabular">'+p.records+'</strong><span>Records</span></div><div><strong class="tabular">'+p.fcCount+'</strong><span>FCs</span></div><div><strong class="tabular">'+p.passCount+'</strong><span>Passes</span></div></div></article>').join("")+'</section>'+
+ '<p class="data-note">Player totals are calculated from listed victor credits. Sample entries are not verified results, and local pending submissions are only visible in the browser where they were created.</p>';
  setNav();
 }
 function renderRules(){
- $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">A consistent standard for every game</span><h1>Verification rules</h1><p>Overstrum records should be clear, attributable, and tied to the exact chart that was played.</p></div></div>'+
+ $("#app").innerHTML='<div class="page-intro"><div><span class="eyebrow">A CONSISTENT STANDARD FOR EVERY GAME</span><h1>Rules</h1><p>Every record should be clear, attributable and tied to the exact chart that was played.</p></div></div>'+
  '<section class="rules-list">'+
- '<article class="rule-item"><span class="rule-number">01</span><div><h3>Continuous gameplay footage</h3><p>Provide a recording that shows the run from a clear start through the result screen. Avoid cuts, splices, speed changes, or edits that interrupt the attempt.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">02</span><div><h3>Handcam or input visibility</h3><p>Show the player&#39;s hands or input method clearly when the game or chart rules require it. The evidence should make the performance attributable to the submitting player.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">03</span><div><h3>Original gameplay audio</h3><p>Keep the gameplay audio unedited and synchronised with the video. Do not replace the game audio or use processing that could conceal timing or gameplay events.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">04</span><div><h3>Chart MD5 hash</h3><p>Provide the MD5 hash of the exact chart file used. The expected value is 32 hexadecimal characters. Reviewers can use it to distinguish chart revisions and duplicates.</p></div></article>'+
- '<article class="rule-item"><span class="rule-number">05</span><div><h3>Review and pioneer credit</h3><p>A submission remains pending until reviewed. First-verifier recognition is assigned after acceptance, and points are calculated from approved records rather than unreviewed submissions.</p></div></article>'+
- '</section><div class="notice">The current site is a static prototype. The included chart entries are examples for testing the layout, not claims of verified achievements. Do not treat a sample or locally submitted row as an approved record.</div><div class="hero-actions"><a class="button primary" href="'+ROOT_PREFIX+'submit/">Submit a record</a><a class="button ghost" href="'+ROOT_PREFIX+'community/">View community list</a></div>';
+ '<article class="rule-item"><span class="rule-number">01</span><div><h3>Continuous gameplay footage</h3><p>Provide a recording that shows the run from a clear start through the result screen. Avoid cuts, splices, speed changes or edits that interrupt the attempt.</p></div></article>'+
+ '<article class="rule-item"><span class="rule-number">02</span><div><h3>Player and input visibility</h3><p>Show the player&#39;s hands or input method clearly when the game or chart rules require it. Evidence should make the performance attributable to the submitting player.</p></div></article>'+
+ '<article class="rule-item"><span class="rule-number">03</span><div><h3>Original gameplay audio</h3><p>Keep gameplay audio unedited and synchronised with the video. Do not replace the game audio or use processing that could conceal timing or gameplay events.</p></div></article>'+
+ '<article class="rule-item"><span class="rule-number">04</span><div><h3>Exact chart identity</h3><p>Provide the MD5 hash of the exact chart file used when available. A 32-character hexadecimal hash helps reviewers distinguish chart revisions and duplicates.</p></div></article>'+
+ '<article class="rule-item"><span class="rule-number">05</span><div><h3>Review and first-clear credit</h3><p>A submission remains pending until reviewed. First-verifier recognition is assigned after acceptance, and points are calculated from approved records rather than unreviewed submissions.</p></div></article>'+
+ '</section><section class="rules-footer content-card"><div><h2>Ready to submit?</h2><p>Check that your proof is public and the chart details match the run before sending it in.</p></div><a class="button primary" href="'+ROOT_PREFIX+'submit/">Submit a Run ↗</a></section>'+
+ '<p class="data-note">The bundled entries currently shown on the site are sample data for interface testing, not verified achievements.</p>';
  setNav();
 }
 function renderCurrentRoute(){
